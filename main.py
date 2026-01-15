@@ -1,12 +1,14 @@
 import pygame
-import pygame_managers as pm
+import pygame_manager as pm
 
 
 class Main:
     def __init__(self):
-        pm.time.set_fps_limit(50)
-        print("ok")
+        pass
 
+    def update(self):
+        pass
 
 if __name__ == '__main__':
     main = Main()
+    pm.run(main.update())
