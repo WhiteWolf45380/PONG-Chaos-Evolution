@@ -1,21 +1,24 @@
 import pygame
-import pygame_manager as pm
+import pygame_manager as pm # package personnel pour pygame
+from _game import Game
 
 
 class Main:
+    """
+    Jeu entier
+    """
     def __init__(self):
         pm.init()
-        self.closed = False
-        self.opened = False
+        
+        self.game = Game()
+        self.game.init()
 
     def update(self):
-        print(pygame.time.get_ticks())
-        if pygame.time.get_ticks() >= 5000 and not self.closed:
-            pm.screen.close()
-            self.closed = True
-        if pygame.time.get_ticks() >= 10000 and not self.opened:
-            pm.screen.create()
-            self.opened = True
+        """
+        Actualisation de la frame
+        """
+        self.game.update()
+
 
 if __name__ == '__main__':
     main = Main()
