@@ -6,9 +6,8 @@ class Paddle:
     """
     Raquette d'une joueur
     """
-    def __init__(self, player: int=1, width: int=15, height: int=80, offset_x: int= 50, color: tuple[int]=(255, 255, 255)):
+    def __init__(self, x: int=0, y: int=0, width: int=3, height: int=20, color: tuple[int]=(255, 255, 255), up: int=None, down: int=None):
         # profil
-        self.player = player
         self.color = color
 
         # taille
@@ -17,19 +16,35 @@ class Paddle:
         self.rect = pygame.Rect(0, 0, self.width, self.height)
 
         # position
-        self.x = pm.screen.width - offset_x if player == 1 else offset_x
-        self.y = pm.screen.height / 2
+        self.x = x
+        self.y = y
         self.rect.center = (self.x, self.y)
+
+        # touches
+        self.up = up
+        self.down = down
+
+        # handlers de déplacement
+        pm.inputs.add_listener()
 
         # paramètres
         self.celerity = 10
 
-    def update(self):
+    def update(self, surface: pygame.Surface):
         """
         Actualisation de la frame
+
+        Args :
+            - surface (pygame.Surface) : surface sur laquelle afficher l'objet
         """
         self.rect.center = (self.x, self.y)
         pygame.draw.rect(pm.screen.surface, self.color, self.rect)
+
+    def is_playing(self):
+        """
+        Prédicat de l'état actif du jeu
+        """
+        return self.main.current_state
     
     def move_up(self):
         """

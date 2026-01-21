@@ -9,16 +9,17 @@ class Main:
     """
     def __init__(self):
         pm.init()
-        
-        self.game = Game()
-        self.game.init()
+
+    def init(self):
+        self.game = Game().init()
+        pm.states.activate("game")
 
     def update(self):
         """
         Actualisation de la frame
         """
-        self.game.update()
-
+        pm.screen.fill((80, 80, 90))
+        pm.states.update_current()
 
 if __name__ == '__main__':
     main = Main()
