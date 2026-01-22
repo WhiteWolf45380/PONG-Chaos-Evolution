@@ -7,20 +7,18 @@ class Main:
     Jeu entier
     """
     def __init__(self):
-        pm.init(self.init)
+        pm.init()
 
     def init(self):
         self.game = Game().init()
         pm.states.activate("game")
-        for i in range(9999):
-            print(i)
 
     def update(self):
         """
         Actualisation de la frame
         """
         pm.screen.fill((80, 80, 90))
-        pm.states.update_current()
+        pm.states.update()
 
 if __name__ == '__main__':
     main = Main()

@@ -10,7 +10,7 @@ class Game:
     """
     def __init__(self):
         self.players = 1
-        pm.states.add("game", self.update)
+        pm.states.register("game", self.update)
 
         # fond
         self.board = pygame.Surface((1440, 1080))
