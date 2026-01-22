@@ -8,10 +8,8 @@ class Main:
     """
     def __init__(self):
         pm.init()
-
-    def init(self):
         self.game = Game().init()
-        pm.states.activate("game")
+        self.game.activate()
 
     def update(self):
         """

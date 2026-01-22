@@ -4,13 +4,13 @@ from _ball import Ball
 from _paddle import Paddle
 
 
-class Game:
+class Game(pm.states.State):
     """
     Une partie de jeu
     """
     def __init__(self):
+        super().__init__('game')
         self.players = 1
-        pm.states.register("game", self.update)
 
         # fond
         self.board = pygame.Surface((1440, 1080))
@@ -38,13 +38,12 @@ class Game:
         self.ball = Ball()
 
         # raquettes
-        offset = 40
+        offset = 50
         self.paddles.append(Paddle(offset, self.board_rect.height / 2, up=pygame.K_z, down=pygame.K_s))
         if self.players == 2:
             self.paddles.append(Paddle(self.board_rect.width - offset, self.board_rect.height / 2, up=pygame.K_UP, down=pygame.K_DOWN))
         
-        pm.states.activate_exclusive("game")
-            
+        pm.states.switch("game") 
         return self
 
     def update(self):

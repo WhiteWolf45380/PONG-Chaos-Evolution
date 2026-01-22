@@ -6,7 +6,7 @@ class Paddle:
     """
     Raquette d'une joueur
     """
-    def __init__(self, x: int=0, y: int=0, width: int=9, height: int=60, color: tuple[int]=(255, 255, 255), up: int=None, down: int=None):
+    def __init__(self, x: int=0, y: int=0, width: int=12, height: int=80, color: tuple[int]=(255, 255, 255), up: int=None, down: int=None):
         # profil
         self.color = color
 
@@ -25,11 +25,11 @@ class Paddle:
         self.down = down
 
         # handlers de déplacement
-        pm.inputs.add_listener(up, self.move_up, once=True)
-        pm.inputs.add_listener(down, self.move_down, once=True)
+        pm.inputs.add_listener(up, self.move_up, repeat=True)
+        pm.inputs.add_listener(down, self.move_down, repeat=True)
 
         # paramètres
-        self.celerity = 10
+        self.celerity = 200
 
     def update(self, surface: pygame.Surface):
         """
@@ -51,12 +51,10 @@ class Paddle:
         """
         Se dirige vers le haut
         """
-        print("up")
         self.y = max(self.height / 2, self.y - pm.time.scale_value(self.celerity))
     
     def move_down(self):
         """
         Se dirige vers le bas
         """
-        print("down")
         self.y = max(self.height / 2, self.y + pm.time.scale_value(self.celerity))
