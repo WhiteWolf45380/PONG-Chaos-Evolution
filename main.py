@@ -2,7 +2,6 @@ import pygame
 import pygame_manager as pm # package personnel pour pygame
 from _game import Game
 
-
 class Main:
     """
     Jeu entier
@@ -13,6 +12,8 @@ class Main:
     def init(self):
         self.game = Game().init()
         pm.states.activate("game")
+        for i in range(99999):
+            print(i)
 
     def update(self):
         """
