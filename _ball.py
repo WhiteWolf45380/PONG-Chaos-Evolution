@@ -11,13 +11,13 @@ class Ball:
     def __init__(self, radius: int=20, color: tuple[int]=(255, 255, 255)):
         # position initiale
         self.disabled_side = random.choice(("left", "right")) if pm.states["game"].game_mode != 1 else "right"
-        self.start_angle = (random.randint(15, 35) if self.disabled_side == "left" else random.randint(145, 165)) * random.choice((-1, 1))
+        self.start_angle = (random.randint(15, 30) if self.disabled_side == "left" else random.randint(150, 165)) * random.choice((-1, 1))
         self.start_angle_radians = math.radians(self.start_angle)
 
         # design
         self.color = color
         self.trail = []
-        self.trail_limit = 10
+        self.trail_limit = 6
 
         # taille
         self.radius = radius
