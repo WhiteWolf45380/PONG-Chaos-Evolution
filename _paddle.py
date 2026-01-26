@@ -25,8 +25,8 @@ class Paddle:
         self.down = down
 
         # handlers de déplacement
-        pm.inputs.add_listener(up, self.move_up, repeat=True)
-        pm.inputs.add_listener(down, self.move_down, repeat=True)
+        pm.inputs.add_listener(up, self.move_up, repeat=True, condition=lambda: not pm.states["game"].game_frozen)
+        pm.inputs.add_listener(down, self.move_down, repeat=True, condition=lambda: not pm.states["game"].game_frozen)
 
         # paramètres
         self.celerity = 700
@@ -36,7 +36,11 @@ class Paddle:
         Actualisation de la frame
         """
         self.rect.center = (self.x, self.y)
-        pygame.draw.rect(pm.states["game"].surface, self.color, self.rect)
+
+    def draw(self):
+        """Affichage"""
+        pygame.draw.rect(pm.states["game"].surface, self.color, self.rect, border_radius=5)
+        pygame.draw.rect(pm.states["game"].surface, (0, 0, 0), self.rect, 1, border_radius=5)
 
     def is_playing(self):
         """
