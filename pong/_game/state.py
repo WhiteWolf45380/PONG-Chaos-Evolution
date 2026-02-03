@@ -1,9 +1,8 @@
 # ======================================== IMPORTS ========================================
-import pygame
-import pygame_manager as pm
-from ._view import GameView
-from .objects._ball import Ball
-from .objects._paddle import Paddle
+from .._core import ctx, pm, pygame
+from ._panels import GameView
+from ._modes import WallGame, Solo, Local
+from ._objects import Ball, Paddle
 
 # ======================================== ETAT ========================================
 class Game(pm.states.State):
@@ -13,9 +12,15 @@ class Game(pm.states.State):
     def __init__(self):
         super().__init__('game')
 
-        # panel de vue du jeu
+        # Panels
         self.view = GameView()
         self.bind_panel(self.view)
+
+        # Modes de jeu
+        self.modes = {}
+        self.modes["wall_game"] = WallGame()
+        self.modes["solo"] = Solo()
+        self.modes["local"] = Local()
 
         # temporaire
         self.game_mode = 2
@@ -33,6 +38,7 @@ class Game(pm.states.State):
         # wall game
         self.score = 0
 
+    # ======================================== CHARGEMENT ========================================
     def init(self):
         """Initialisation d'une partie"""
         # balle
@@ -47,8 +53,15 @@ class Game(pm.states.State):
         pm.states.activate("game") 
         return self
 
+    # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation de la frame"""
         # jeu en pause
         if self.game_frozen:
             return
+        
+    # ======================================== GETTERS ========================================
+    @property
+    def current_mode(self):
+        """Renvoie le mode de jeu actuel"""
+        return ctx.modes.selected

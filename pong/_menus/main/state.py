@@ -2,7 +2,7 @@
 from ..._core import pm
 
 # ======================================== ETAT ========================================
-class MainMenuState(pm.states.State):
+class Main(pm.states.State):
     """
     Menu principal
     """

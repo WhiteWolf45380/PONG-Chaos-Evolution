@@ -1,5 +1,6 @@
 # ======================================== IMPORTS ========================================
-from .launcher import run
+from ._ball import Ball
+from ._paddle import Paddle
 
 # ======================================== EXPORTS ========================================
-__all__ = ["run"]
+__all__ = ["Ball", "Paddle"]

@@ -1,2 +1,2 @@
-from .state import GameState
-__all__ = ["GameState"]
+from .state import Game
+__all__ = ["Game"]

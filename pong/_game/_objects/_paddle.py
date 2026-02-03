@@ -1,7 +1,7 @@
-import pygame
-import pygame_manager as pm
+# ======================================== IMPORTS ========================================
+from ..._core import pm, pygame
 
-
+# ======================================== OBJET ========================================
 class Paddle:
     """
     Raquette d'une joueur
@@ -31,6 +31,7 @@ class Paddle:
         # paramètres
         self.celerity = 700
 
+    # ======================================== ACTUALISATION ========================================
     def update(self):
         """
         Actualisation de la frame
@@ -42,12 +43,14 @@ class Paddle:
         pygame.draw.rect(pm.states["game"].surface, self.color, self.rect, border_radius=10)
         pygame.draw.rect(pm.states["game"].surface, (0, 0, 0), self.rect, 1, border_radius=10)
 
+    # ======================================== PREDICATS ========================================
     def is_playing(self):
         """
         Prédicat de l'état actif du jeu
         """
         return self.main.current_state
     
+    # ======================================== METHODES DYNAMIQUES ========================================
     def move_up(self):
         """
         Se dirige vers le haut

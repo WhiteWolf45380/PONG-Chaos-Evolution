@@ -9,6 +9,8 @@ class Modes(pm.states.State):
     def __init__(self):
         super().__init__('modes_menu')
 
+        self.selected = "wall_game"
+
     def init(self):
         """Chargement de l'état"""
 

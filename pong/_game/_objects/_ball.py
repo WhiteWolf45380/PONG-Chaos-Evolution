@@ -1,9 +1,9 @@
-import pygame
-import pygame_manager as pm
+# ======================================== IMPORTS ========================================
+from ..._core import pm, pygame
 import math
 import random
 
-
+# ======================================== OBJET ========================================
 class Ball:
     """
     Balle
@@ -38,11 +38,11 @@ class Ball:
         self.x_extremum = None
         self.y_at_extremum = 0
 
+    # ======================================== ACTUALISATION ========================================
     def update(self) -> None | int:
         """
         Actualisation de la frame
         """
-        print(self.celerity)
         # trainée
         self.trail.append((self.x, self.y))
         while len(self.trail) > int(self.trail_limit * (pm.time.smoothfps / 60)):
@@ -81,6 +81,7 @@ class Ball:
         pygame.draw.circle(pm.states["game"].surface, self.color, (int(self.x), int(self.y)), self.radius)
         pygame.draw.circle(pm.states["game"].surface, (0, 0, 0), (int(self.x), int(self.y)), self.radius, 1)
 
+    # ======================================== GETTERS ========================================
     @property
     def dx(self):
         """Renvoie la composante x du vecteur déplacement"""
@@ -95,6 +96,7 @@ class Ball:
         """Renvoie le vecteur déplacement"""
         return pm.geometry.Vector(self.dx, self.dy)
 
+    # ======================================== METHODES DYNAMIQUES ========================================
     def bounce(self, normal_angle: int|float):
         """
         Fait rebondir la balle

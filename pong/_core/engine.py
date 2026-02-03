@@ -12,6 +12,10 @@ class Engine:
         # Initialisation du framework modulable
         pm.init()
 
+        # Instanciation du jeu
+        self.game = Game().init()
+        ctx.game = self.game
+
         # Instanciation des menus
         self.modes = Modes.init()
         ctx.modes = self.modes
@@ -21,10 +25,6 @@ class Engine:
 
         self.main = Main.init()
         ctx.main = self.main
-
-        # Instanciation du jeu
-        self.game = Game().init()
-        ctx.game = self.game
         
 
     def update(self):

@@ -7,13 +7,13 @@ class ContextManager:
     Context Manager
     """
     def __init__(self):
+        # Jeu
+        self.game = None
+
         # Menus
         self.main = None
         self.modes = None
         self.modifiers = None
-
-        # Jeu
-        self.game = None
 
     def __getattr__(self, name):
         raise AttributeError(f"context has no attribute {name!r}")
