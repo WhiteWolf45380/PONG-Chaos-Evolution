@@ -2,7 +2,6 @@
 from .._core import ctx, pm, pygame
 from ._panels import GameView
 from ._modes import WallGame, Solo, Local
-from ._objects import Ball, Paddle
 
 # ======================================== ETAT ========================================
 class Game(pm.states.State):
@@ -18,9 +17,9 @@ class Game(pm.states.State):
 
         # Modes de jeu
         self.modes = {}
-        self.modes["wall_game"] = WallGame
-        self.modes["solo"] = Solo
-        self.modes["local"] = Local
+        self.modes["wall_game"] = WallGame()
+        self.modes["solo"] = Solo()
+        self.modes["local"] = Local()
 
         # Partie en cours
         self.current = None
@@ -35,7 +34,8 @@ class Game(pm.states.State):
     def init(self):
         """Initialisation d'une partie"""
         pm.states.activate("game")
-        self.current = self.modes[ctx.modes.selected](self.view)
+        self.current = self.modes[ctx.modes.selected]
+        pm.states.activate(ctx.modes.selected)
         return self
 
     # ======================================== ACTUALISATION ========================================

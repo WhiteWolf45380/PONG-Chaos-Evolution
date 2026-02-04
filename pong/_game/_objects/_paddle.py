@@ -1,36 +1,33 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm, pygame
+from ..._core import ctx, pm, pygame
 
 # ======================================== OBJET ========================================
-class Paddle:
+class Paddle(pm.entities.RectEntity):
     """
     Raquette d'une joueur
     """
     OFFSET = 50
-    def __init__(self, x: int=0, y: int=0, width: int=20, height: int=160, color: tuple[int]=(255, 255, 255), up: int=None, down: int=None):
-        # design
-        self.color = color
+    def __init__(self, x: int = 0, y: int = 0, up: int = None, down: int = None):
+        # Panel de vue
+        self.view = pm.panels["game_view"]
 
-        # taille
-        self.width = width
-        self.height = height
-        self.rect = pygame.Rect(0, 0, self.width, self.height)
+        # Propriétés
+        self.properties = ctx.modifiers.get_by_category("paddle", remove_prefix=True)
 
-        # position
-        self.x = x
-        self.y = y
-        self.rect.center = (self.x, self.y)
+        # Initialisation de l'entité
+        super().__init__(0, 0, self.width, self.height, self.border_radius, 1, self.view)
 
-        # touches
-        self.up = up
-        self.down = down
+        # Position
+        self.center = (x, y)
 
-        # handlers de déplacement
-        pm.inputs.add_listener(up, self.move_up, repeat=True, condition=lambda: not pm.states["game"].game_frozen)
-        pm.inputs.add_listener(down, self.move_down, repeat=True, condition=lambda: not pm.states["game"].game_frozen)
-
-        # paramètres
+        # Déplacement
         self.celerity = 700
+
+        self.up = up
+        pm.inputs.add_listener(up, self.move_up, repeat=True, condition=lambda: not pm.states["game"].game_frozen)
+        
+        self.down = down
+        pm.inputs.add_listener(down, self.move_down, repeat=True, condition=lambda: not pm.states["game"].game_frozen)     
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
@@ -41,8 +38,8 @@ class Paddle:
 
     def draw(self):
         """Affichage"""
-        pygame.draw.rect(pm.states["game"].surface, self.color, self.rect, border_radius=10)
-        pygame.draw.rect(pm.states["game"].surface, (0, 0, 0), self.rect, 1, border_radius=10)
+        pygame.draw.rect(pm.states["game"].surface, self.color, self.rect, border_radius=self.border_radius)
+        pygame.draw.rect(pm.states["game"].surface, (0, 0, 0), self.rect, 1, border_radius=self.border_radius)
 
     # ======================================== PREDICATS ========================================
     def is_playing(self):

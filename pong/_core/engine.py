@@ -15,19 +15,21 @@ class Engine:
         from .._game import Game
 
         # Instanciation du jeu
-        self.game = Game().init()
+        self.game = Game()
         ctx.game = self.game
 
         # Instanciation des menus
-        self.modes = Modes.init()
+        self.main = Main()
+        ctx.main = self.main
+
+        self.modes = Modes()
         ctx.modes = self.modes
 
-        self.modifiers = Modifiers().init()
+        self.modifiers = Modifiers()
         ctx.modifiers = self.modifiers
-
-        self.main = Main.init()
-        ctx.main = self.main
         
+        # Lancement d'une partie
+        self.game.init()
 
     def update(self):
         """Actualisation de la frame"""

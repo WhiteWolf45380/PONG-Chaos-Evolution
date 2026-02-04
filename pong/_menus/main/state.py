@@ -9,8 +9,5 @@ class Main(pm.states.State):
     def __init__(self):
         super().__init__('main_menu')
     
-    def init(self):
-        """Chargement de l'état"""
-
     def update(self):
         """Actualisation par frame"""

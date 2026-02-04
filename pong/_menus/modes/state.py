@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm
+from ..._core import ctx, pm
 
 # ======================================== ETAT ========================================
 class Modes(pm.states.State):
@@ -9,10 +9,9 @@ class Modes(pm.states.State):
     def __init__(self):
         super().__init__('modes_menu')
 
+        self.all = ctx.game.modes.keys()
         self.selected = "wall_game"
 
-    def init(self):
-        """Chargement de l'état"""
-
+    # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""

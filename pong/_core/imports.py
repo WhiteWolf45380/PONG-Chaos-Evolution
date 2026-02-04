@@ -11,6 +11,7 @@ import pygame_manager as pm
 from typing import (
     Optional,
     Iterable,
+    TYPE_CHECKING,
 )
 
 from pathlib import (
@@ -28,6 +29,7 @@ __all__ = [
     "pm",
     "Optional",
     "Iterable",
+    "TYPE_CHECKING",
     "Path",
     "Real",
 ]

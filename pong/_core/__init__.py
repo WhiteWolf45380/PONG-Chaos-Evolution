@@ -9,6 +9,7 @@ __all__ = [
     "pm",
     "Optional",
     "Iterable",
+    "TYPE_CHECKING",
     "Path",
     "Real",
 
