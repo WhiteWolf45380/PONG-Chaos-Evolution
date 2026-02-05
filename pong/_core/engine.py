@@ -9,6 +9,7 @@ class Engine:
     def __init__(self):
         # Initialisation du framework modulable
         pm.init()
+        pm.screen.set_vsync(True)
 
         # Imports
         from .._menus import Main, Modes, Modifiers

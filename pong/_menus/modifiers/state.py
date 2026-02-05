@@ -19,16 +19,17 @@ class Modifiers(pm.states.State):
         # Catégorie: Ball
         self.add("radius", 20, category="ball", add_prefix=True)                                        # (int)  : rayon de la balle
         self.add("color", (255, 255, 255), category="ball", add_prefix=True)                            # (color): couleur de la balle
-        self.add("trail", True, category="ball", add_prefix=True)      
+        self.add("trail", "discret", category="ball", add_prefix=True)                                  # (str)  : type de traînée
         self.add("trail_limit", 8, category="ball", add_prefix=True)                                    # (bool) : activation de la traînée
         self.add("celerity_min", 600, category="ball", add_prefix=True)                                 # (int)  : vitesse initiale de la balle
         self.add("celerity_max", 2000, category="ball", add_prefix=True)                                # (int)  : vitesse finale de la balle
         self.add("acceleration_duration", 120, category="ball", add_prefix=True)                        # (int)  : durée d'accéleration de la balle en secondes
         self.add("angle_min", 15, category="ball", add_prefix=True)                                     # (int)  : angle minimal de déplacement de la balle
         self.add("angle_max", 35, category="ball", add_prefix=True)                                     # (int)  : angle maximal de déplacement de la balle
+        self.add("bouncing_epsilon", 5, category="ball", add_prefix=True)                               # (int)  : aléatoire de l'angle dans les rebonds
 
         # Catégorie: Paddle
-        self.add("size", 100, category="paddle", add_prefix=True)                                       # (int)  : hauteur de la raquette
+        self.add("size", 120, category="paddle", add_prefix=True)                                       # (int)  : hauteur de la raquette
         self.add("border_radius", 10, category="paddle", add_prefix=True)                               # (int)  : arrondi des coins de la raquette
         self.add("color", (255, 255, 255), category="paddle", add_prefix=True)                          # (color): couleur de la raquette
         self.add("celerity", 500, category="paddle", add_prefix=True)                                   # (int)  : vitesse de la raquette

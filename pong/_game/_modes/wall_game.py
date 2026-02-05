@@ -19,6 +19,7 @@ class WallGame(pm.states.State):
         self.paddle_1: Paddle = None
 
         # Paramètres dynamiques
+        self.ended = False
         self.score = 0
     
     # ======================================== LANCEMENT ========================================
@@ -38,7 +39,8 @@ class WallGame(pm.states.State):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
-        pass
+        if self.ended:
+            self.end()
 
     # ======================================== FIN ========================================
     def is_end(self, side: int):
@@ -46,6 +48,7 @@ class WallGame(pm.states.State):
         if side != ctx.modifiers.paddle_side:
             self.score += 1
             return False
+        self.ended = True
         return True
 
     def end(self):

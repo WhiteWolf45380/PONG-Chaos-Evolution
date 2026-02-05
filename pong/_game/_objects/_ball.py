@@ -27,10 +27,10 @@ class Ball(pm.entities.CircleEntity):
 
         # Angle
         self.disabled_side = random.choice(("left", "right")) if ctx.modes.selected != 1 else "right"
-        self.angle = (random.randint(15, 35) if self.disabled_side == "left" else random.randint(145, 165)) * random.choice((-1, 1))
-        self.angle_epsilon = math.radians(5) # bruit dans le rebond
-        self.angle_min = 15
-        self.angle_max = 35
+        self.angle = math.radians((random.randint(self["angle_min"], self["angle_max"]) if self.disabled_side == "left" else random.randint(180 - self["angle_max"], 180 - self["angle_min"])) * random.choice((-1, 1)))
+        self.angle_min = math.radians(self["angle_min"])
+        self.angle_max = math.radians(self["angle_max"])
+        self.bouncing_epsilon = math.radians(self["bouncing_epsilon"]) # bruit dans le rebond
 
         # Déplacement
         self.celerity_min = 700
@@ -49,21 +49,23 @@ class Ball(pm.entities.CircleEntity):
 
         # Trainée
         self.trail.append((self.centerx, self.centery))
-        while len(self.trail) > int(self.trail_limit * (pm.time.smoothfps / 60)):
+        while len(self.trail) > int(self["trail_limit"] * (pm.time.smoothfps / 60)):
             self.trail.pop(0)
 
         # Vitesse croissante
         self.celerity = min(self.celerity + pm.time.scale_value((self.celerity_max - self.celerity_min) / self.celerity_variation_time), self.celerity_max)
         celerity = pm.time.scale_value(self.celerity)
+        print(self.celerity)
 
         # Déplacement
-        pos_0 = pm.geometry.Point(self.center)
+        pos_0 = pm.geometry.Point(*self.center)
         self.centerx += self.dx * celerity
         self.centery += self.dy * celerity
-        pos_1 = pm.geometry.Point(self.center)
+        pos_1 = pm.geometry.Point(*self.center)
 
         # Collision contre les raquettes
-        self.collidepaddle(side_paddle, pos_0, pos_1)
+        if side_paddle is not None:
+            self.collidepaddle(side_paddle, pos_0, pos_1)
 
         # Collision avec les murs horizontaux
         self.collidehorizontal()
@@ -73,11 +75,45 @@ class Ball(pm.entities.CircleEntity):
     
     def draw_behind(self, surface: pygame.Surface):
         """affichage derrière la balle"""
-        # Trainée
+        if self["trail"] == "discret":
+            self.draw_trail_discret(surface)
+        elif self["trail"] == "continous":
+            self.draw_trail_continuous(surface)
+
+    def draw_trail_discret(self, surface: pygame.Surface):
+        """Traînée par progression discrète"""
         for i, pos in enumerate(self.trail):
             advancement = min(max((i + 1) / (len(self.trail) + 2), 0), 1)
-            color = tuple(self.color[j] + (self.view.color[j] - self.color[j]) * (1 - advancement) for j in range(3))
+            color = tuple(self["color"][j] + (self.view.background_color[j] - self["color"][j]) * (1 - advancement) for j in range(3))
             pygame.draw.circle(surface, color, tuple(map(int, pos)), self.radius * advancement**0.75)
+
+    def draw_trail_continuous(self, surface: pygame.Surface):
+        """Traînée par interpolation linéaire"""
+        num_segments = len(self.trail)
+        if num_segments < 2:
+            return
+        
+        current_pos = (self.centerx, self.centery)
+        for i in range(num_segments):
+            if i == num_segments - 1:
+                start_pos = self.trail[i]
+                end_pos = current_pos
+            else:
+                start_pos = self.trail[i]
+                end_pos = self.trail[i + 1]
+
+            subdivisions = 5
+            for j in range(subdivisions):
+                t = j / subdivisions
+                
+                pos_x = start_pos[0] + t * (end_pos[0] - start_pos[0])
+                pos_y = start_pos[1] + t * (end_pos[1] - start_pos[1])
+                
+                advancement = (i + t) / num_segments
+                color = tuple(int(self["color"][k] + (self.view.background_color[k] - self["color"][k]) * (1 - advancement))for k in range(3))
+                radius = self.radius * advancement**0.75
+                
+                pygame.draw.circle(surface, color, (int(pos_x), int(pos_y)), max(1, int(radius)))
 
     # ======================================== GETTERS ========================================
     def __getitem__(self, name: str):
@@ -101,17 +137,31 @@ class Ball(pm.entities.CircleEntity):
         return pm.geometry.Vector(self.dx, self.dy)
 
     # ======================================== METHODES DYNAMIQUES ========================================
-    def bounce(self, normal_angle: int|float):
+    def bounce(self, normal: pm.types.VectorObject):
         """
         Fait rebondir la balle
 
         Args:
-            normal_angle (int|float) : angle du vect normal extérieur (radians)
+            normal (pm.types.VectorObject) : vect normal extérieur (radians)
         """
-        self.angle = 2 * normal_angle - self.angle                                                                  # réflexion mirroir
-        self.angle += random.uniform(-self.angle_epsilon, self.angle_epsilon)                                       # bruit
-        self.angle = (self.angle + math.pi) % (2 * math.pi) - math.pi                                               # normalisation
-        self.angle = (self.angle / abs(self.angle)) * min(max(abs(self.angle), self.angle_min), self.angle_max)     # clamp
+        # Réflexion vectorielle
+        vector = self.get_vect()
+        dot = vector @ normal
+        if dot >= 0: return
+        vector -= 2 * (vector @ normal) * normal
+        vector.normalize()
+
+        # Calcul du nouvel angle
+        self.angle = math.atan2(-vector.y, vector.x)
+        self.angle += random.uniform(-self.bouncing_epsilon, self.bouncing_epsilon)
+        self.angle = (self.angle + math.pi) % (2 * math.pi) - math.pi
+
+        # Clamp
+        sign = 1 if self.angle >= 0 else -1
+        abs_angle = abs(self.angle)
+        if abs_angle > math.pi / 2: abs_angle = min(math.pi - self.angle_min, max(math.pi - self.angle_max, abs_angle))
+        else: abs_angle = min(self.angle_min, max(self.angle_max, abs_angle))
+        self.angle = sign * abs_angle
 
     def collidepaddle(self, paddle: Paddle, p0: pm.types.PointObject, p1: pm.types.PointObject): 
         """
@@ -121,16 +171,17 @@ class Ball(pm.entities.CircleEntity):
             p0 (pm.geometry.Point) : position initiale
             p1 (pm.geometry.Point) : position finale
         """
-        if abs(p1.x - self.view.centerx) >= abs(paddle.centerx - 0.5 * paddle.width - self.view.centerx):
+        if abs(p1.x - paddle.centerx) <= (paddle.width / 2 + self.radius):
             line = pm.geometry.Line(p0, p1 - p0)
 
             rect_inflation = 2 * self.radius
             rect = pm.geometry.Rect(point=(0, 0), width=paddle.width + rect_inflation, height=paddle.height + rect_inflation, border_radius=paddle.border_radius)
+            rect.center = paddle.center
 
             intersections = rect._line_intersection(line)
             if intersections:
                 I = min(intersections, key=lambda P: p0.distance(P))
-                normal = pm.geometry.Circle(I, self.radius).rect_collision_normal(paddle.rect)
+                normal: pm.types.VectorObject = pm.geometry.Circle(I, self.radius).rect_collision_normal(paddle.rect)
                 self.bounce(normal)
     
     def collidehorizontal(self):
