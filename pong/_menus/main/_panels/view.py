@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ...._core import pm, pygame
+from ...._core import pm, pygame, get_path
 
 # ======================================== PANEL ========================================
 class MainMenuView(pm.panels.Panel):
@@ -18,11 +18,14 @@ class MainMenuView(pm.panels.Panel):
             y=self.height * 0.18,
             text="PONG : Chaos Evolution",
             font_color=(0, 255, 255),
-            font_size=124,
+            font_path=get_path("_assets/fonts/futurist.ttf"),
+            font_size=112,
             gradient=True,
             gradient_color=(255, 0, 255),
-            gradient_direction="horizontal",
-            gradient_fluctuation="sides",
+            gradient_direction="diagonal",
+            gradient_fluctuation=True,
+            gradient_fluctuation_speed=1.5,
+            gradient_fluctuation_amplitude=0.5,
             anchor="center",
             panel="main_menu_view"
             )

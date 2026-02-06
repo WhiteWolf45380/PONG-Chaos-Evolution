@@ -22,11 +22,11 @@ class Main(pm.states.State):
             "leave": None,
         }
 
-        top = self.view.title.rect.bottom + self.view.height * 0.1
-        bottom = self.view.height * 0.85
+        top = self.view.title.rect.bottom + self.view.height * 0.15
+        bottom = self.view.height * 0.95
         buttons_space = abs(bottom - top) / len(self.buttons)
         buttons_height = buttons_space * 0.6
-        buttons_width = buttons_height * 3
+        buttons_width = buttons_height * 3.5
         for i, button in enumerate(self.buttons):
             self.buttons[button] = pm.ui.RectButton(
                 x=self.view.centerx,
@@ -52,7 +52,6 @@ class Main(pm.states.State):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
-        print(pm.time.fps)
     
     # ======================================== HANDLERS ========================================
     def handle_play(self):
