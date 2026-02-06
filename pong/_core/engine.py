@@ -9,6 +9,7 @@ class Engine:
     def __init__(self):
         # Initialisation du framework modulable
         pm.init()
+        pm.time.set_fps_limit(60)
         pm.screen.set_vsync(True)
 
         # Imports

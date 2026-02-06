@@ -77,15 +77,19 @@ class Ball(pm.entities.CircleEntity):
         """affichage derrière la balle"""
         if self["trail"] == "discret":
             self.draw_trail_discret(surface)
-        elif self["trail"] == "continous":
+        elif self["trail"] == "continuous":
             self.draw_trail_continuous(surface)
 
     def draw_trail_discret(self, surface: pygame.Surface):
         """Traînée par progression discrète"""
+        if len(self.trail) < 2:
+            return
+        
         for i, pos in enumerate(self.trail):
-            advancement = min(max((i + 1) / (len(self.trail) + 2), 0), 1)
-            color = tuple(self["color"][j] + (self.view.background_color[j] - self["color"][j]) * (1 - advancement) for j in range(3))
-            pygame.draw.circle(surface, color, tuple(map(int, pos)), self.radius * advancement**0.75)
+            advancement = (i + 1) / len(self.trail)
+            color = tuple(int(self["color"][j] * advancement + self.view.background_color[j] * (1 - advancement)) for j in range(3))
+            radius = max(1, int(self.radius * (advancement ** 0.75)) * 0.9)
+            pygame.draw.circle(surface, color, tuple(map(int, pos)), radius)
 
     def draw_trail_continuous(self, surface: pygame.Surface):
         """Traînée par interpolation linéaire"""
