@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from . import ctx, pm
+from . import ctx, pm, get_folder
 
 # ======================================== CLASSE PRINCIPALE ========================================
 class Engine:
@@ -9,8 +9,12 @@ class Engine:
     def __init__(self):
         # Initialisation du framework modulable
         pm.init()
+
         pm.time.set_fps_limit(60)
         pm.screen.set_vsync(True)
+
+        pm.languages.load_directory(get_folder("_languages"))
+        pm.languages.set_language('fr', fallback='en')
 
         # Imports
         from .._menus import Main, Modes, Modifiers
@@ -31,7 +35,7 @@ class Engine:
         ctx.modifiers = self.modifiers
         
         # Lancement d'une partie
-        pm.states.activate("game")
+        pm.states.activate("main_menu")
 
     def update(self):
         """Actualisation de la frame"""

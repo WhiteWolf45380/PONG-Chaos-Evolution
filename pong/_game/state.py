@@ -26,13 +26,7 @@ class Game(pm.states.State):
 
         # pause
         self.game_frozen = True
-        def toggle_freeze(self):
-            if self.current is None: return
-            self.game_frozen = not self.game_frozen
-            for name in ("ball", "paddle_0", "paddle_1"):
-                obj: pm.types.Entity = getattr(self.current, name)
-                if obj is not None: obj.freeze() if not self.game_frozen else obj.unfreeze()
-        pm.inputs.add_listener(pygame.K_SPACE, toggle_freeze, args=[self])
+        pm.inputs.add_listener(pygame.K_SPACE, self.toggle_freeze)
 
     # ======================================== CHARGEMENT ========================================
     def on_enter(self):
@@ -40,6 +34,7 @@ class Game(pm.states.State):
         super().on_enter()
         self.current = self.modes[ctx.modes.selected]
         pm.states.activate(ctx.modes.selected)
+        self.toggle_freeze()
         return self
 
     # ======================================== ACTUALISATION ========================================
@@ -58,3 +53,11 @@ class Game(pm.states.State):
     def current_mode(self):
         """Renvoie le mode de jeu actuel"""
         return ctx.modes.selected
+
+    # ======================================== METHODES DYNAMIQUES ========================================
+    def toggle_freeze(self):
+        if self.current is None: return
+        self.game_frozen = not self.game_frozen
+        for name in ("ball", "paddle_0", "paddle_1"):
+            obj: pm.types.Entity = getattr(self.current, name)
+            if obj is not None: obj.freeze() if not self.game_frozen else obj.unfreeze()

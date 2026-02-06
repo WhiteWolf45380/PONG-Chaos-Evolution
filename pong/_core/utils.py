@@ -8,16 +8,16 @@ def get_path(relative_path: str | Path) -> str:
     if getattr(sys, "frozen", False):
         base_path = Path(sys._MEIPASS)
     else:
-        base_path = Path(__file__).resolve().parent
+        base_path = Path(__file__).resolve().parent.parent
     return str(base_path / relative_path)
 
 
 def get_folder(relative_path: str | Path) -> str:
     """Obtention du chemin absolu d'un dossier"""
     if getattr(sys, "frozen", False):
-        folder_path = Path(sys.executable).resolve().parent
+        folder_path = Path(sys.executable).resolve().parent.parent
     else:
-        folder_path = Path(__file__).resolve().parent
+        folder_path = Path(__file__).resolve().parent.parent
     return str(folder_path / relative_path)
 
 # ======================================== EXPORTS ========================================

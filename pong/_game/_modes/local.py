@@ -24,11 +24,11 @@ class Local(pm.states.State):
     def on_enter(self):
         """Lancement d'une partie"""
         # Balle
-        self.ball = Ball()
+        self.ball = Ball(self.is_end)
 
         # Raquettes
         self.paddle_0 = Paddle(Paddle.OFFSET, self.view.centery, up=pygame.K_z, down=pygame.K_s)
-        self.paddle_1 = Paddle(self.surface_rect.width - Paddle.OFFSET, self.surface_rect.height / 2, up=pygame.K_UP, down=pygame.K_DOWN)
+        self.paddle_1 = Paddle(self.view.width - Paddle.OFFSET, self.view.centery, up=pygame.K_UP, down=pygame.K_DOWN)
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

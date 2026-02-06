@@ -12,7 +12,7 @@ class Ball(pm.entities.CircleEntity):
     """
     Balle
     """
-    def __init__(self):
+    def __init__(self, check_end: callable):
         # Panel de vue
         self.view = pm.panels["game_view"]
 
@@ -20,7 +20,11 @@ class Ball(pm.entities.CircleEntity):
         self.properties = ctx.modifiers.get_by_category("ball", remove_prefix=True)
 
         # Init de la super-classe
-        super().__init__(self.view.center, self["radius"], zorder=0, panel="game_view")
+        super().__init__(self.view.center, self["radius"], zorder=1, panel="game_view")
+        self.border = True
+        self.border_width = 2
+        self.border_color = (120, 120, 120)
+        self.border_around = True
 
         # Traînée        
         self.trail = []
@@ -36,7 +40,9 @@ class Ball(pm.entities.CircleEntity):
         self.celerity_min = 700
         self.celerity_max = 2500
         self.celerity = self.celerity_min
-        self.celerity_variation_time = 240
+
+        # Fonction de vérification de fin de partie
+        self.check_end = check_end
 
     # ======================================== ACTUALISATION ========================================
     def update(self) -> None | int:
@@ -49,13 +55,12 @@ class Ball(pm.entities.CircleEntity):
 
         # Trainée
         self.trail.append((self.centerx, self.centery))
-        while len(self.trail) > int(self["trail_limit"] * (pm.time.smoothfps / 60)):
+        while len(self.trail) > int(self["trail_length"] * (pm.time.smoothfps / 60)):
             self.trail.pop(0)
 
         # Vitesse croissante
-        self.celerity = min(self.celerity + pm.time.scale_value((self.celerity_max - self.celerity_min) / self.celerity_variation_time), self.celerity_max)
+        self.celerity = min(self.celerity + pm.time.scale_value((self.celerity_max - self.celerity_min) / self["acceleration_duration"]), self.celerity_max)
         celerity = pm.time.scale_value(self.celerity)
-        print(self.celerity)
 
         # Déplacement
         pos_0 = pm.geometry.Point(*self.center)
@@ -156,15 +161,15 @@ class Ball(pm.entities.CircleEntity):
         vector.normalize()
 
         # Calcul du nouvel angle
-        self.angle = math.atan2(-vector.y, vector.x)
-        self.angle += random.uniform(-self.bouncing_epsilon, self.bouncing_epsilon)
-        self.angle = (self.angle + math.pi) % (2 * math.pi) - math.pi
+        angle = math.atan2(-vector.y, vector.x)
+        angle = (angle + math.pi) % (2 * math.pi) - math.pi
 
         # Clamp
-        sign = 1 if self.angle >= 0 else -1
-        abs_angle = abs(self.angle)
+        sign = 1 if angle >= 0 else -1
+        abs_angle = abs(angle)
         if abs_angle > math.pi / 2: abs_angle = min(math.pi - self.angle_min, max(math.pi - self.angle_max, abs_angle))
         else: abs_angle = min(self.angle_min, max(self.angle_max, abs_angle))
+        abs_angle += random.uniform(0, self.bouncing_epsilon)
         self.angle = sign * abs_angle
 
     def collidepaddle(self, paddle: Paddle, p0: pm.types.PointObject, p1: pm.types.PointObject): 
@@ -175,6 +180,8 @@ class Ball(pm.entities.CircleEntity):
             p0 (pm.geometry.Point) : position initiale
             p1 (pm.geometry.Point) : position finale
         """
+        if paddle.cooldown > 0:
+            return
         if abs(p1.x - paddle.centerx) <= (paddle.width / 2 + self.radius):
             line = pm.geometry.Line(p0, p1 - p0)
 
@@ -186,7 +193,9 @@ class Ball(pm.entities.CircleEntity):
             if intersections:
                 I = min(intersections, key=lambda P: p0.distance(P))
                 normal: pm.types.VectorObject = pm.geometry.Circle(I, self.radius).rect_collision_normal(paddle.rect)
+                print(normal)
                 self.bounce(normal)
+                paddle.collision()
     
     def collidehorizontal(self):
         """Vérifie la collision avec les murs horizontaux"""
@@ -200,8 +209,6 @@ class Ball(pm.entities.CircleEntity):
         """Vérifie la collision avec les murs verticaux"""
         self.centerx = min(max(self.centerx, self.radius), self.view.width - self.radius)
         if self.left <= 0:
-            _end = ctx.game.current.is_end(0)
-            if not _end: self.bounce(pm.geometry.Vector(1, 0))
+            if not self.check_end(0): self.bounce(pm.geometry.Vector(1, 0))
         elif self.right >= self.view.width:
-            _end = ctx.game.current.is_end(1)
-            if not _end: self.bounce(pm.geometry.Vector(-1, 0))
+            if not self.check_end(1): self.bounce(pm.geometry.Vector(-1, 0))

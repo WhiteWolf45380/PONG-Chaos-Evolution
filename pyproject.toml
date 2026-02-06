@@ -17,4 +17,4 @@ where = ["."]
 include = ["pong*"]
 
 [tool.setuptools.package-data]
-"pong" = ["_assets/**/*"]
+"pong" = ["_assets/**/*", "_languages/*"]

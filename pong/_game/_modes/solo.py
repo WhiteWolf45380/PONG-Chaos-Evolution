@@ -24,7 +24,7 @@ class Solo(pm.states.State):
     def on_enter(self):
         """Lancement d'une partie"""
         # Balle
-        self.ball = Ball()
+        self.ball = Ball(self.is_end)
 
         # Raquette
         if ctx.paddle_side == 1:
