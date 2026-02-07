@@ -115,8 +115,10 @@ class Mode(pm.states.State):
         """Vérifie que la partie soit en cours"""
         return (self.running and not self.ended and not self.frozen)
     
-    def to_dict(self) -> dict:
+    def to_dict(self, fast: bool = False) -> dict:
         """Sérialise l'état de la partie"""
+        if fast:
+            return {"player_1_y": self.player_1.y}
         return {
             "ball_x": self.ball.x,
             "ball_y": self.ball.y,

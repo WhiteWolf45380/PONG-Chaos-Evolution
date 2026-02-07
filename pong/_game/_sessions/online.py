@@ -35,7 +35,7 @@ class Online(Session):
             return
 
         if self._is_host:
-            pm.network.send(self.current.to_dict())
+            pm.network.send(self.current.to_dict(fast=True))
         else:
             data = pm.network.receive()
             print(data)
