@@ -17,7 +17,7 @@ class Modes(pm.states.State):
 
         # Modes de jeu
         self.all = ctx.game.modes.keys()
-        self.selected = "wall_game"
+        self.selected = "classic"
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

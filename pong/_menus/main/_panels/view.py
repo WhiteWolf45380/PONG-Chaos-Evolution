@@ -19,7 +19,7 @@ class MainMenuView(pm.panels.Panel):
             text="PONG : Chaos Evolution",
             font_color=(0, 255, 255),
             font_path=get_path("_assets/fonts/futurist.ttf"),
-            font_size=96,
+            font_size=112,
             gradient=True,
             gradient_color=(255, 0, 255),
             gradient_direction="diagonal",
@@ -33,7 +33,7 @@ class MainMenuView(pm.panels.Panel):
         # Voile assombrissant
         self.dark_curtain = pygame.Surface((width, height))
         self.dark_curtain.fill(self.background_color)
-        self.dark_curtain.set_alpha(200)
+        self.dark_curtain.set_alpha(210)
 
     def draw_back(self, surface: pygame.Surface):
         """Dessin par frame"""

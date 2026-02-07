@@ -51,7 +51,7 @@ class Ball(pm.entities.CircleEntity):
         """
         # Détermination du côté
         side = int(self.centerx // (0.5 * self.view.width))
-        side_paddle: Paddle = getattr(ctx.game.current, f'paddle_{side}')
+        side_paddle: Paddle = getattr(pm.states[pm.states.get_active_by_layer(2)], f'paddle_{side}')
 
         # Trainée
         self.trail.append((self.centerx, self.centery))

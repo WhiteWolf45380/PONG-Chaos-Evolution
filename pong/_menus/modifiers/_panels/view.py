@@ -2,7 +2,7 @@
 from ...._core import ctx, pm
 
 # ======================================== PANEL ========================================
-class Menu(pm.panels.Panel):
+class ModifiersMenuView(pm.panels.Panel):
     """
     Panel du menu
     """

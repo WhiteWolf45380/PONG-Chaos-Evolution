@@ -1,6 +1,7 @@
 # ======================================== IMPORTS ========================================
-from .wall_game import WallGame
+from ._mode import Mode
+from .wall import Wall
 from .classic import Classic
 
 # ======================================== IMPORTS ========================================
-__all__ = ["WallGame", "Classic"]
+__all__ = ["Mode", "Wall", "Classic"]

@@ -30,7 +30,7 @@ class BallObject(pm.entities.CircleEntity):
 
         # Traînée       
         self.trail = []
-        self.trail_limit = 8
+        self.trail_limit = 6
 
         # Angle
         self.angle_min = math.radians(20)
@@ -48,7 +48,7 @@ class BallObject(pm.entities.CircleEntity):
         """
         # Trainée
         self.trail.append((self.centerx, self.centery))
-        while len(self.trail) > int(self.trail_limit * (pm.time.smoothfps / 60)):
+        while len(self.trail) > int(self.trail_limit):
             self.trail.pop(0)
 
         # Déplacement

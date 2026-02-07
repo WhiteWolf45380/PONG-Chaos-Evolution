@@ -8,7 +8,6 @@ class GameView(pm.panels.Panel):
     """
     def __init__(self, width : int = 1440, height : int = 1080):
         super().__init__('game_view', rect=(0, 0, width, height), centered=True, border_width=3, border_color=(200, 200, 200), border_around=False)
-        print(self._surface_rect)
         # Fond
         self.background_color = (0, 0, 15)
 

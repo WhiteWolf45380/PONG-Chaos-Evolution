@@ -16,15 +16,17 @@ class Engine:
         pm.languages.load_directory(get_folder("_languages"))
         pm.languages.set_language('en', fallback='fr')
 
-        # Imports
-        from .._menus import Main, Modes, Modifiers
-        from .._game import Game
+        pm.screen.set_caption("PONG : Chaos Evolution")
 
         # Instanciation du jeu
+        from .._game import Game
+
         self.game = Game()
         ctx.game = self.game
 
         # Instanciation des menus
+        from .._menus import Main, Modes, Modifiers, Settings, Lobbies
+        
         self.main = Main()
         ctx.main = self.main
 
@@ -33,9 +35,15 @@ class Engine:
 
         self.modifiers = Modifiers()
         ctx.modifiers = self.modifiers
+
+        self.settings = Settings()
+        ctx.settings = self.settings
+
+        self.lobbies = Lobbies()
+        ctx.lobbies = self.lobbies
         
         # Lancement d'une partie
-        pm.states.activate("main_menu", ease_out=False, duration=1.5)
+        pm.states.activate("main_menu", transition=True, ease_out=False, duration=1.5)
 
     def update(self):
         """Actualisation de la frame"""

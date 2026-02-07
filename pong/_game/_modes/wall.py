@@ -1,19 +1,20 @@
 # ======================================== IMPORTS ========================================
+from ..._core import ctx
 from ._mode import Mode
 
 # ======================================== MODE DE JEU ========================================
-class Classic(Mode):
+class Wall(Mode):
     """
-    Mode de jeu : Classique
+    Mode de jeu : Mur
 
-    Jeu de PONG basique.
-    Une raquette de chaque côté.
-    La partie se termine lorsque la balle touche l'un des murs verticaux.
-    Le but est d'envoyer la balle toucher le mur adverse.
+    Jeu seul contre un mur.
+    Le score augment à chaque rebond contre le mur.
+    La partie se termine lorsque la balle touche le mur côté raquette.
+    Le but est d'effectuer le plus grand score.
     """
     def __init__(self):
         # Initialisation du mode
-        super().__init__("classic", paddles=2)
+        super().__init__("wall", paddles=1)
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
@@ -23,11 +24,13 @@ class Classic(Mode):
     # ======================================== FIN ========================================
     def is_end(self, side: int):
         """Vérifie la fin de partie"""
-        self.winner = 1 - side
-        self.ended = True
-        return True
+        if side == ctx.modifiers['paddle_side']:
+            self.ended = True
+            return True
+        self.score += 1
+        return False
 
     def end(self):
         """Fin de partie"""
-        print(f"La partie est terminée !\nLe gagnant est le joueur {self.winner}")
+        print(f"La partie est terminée !\nScore: {self.score}")
         super().end()

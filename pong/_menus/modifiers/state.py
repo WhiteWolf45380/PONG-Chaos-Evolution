@@ -2,7 +2,7 @@
 from ..._core import pm
 from typing import Iterable, Optional
 
-from ._panels import Menu
+from ._panels import ModifiersMenuView
 
 # ======================================== ETAT ========================================
 class Modifiers(pm.states.State):
@@ -36,7 +36,7 @@ class Modifiers(pm.states.State):
         self.add("side", 0, category="paddle", modes=['wall_game', 'solo'], add_prefix=True)            # (int)  : côté de la raquette
 
         # Panel du menu
-        self.menu = Menu()
+        self.menu = ModifiersMenuView()
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

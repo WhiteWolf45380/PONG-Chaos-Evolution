@@ -1,21 +1,24 @@
 # ======================================== IMPORTS ========================================
-from ..._core import ctx, pm, pygame
+from ._session import Session
 
 # ======================================== MODE DE JEU ========================================
-class Solo():
+class Solo(Session):
     """Type de session : Seul"""
     def __init__(self):
-        pass
+        # Initialisation de l'état
+        super().__init__("solo")
 
     # ======================================== LANCEMENT ========================================
-    def init(self):
+    def start(self):
         """Initialisation d'une session"""
-        pass
+        super().start()
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation de la session"""
-    
+        super().update()
+
     # ======================================== FIN ========================================
     def end(self):
         """Fin de la session"""
+        super().end()

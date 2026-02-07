@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from .view import ModifiersMenuView
+from .view import SettingsMenuView
 
 # ======================================== EXPORTS ========================================
-__all__ = ["ModifiersMenuView"]
+__all__ = ["Menu"]

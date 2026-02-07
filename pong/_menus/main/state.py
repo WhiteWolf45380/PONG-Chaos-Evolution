@@ -25,10 +25,10 @@ class Main(pm.states.State):
             "leave": None,
         }
 
-        top = self.view.title.rect.bottom + self.view.height * 0.1
-        bottom = self.view.height * 0.95
+        top = self.view.title.rect.bottom + self.view.height * 0.08
+        bottom = self.view.height * 0.96
         buttons_space = abs(bottom - top) / len(self.buttons)
-        buttons_height = buttons_space * 0.65
+        buttons_height = buttons_space * 0.7
         buttons_width = buttons_height * 3.5
         for i, button in enumerate(self.buttons):
             self.buttons[button] = pm.ui.RectButton(
@@ -67,21 +67,21 @@ class Main(pm.states.State):
     def handle_solo(self):
         """Action du bouton Solo"""
         self.session_type = "solo"
-        pm.states.activate("game")
+        pm.states.activate("game", transition=True)
     
     def handle_local(self):
         """Action du bouton Local"""
         self.session_type = "local"
-        pm.states.activate("game")
+        pm.states.activate("game", transition=True)
     
     def handle_online(self):
         """Action du bouton Online"""
         self.session_type = "online"
-        pm.states.activate("game")
+        pm.states.activate("lobbies_menu", transition=True)
     
     def handle_settings(self):
         """Action du bouton Paramètres"""
-        pm.states.activate("settings")
+        pm.states.activate("settings_menu", transition=True)
     
     def handle_leave(self):
         """Action du bouton Quitter"""
