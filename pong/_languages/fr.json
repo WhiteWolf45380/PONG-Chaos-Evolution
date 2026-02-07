@@ -1,5 +1,7 @@
 {
-    "main_play": "Jouer",
+    "main_solo": "Jouer Seul",
+    "main_local": "Jouer en local",
+    "main_online": "Jouer en ligne",
     "main_settings": "Paramètres",
     "main_leave": "Quitter"
 }

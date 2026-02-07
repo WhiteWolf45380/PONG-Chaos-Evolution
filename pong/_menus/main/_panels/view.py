@@ -15,11 +15,11 @@ class MainMenuView(pm.panels.Panel):
         # Titre
         self.title = pm.ui.Text(
             x=self.centerx,
-            y=self.height * 0.18,
+            y=self.height * 0.13,
             text="PONG : Chaos Evolution",
             font_color=(0, 255, 255),
             font_path=get_path("_assets/fonts/futurist.ttf"),
-            font_size=112,
+            font_size=96,
             gradient=True,
             gradient_color=(255, 0, 255),
             gradient_direction="diagonal",

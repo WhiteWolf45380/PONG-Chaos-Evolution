@@ -18,15 +18,17 @@ class Main(pm.states.State):
 
         # Boutons
         self.buttons = {
-            "play": None,
+            "solo": None,
+            "local": None,
+            "online": None,
             "settings": None,
             "leave": None,
         }
 
-        top = self.view.title.rect.bottom + self.view.height * 0.15
+        top = self.view.title.rect.bottom + self.view.height * 0.1
         bottom = self.view.height * 0.95
         buttons_space = abs(bottom - top) / len(self.buttons)
-        buttons_height = buttons_space * 0.6
+        buttons_height = buttons_space * 0.65
         buttons_width = buttons_height * 3.5
         for i, button in enumerate(self.buttons):
             self.buttons[button] = pm.ui.RectButton(
@@ -49,17 +51,32 @@ class Main(pm.states.State):
                 callback=getattr(self, f"handle_{button}", lambda: None),
                 panel="main_menu_view",
             )
-    
+
+        # Fond
         self.balls_n = 15
         self.balls = [BallObject() for _ in range(self.balls_n)]
+
+        # Paramètres dynamique
+        self.session_type = None
     
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
     
     # ======================================== HANDLERS ========================================
-    def handle_play(self):
-        """Action du bouton Jouer"""
+    def handle_solo(self):
+        """Action du bouton Solo"""
+        self.session_type = "solo"
+        pm.states.activate("game")
+    
+    def handle_local(self):
+        """Action du bouton Local"""
+        self.session_type = "local"
+        pm.states.activate("game")
+    
+    def handle_online(self):
+        """Action du bouton Online"""
+        self.session_type = "online"
         pm.states.activate("game")
     
     def handle_settings(self):

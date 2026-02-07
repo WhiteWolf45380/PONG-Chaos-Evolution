@@ -1,34 +1,18 @@
 # ======================================== IMPORTS ========================================
 from ..._core import ctx, pm, pygame
 from .._objects import Ball, Paddle
+from ._mode import Mode
 
 # ======================================== MODE DE JEU ========================================
-class Local(pm.states.State):
-    """Mode de jeu : 2 Joueurs"""
+class Classic(Mode):
+    """
+    Mode de jeu : Classique
+
+    Jeu de PONG basique
+    """
     def __init__(self):
-        # Initialisation de l'état
-        super().__init__("local", layer=1)
-
-        # Panel de vue
-        self.view = pm.panels["game_view"]
-        
-        # Objets
-        self.ball = None
-        self.paddle_0 = None
-        self.paddle_1 = None
-
-        # Paramètres dynamiques
-        self.winner = None
-
-    # ======================================== LANCEMENT ========================================
-    def on_enter(self):
-        """Lancement d'une partie"""
-        # Balle
-        self.ball = Ball(self.is_end)
-
-        # Raquettes
-        self.paddle_0 = Paddle(Paddle.OFFSET, self.view.centery, up=pygame.K_z, down=pygame.K_s)
-        self.paddle_1 = Paddle(self.view.width - Paddle.OFFSET, self.view.centery, up=pygame.K_UP, down=pygame.K_DOWN)
+        # Initialisation du mode
+        super().__init__("classic")
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

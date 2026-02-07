@@ -1,7 +1,8 @@
 # ======================================== IMPORTS ========================================
 from .._core import ctx, pm, pygame
 from ._panels import GameView
-from ._modes import WallGame, Solo, Local
+from ._sessions import Solo, Local, Online
+from ._modes import WallGame, Classic
 
 # ======================================== ETAT ========================================
 class Game(pm.states.State):
@@ -18,24 +19,38 @@ class Game(pm.states.State):
         # Modes de jeu
         self.modes = {}
         self.modes["wall_game"] = WallGame()
-        self.modes["solo"] = Solo()
-        self.modes["local"] = Local()
+        self.modes["classic"] = Classic()
+
+        # Types de session
+        self.sessions = {}
+        self.sessions["solo"] = Solo()
+        self.session["local"] = Local()
+        self.session["online"] = Online()
 
         # Partie en cours
-        self.current = None
+        self.current_mode = None
+        self.current_session = None
 
         # pause
         self.game_frozen = True
         pm.inputs.add_listener(pygame.K_SPACE, self.toggle_freeze)
 
-    # ======================================== CHARGEMENT ========================================
+    # ======================================== Initialisation ========================================
     def on_enter(self):
         """Initialisation d'une partie"""
+        # Activation des panels
         super().on_enter()
-        self.current = self.modes[ctx.modes.selected]
-        pm.states.activate(ctx.modes.selected, transition=False)
+
+        # Activation de la session
+        self.current_session = self.sessions[ctx.main.session_type]
+        self.current_session.activate()
+
+        # Activation du mode de jeu
+        self.current_mode = self.modes[ctx.modes.selected]
+        self.current_mode.activate()
+
+        # Gêle avant partie
         self.toggle_freeze()
-        return self
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
@@ -49,15 +64,14 @@ class Game(pm.states.State):
             self.current.update()
         
     # ======================================== GETTERS ========================================
-    @property
-    def current_mode(self):
-        """Renvoie le mode de jeu actuel"""
-        return ctx.modes.selected
+
+    # ======================================== SETTERS ========================================
 
     # ======================================== METHODES DYNAMIQUES ========================================
     def toggle_freeze(self):
-        if self.current is None: return
+        """Active/Désactive le gêle de la partie"""
+        if self.current_mode is None: return
         self.game_frozen = not self.game_frozen
         for name in ("ball", "paddle_0", "paddle_1"):
-            obj: pm.types.Entity = getattr(self.current, name)
+            obj: pm.types.Entity = getattr(self.current, name, None)
             if obj is not None: obj.freeze() if not self.game_frozen else obj.unfreeze()

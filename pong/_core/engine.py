@@ -14,7 +14,7 @@ class Engine:
         pm.screen.set_vsync(True)
 
         pm.languages.load_directory(get_folder("_languages"))
-        pm.languages.set_language('fr', fallback='en')
+        pm.languages.set_language('en', fallback='fr')
 
         # Imports
         from .._menus import Main, Modes, Modifiers

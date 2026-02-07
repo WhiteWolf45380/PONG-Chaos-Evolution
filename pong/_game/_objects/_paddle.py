@@ -7,7 +7,7 @@ class Paddle(pm.entities.RectEntity):
     Raquette d'une joueur
     """
     OFFSET = 50
-    def __init__(self, x: int = 0, y: int = 0, up: int = None, down: int = None):
+    def __init__(self, x: int = 0, y: int = 0):
         # Panel de vue
         self.view = pm.panels["game_view"]
 
@@ -20,12 +20,6 @@ class Paddle(pm.entities.RectEntity):
 
         # Déplacement
         self.celerity = 700
-
-        self.up = up
-        pm.inputs.add_listener(up, self.move_up, repeat=True, condition=lambda: self.is_active())
-        
-        self.down = down
-        pm.inputs.add_listener(down, self.move_down, repeat=True, condition=lambda: self.is_active())   
 
         # Paramètres dynamiques
         self.cooldown = 0  
