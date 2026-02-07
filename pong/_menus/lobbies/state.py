@@ -47,3 +47,5 @@ class Lobbies(pm.states.State):
 
     def join(self):
         print(pm.network.get_lobbies())
+        pm.network.join("192.168.1.22")
+        pm.states.activate("game", transition=True)
