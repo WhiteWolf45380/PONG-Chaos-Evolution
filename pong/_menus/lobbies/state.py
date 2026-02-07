@@ -44,6 +44,7 @@ class Lobbies(pm.states.State):
 
     def host(self):
         pm.network.host(name="Partie test", mode="classic")
+        pm.states.activate("game", transition=True)
 
     def join(self):
         print(pm.network.get_lobbies())

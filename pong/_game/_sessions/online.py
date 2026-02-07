@@ -1,6 +1,6 @@
 # ======================================== IMPORTS ========================================
 from ._session import Session
-from    ..._core import pm
+from    ..._core import pm, ctx
 
 # ======================================== MODE DE JEU ========================================
 class Online(Session):
@@ -17,12 +17,17 @@ class Online(Session):
         super().start()
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
+        while not pm.network.is_connected: pass
+        if not self._is_host: ctx.modifiers.set("paddle_side", 1)
         print(f"[Online] Start session | Host: {self._is_host}, Connected: {self._connected}")
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation de la session"""
         super().update()
+        if self.current is None: return
+        if not self._is_host and not self.current.frozen: self.current.freeze()
+
         pm.network.update()
         self._connected = pm.network.is_connected
 
