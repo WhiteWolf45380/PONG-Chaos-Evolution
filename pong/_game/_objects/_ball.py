@@ -14,35 +14,35 @@ class Ball(pm.entities.CircleEntity):
     """
     def __init__(self, check_end: callable):
         # Panel de vue
-        self.view = pm.panels["game_view"]
+        self.view: pm.typeS.Panel = pm.panels["game_view"]
 
         # Propriétés
-        self.properties = ctx.modifiers.get_by_category("ball", remove_prefix=True)
+        self.properties: dict = ctx.modifiers.get_by_category("ball", remove_prefix=True)
 
         # Init de la super-classe
         super().__init__(self.view.center, self["radius"], zorder=1, panel="game_view")
-        self.border = True
-        self.border_width = 2
-        self.border_color = (120, 120, 120)
-        self.border_around = True
+        self.border: bool = True
+        self.border_width: int = 2
+        self.border_color: tuple[int, int, int] = (120, 120, 120)
+        self.border_around: bool = True
 
         # Traînée        
-        self.trail = []
+        self.trail: list[tuple] = []
 
         # Angle
-        self.disabled_side = random.choice(("left", "right")) if ctx.modes.selected != 1 else "right"
-        self.angle = math.radians((random.randint(self["angle_min"], self["angle_max"]) if self.disabled_side == "left" else random.randint(180 - self["angle_max"], 180 - self["angle_min"])) * random.choice((-1, 1)))
-        self.angle_min = math.radians(self["angle_min"])
-        self.angle_max = math.radians(self["angle_max"])
-        self.bouncing_epsilon = math.radians(self["bouncing_epsilon"]) # bruit dans le rebond
+        self.disabled_side: str = random.choice(("left", "right")) if ctx.modes.selected != 1 else "right"
+        self.angle: float = math.radians((random.randint(self["angle_min"], self["angle_max"]) if self.disabled_side == "left" else random.randint(180 - self["angle_max"], 180 - self["angle_min"])) * random.choice((-1, 1)))
+        self.angle_min: float = math.radians(self["angle_min"])
+        self.angle_max: float = math.radians(self["angle_max"])
+        self.bouncing_epsilon: float = math.radians(self["bouncing_epsilon"]) # bruit dans le rebond
 
         # Déplacement
-        self.celerity_min = 700
-        self.celerity_max = 2500
-        self.celerity = self.celerity_min
+        self.celerity_min: int = 700
+        self.celerity_max: int = 2500
+        self.celerity: float = self.celerity_min
 
         # Fonction de vérification de fin de partie
-        self.check_end = check_end
+        self.check_end: callable = check_end
 
     # ======================================== ACTUALISATION ========================================
     def update(self) -> None | int:
@@ -51,7 +51,7 @@ class Ball(pm.entities.CircleEntity):
         """
         # Détermination du côté
         side = int(self.centerx // (0.5 * self.view.width))
-        side_paddle: Paddle = getattr(pm.states[pm.states.get_active_by_layer(2)], f'paddle_{side}')
+        side_paddle: Paddle = getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), f'paddle_{side}')
 
         # Trainée
         self.trail.append((self.centerx, self.centery))

@@ -10,7 +10,6 @@ class Online(Session):
         super().__init__("online")
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
-        self._start_pos = False
 
     # ======================================== LANCEMENT ========================================
     def start(self):
@@ -23,28 +22,28 @@ class Online(Session):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation de la session"""
+        # Actualisation de la session
         super().update()
-        if self.current is None: return
 
-        pm.network.update()
+        # Vérification que la partie soit en cours
+        if self.current is None:
+            return
+
+        # Vérification de la connexion
         self._connected = pm.network.is_connected
-
         if not self._connected:
             return
 
+        # Actualisation côté hôte
         if self._is_host:
             data = pm.network.receive()
-            if data:
-                self.current.from_dict(data, ennemy=True)
+            if data: self.current.from_dict(data, ennemy=True)
             pm.network.send(self.current.to_dict())
+
+        # Actualisation côté client
         else:
             data = pm.network.receive()
-            if data:
-                if not self._start_pos:
-                    self.current.from_dict(data, ball=True, ennemy=True, game=True)
-                    self._start_pos = True
-                else:
-                    self.current.from_dict(data, ball=True, ennemy=True, game=True)
+            if data: self.current.from_dict(data, ball=True, ennemy=True, game=True)
             pm.network.send(self.current.to_dict())
 
     # ======================================== FIN ========================================

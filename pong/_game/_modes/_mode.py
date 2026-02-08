@@ -31,11 +31,11 @@ class Mode(pm.states.State):
         self.player_2 : Paddle | None = None
 
         # Paramètres fixes
-        self.paddles = paddles
+        self.paddles: int = paddles
 
         # Paramètres dynamiques
-        self.running = False
-        self.ended = False
+        self.running: bool = False
+        self.ended: bool = False
         self.winner: int = None
         self.score: int = 0
     
@@ -65,7 +65,6 @@ class Mode(pm.states.State):
         
         # Paramètres
         self.running = True # Jeu en cours
-        self.frozen = False # Jeu en gêle
         self.ended = False  # Fin de partie
         self.winner = None
         self.score = 0
@@ -73,13 +72,8 @@ class Mode(pm.states.State):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
-        if not pm.states.is_active("game"):
-            if self.running:
-                self.running = False
-                self.freeze()
-        elif not self.running:
-            self.running = True
-            self.unfreeze()
+        if not self.running:
+            return
 
         if self.ended:
             self.end()
@@ -113,7 +107,7 @@ class Mode(pm.states.State):
     @property
     def playing(self):
         """Vérifie que la partie soit en cours"""
-        return (self.running and not self.ended and not self.frozen)
+        return (self.running and not self.ended)
     
     def to_dict(self) -> dict:
         """Sérialise l'état de la partie"""
@@ -132,7 +126,6 @@ class Mode(pm.states.State):
             "score": self.score,
             "winner": self.winner,
             "running": self.running,
-            "frozen": self.frozen,
             "ended": self.ended,
         }
 
@@ -167,22 +160,21 @@ class Mode(pm.states.State):
             self.score = data.get("score", self.score)
             self.winner = data.get("winner", self.winner)
             self.running = data.get("running", self.running)
-            if data.get("frozen", self.frozen) and not self.frozen: self.freeze()
-            elif not data.get("frozen", self.frozen) and self.frozen: self.unfreeze()
             self.ended = data.get("ended", self.ended)
     
     def freeze(self):
         """Met le jeu en gêle"""
+        if not self.running: return
         self.ball.freeze()
         self.player_1.freeze()
         self.player_2.freeze()
-        self.frozen = True
+        self.running = False
     
     def unfreeze(self):
         """Enlêve le gêle"""
-        if not self.running: return
+        if self.running: return
         self.ball.unfreeze()
         self.player_1.unfreeze()
         if self.paddles > 1:
             self.player_2.unfreeze()
-        self.frozen = False
+        self.running = True

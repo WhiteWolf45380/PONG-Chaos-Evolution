@@ -30,8 +30,7 @@ class Session(pm.states.State):
         if not pm.states.is_active("game"):
             return
 
-        current_str = pm.states.get_active_by_layer(2)
-        if current_str is not None: self.current = pm.states[current_str]
+        self.current = pm.states.get_object(pm.states.get_active_by_layer(2))
         if isinstance(self.current, Mode):
             if not self.initialized: self.start()
         elif self.initialized:
@@ -43,7 +42,6 @@ class Session(pm.states.State):
         pm.inputs.remove_listener(pm.settings["p1_up"], self.p1_move_up)
         pm.inputs.remove_listener(pm.settings["p1_down"], self.p1_move_up)
         self.initialized = False
-
     
     def on_exit(self):
         """Désactivation de l'état"""

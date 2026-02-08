@@ -65,8 +65,8 @@ class Game(pm.states.State):
     def toggle_freeze(self):
         """Active/Désactive le gêle de la partie"""
         if self.current_mode is None: return
-        if self.current_mode.frozen: self.current_mode.unfreeze()
-        else: self.current_mode.freeze()
+        if self.current_mode.running: self.current_mode.freeze()
+        else: self.current_mode.unfreeze()
 
     def end_session(self):
         """Met fin à la session"""

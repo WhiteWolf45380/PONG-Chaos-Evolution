@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import ctx, pm, pygame
+from ..._core import ctx, pm, TYPE_CHECKING
 
 # ======================================== OBJET ========================================
 class Paddle(pm.entities.RectEntity):
@@ -9,24 +9,25 @@ class Paddle(pm.entities.RectEntity):
     OFFSET = 50
     def __init__(self, x: int = 0, y: int = 0):
         # Panel de vue
-        self.view = pm.panels["game_view"]
+        self.view: pm.types.Panel = pm.panels["game_view"]
 
         # Propriétés
-        self.properties = ctx.modifiers.get_by_category("paddle", remove_prefix=True)
+        self.properties: dict = ctx.modifiers.get_by_category("paddle", remove_prefix=True)
 
         # Initialisation de l'entité
         super().__init__(0, 0, self["size"] / 6, self["size"], self["border_radius"], zorder=2, panel="game_view")
-        self.center = (x, y)
+        self.center: tuple[float, float] = (x, y)
 
         # Déplacement
-        self.celerity = 700
+        self.celerity: int = 700
 
         # Paramètres dynamiques
-        self.cooldown = 0  
+        self.cooldown: float = 0  
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation de la frame"""
+        # Actualisation du cooldown
         self.cooldown = max(0, self.cooldown - pm.time.dt)
     
     # ======================================== METHODES DYNAMIQUES ========================================
