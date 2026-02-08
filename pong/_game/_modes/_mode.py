@@ -121,10 +121,14 @@ class Mode(pm.states.State):
             "ball_x": self.ball.x,
             "ball_y": self.ball.y,
             "ball_angle": self.ball.angle,
-            "paddle_0_x": self.player_1.x if self.paddle_0 else None,
-            "paddle_0_y": self.player_1.y if self.paddle_0 else None,
-            "paddle_1_x": self.player_2.x if self.paddle_1 else None,
-            "paddle_1_y": self.player_2.y if self.paddle_1 else None,
+            "paddle_0_x": self.paddle_0.x if self.paddle_0 else None,
+            "paddle_0_y": self.paddle_0.y if self.paddle_0 else None,
+            "paddle_1_x": self.paddle_1.x if self.paddle_1 else None,
+            "paddle_1_y": self.paddle_1.y if self.paddle_1 else None,
+            "player_1_x": self.player_1.x if self.player_1 else None,
+            "player_1_y": self.player_1.y if self.player_1 else None,
+            "player_2_x": self.player_2.x if self.player_2 else None,
+            "player_2_y": self.player_2.y if self.player_2 else None,
             "score": self.score,
             "winner": self.winner,
             "running": self.running,
@@ -132,7 +136,7 @@ class Mode(pm.states.State):
             "ended": self.ended,
         }
 
-    def from_dict(self, data: dict, ball: bool = False, player_1: bool = False, player_2: bool = False, game: bool = False):
+    def from_dict(self, data: dict, ball: bool = False, paddle_0: bool = False, paddle_1: bool = False, ennemy: bool = False, game: bool = False):
         """Applique l'état reçu"""
         if not data:
             return
@@ -144,14 +148,19 @@ class Mode(pm.states.State):
             self.ball.angle = data.get("ball_angle", self.ball.angle)
 
         # Paddle 0
-        if self.paddle_0 and player_1:
+        if self.paddle_0 and paddle_0:
             self.paddle_0.x = data.get("paddle_0_x", self.paddle_0.x)
             self.paddle_0.y = data.get("paddle_0_y", self.paddle_0.y)
 
         # Paddle 1
-        if self.player_2 and player_2:
+        if self.paddle_1 and paddle_1:
             self.paddle_1.x = data.get("paddle_1_x", self.paddle_1.x)
             self.paddle_1.y = data.get("paddle_1_y", self.paddle_1.y)
+        
+        # Ennemy
+        if self.player_2 and ennemy:
+            self.player_2.x = data.get("player_1_x", self.player_2.x)
+            self.player_2.y = data.get("player_1_y", self.player_2.y)
 
         # Partie
         if game:

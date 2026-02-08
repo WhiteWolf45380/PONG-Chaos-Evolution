@@ -34,15 +34,18 @@ class Online(Session):
             return
 
         if self._is_host:
+            data = pm.network.receive()
+            self.current.from_dict(data, ennemy=True)
             pm.network.send(self.current.to_dict())
         else:
             data = pm.network.receive()
             if data:
                 if not self._start_pos:
-                    self.current.from_dict(data, ball=True, player_1=True, player_2=True, game=True)
+                    self.current.from_dict(data, ball=True, ennemy=True, game=True)
                     self._start_pos = True
                 else:
-                    self.current.from_dict(data, player_2=True, game=True)
+                    self.current.from_dict(data, ball=True, ennemy=True, game=True)
+            pm.network.send(self.current.to_dict())
 
     # ======================================== FIN ========================================
     def end(self):
