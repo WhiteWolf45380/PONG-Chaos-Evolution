@@ -35,6 +35,7 @@ class Online(Session):
         # Vérification de la connexion
         self._connected = pm.network.is_connected
         if not self._connected:
+            pm.network.update()
             return
 
         # Actualisation côté hôte
