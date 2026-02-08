@@ -3,5 +3,7 @@
     "main_local": "Jouer en local",
     "main_online": "Jouer en ligne",
     "main_settings": "Paramètres",
-    "main_leave": "Quitter"
+    "main_leave": "Quitter",
+    "lobbies_title": "Menu des salons",
+    "lobbies_host": "Héberger"
 }

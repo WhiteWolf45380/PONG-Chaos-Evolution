@@ -10,6 +10,7 @@ class Online(Session):
         super().__init__("online")
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
+        self._ready = False
 
     def on_enter(self):
         return super().on_enter()
@@ -20,6 +21,12 @@ class Online(Session):
         super().start()
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
+        if self._is_host:
+            self._ready = True
+            self.allow_freeze = True
+        else:
+            self._ready = False
+            self.allow_freeze = False
         print(f"[Online] Start session | Host: {self._is_host}, Connected: {self._connected}")
 
     # ======================================== ACTUALISATION ========================================
@@ -35,20 +42,26 @@ class Online(Session):
         # Vérification de la connexion
         self._connected = pm.network.is_connected
         if not self._connected:
-            pm.network.update()
+            pm.network.update() # en attente
             return
 
-        # Actualisation côté hôte
-        if self._is_host:
-            data = pm.network.receive()
-            if data: self.current.from_dict(data, ennemy=True)
-            pm.network.send(self.current.to_dict())
-
-        # Actualisation côté client
-        else:
-            data = pm.network.receive()
-            if data: self.current.from_dict(data, ball=True, ennemy=True, game=True)
-            pm.network.send(self.current.to_dict())
+        # Synchronisation
+        if self._is_host: self._update_host()
+        else: self._update_client()
+    
+    def _update_host(self):
+        """Synchronisation côté hôte"""
+        data = pm.network.receive()
+        if data:
+            self.current.from_dict(data, ennemy=True)
+        pm.network.send(self.current.to_dict())
+        
+    def _update_client(self):
+        """Synchronisation côté client"""
+        data = pm.network.receive()
+        if data:
+            self.current.from_dict(data, ball=True, ennemy=True, game=True)
+        pm.network.send(self.current.to_dict())
 
     # ======================================== FIN ========================================
     def end(self):

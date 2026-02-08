@@ -7,6 +7,9 @@ class ContextManager:
     Context Manager
     """
     def __init__(self):
+        # Engine
+        self.engine = None
+
         # Jeu
         self.game = None
 

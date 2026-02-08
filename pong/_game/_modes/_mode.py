@@ -159,7 +159,8 @@ class Mode(pm.states.State):
         if game:
             self.score = data.get("score", self.score)
             self.winner = data.get("winner", self.winner)
-            self.running = data.get("running", self.running)
+            if data.get("running", self.running): self.unfreeze()
+            else: self.freeze()
             self.ended = data.get("ended", self.ended)
     
     def freeze(self):

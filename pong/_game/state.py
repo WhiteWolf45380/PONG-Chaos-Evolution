@@ -34,11 +34,12 @@ class Game(pm.states.State):
         # pause
         pm.inputs.add_listener(pygame.K_SPACE, self.toggle_freeze)
 
-    # ======================================== Initialisation ========================================
+    # ======================================== HOOKS ========================================
     def on_enter(self):
         """Initialisation d'une partie"""
         # Activation des panels
         super().on_enter()
+        ctx.engine.background.visible = True
 
         # Activation de la session
         if self.current_session is None or str(self.current_session) != ctx.main.session_type:
@@ -53,9 +54,13 @@ class Game(pm.states.State):
         # Gêle avant partie
         self.toggle_freeze()
 
+    def on_exit(self):
+        ctx.engine.background.visible = False
+        return super().on_exit()
+
     # ======================================== ACTUALISATION ========================================
     def update(self):
-        """Actualisation de la frame"""        
+        """Actualisation de la frame"""
         
     # ======================================== GETTERS ========================================
 
@@ -64,7 +69,7 @@ class Game(pm.states.State):
     # ======================================== METHODES DYNAMIQUES ========================================
     def toggle_freeze(self):
         """Active/Désactive le gêle de la partie"""
-        if self.current_mode is None: return
+        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True): return
         if self.current_mode.running: self.current_mode.freeze()
         else: self.current_mode.unfreeze()
 

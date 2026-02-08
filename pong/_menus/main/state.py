@@ -29,7 +29,7 @@ class Main(pm.states.State):
         bottom = self.view.height * 0.96
         buttons_space = abs(bottom - top) / len(self.buttons)
         buttons_height = buttons_space * 0.7
-        buttons_width = buttons_height * 3.5
+        buttons_width = buttons_height * 3.6
         for i, button in enumerate(self.buttons):
             self.buttons[button] = pm.ui.RectButton(
                 x=self.view.centerx,
