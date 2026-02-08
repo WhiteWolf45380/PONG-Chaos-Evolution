@@ -54,6 +54,7 @@ class Mode(pm.states.State):
         self.paddle_1 = Paddle(self.view.width - Paddle.OFFSET, self.view.centery)
 
         # Association
+        print("BBBBBBBBBBBBBBBBBBBBBBBBBBB")
         self.player_1 = getattr(self, f'paddle_{ctx.modifiers["paddle_side"]}')
         self.player_2 = getattr(self, f'paddle_{1 - ctx.modifiers["paddle_side"]}')
 
@@ -159,6 +160,7 @@ class Mode(pm.states.State):
         
         # Ennemy
         if self.player_2 and ennemy:
+            print(self.paddle_1 == self.player_1)
             self.player_2.x = data.get("player_1_x", self.player_2.x)
             self.player_2.y = data.get("player_1_y", self.player_2.y)
 

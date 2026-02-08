@@ -18,7 +18,6 @@ class Online(Session):
         super().start()
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
-        if not self._is_host: ctx.modifiers.set("paddle_side", 1)
         print(f"[Online] Start session | Host: {self._is_host}, Connected: {self._connected}")
 
     # ======================================== ACTUALISATION ========================================
@@ -35,7 +34,8 @@ class Online(Session):
 
         if self._is_host:
             data = pm.network.receive()
-            self.current.from_dict(data, ennemy=True)
+            if data:
+                self.current.from_dict(data, ennemy=True)
             pm.network.send(self.current.to_dict())
         else:
             data = pm.network.receive()

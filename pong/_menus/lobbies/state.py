@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm
+from ..._core import pm, ctx
 from ._panels import LobbiesMenuView
 
 # ======================================== ETAT ========================================
@@ -45,8 +45,9 @@ class Lobbies(pm.states.State):
     def host(self):
         pm.network.host(name="Partie test", mode="classic")
         pm.states.activate("game", transition=True)
+        ctx.modifiers.set("paddle_side", 0)
 
     def join(self):
-        print(pm.network.get_lobbies())
         pm.network.join("192.168.1.22")
         pm.states.activate("game", transition=True)
+        ctx.modifiers.set("paddle_side", 1)
