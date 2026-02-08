@@ -10,6 +10,7 @@ class Online(Session):
         super().__init__("online")
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
+        self._start_pos = False
 
     # ======================================== LANCEMENT ========================================
     def start(self):
@@ -17,7 +18,6 @@ class Online(Session):
         super().start()
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
-        while not pm.network.is_connected: pass
         if not self._is_host: ctx.modifiers.set("paddle_side", 1)
         print(f"[Online] Start session | Host: {self._is_host}, Connected: {self._connected}")
 
@@ -26,7 +26,6 @@ class Online(Session):
         """Actualisation de la session"""
         super().update()
         if self.current is None: return
-        if not self._is_host and not self.current.frozen: self.current.freeze()
 
         pm.network.update()
         self._connected = pm.network.is_connected
@@ -35,12 +34,15 @@ class Online(Session):
             return
 
         if self._is_host:
-            pm.network.send(self.current.to_dict(fast=True))
+            pm.network.send(self.current.to_dict())
         else:
             data = pm.network.receive()
-            print(data)
             if data:
-                self.current.from_dict(data)
+                if not self._start_pos:
+                    self.current.from_dict(data, ball=True, player_1=True, player_2=True, game=True)
+                    self._start_pos = True
+                else:
+                    self.current.from_dict(data, player_2=True, game=True)
 
     # ======================================== FIN ========================================
     def end(self):

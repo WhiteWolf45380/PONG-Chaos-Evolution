@@ -115,50 +115,51 @@ class Mode(pm.states.State):
         """Vérifie que la partie soit en cours"""
         return (self.running and not self.ended and not self.frozen)
     
-    def to_dict(self, fast: bool = False) -> dict:
+    def to_dict(self) -> dict:
         """Sérialise l'état de la partie"""
-        if fast:
-            return {"player_1_y": self.player_1.y}
         return {
             "ball_x": self.ball.x,
             "ball_y": self.ball.y,
-            "ball_dx": self.ball.dx,
-            "ball_dy": self.ball.dy,
+            "ball_angle": self.ball.angle,
             "player_1_x": self.player_1.x,
             "player_1_y": self.player_1.y,
             "player_2_x": self.player_2.x if self.player_2 else None,
             "player_2_y": self.player_2.y if self.player_2 else None,
             "score": self.score,
             "winner": self.winner,
-            "running": self.running
+            "running": self.running,
+            "frozen": self.frozen,
+            "ended": self.ended,
         }
 
-    def from_dict(self, data: dict):
+    def from_dict(self, data: dict, ball: bool = False, player_1: bool = False, player_2: bool = False, game: bool = False):
         """Applique l'état reçu"""
         if not data:
             return
 
         # Balle
-        if self.ball:
+        if self.ball and ball:
             self.ball.x = data.get("ball_x", self.ball.x)
             self.ball.y = data.get("ball_y", self.ball.y)
-            self.ball.dx = data.get("ball_dx", self.ball.dx)
-            self.ball.dy = data.get("ball_dy", self.ball.dy)
+            self.ball.angle = data.get("ball_angle", self.ball.angle)
 
         # Player 1
-        if self.player_1:
+        if self.player_1 and player_1:
             self.player_1.x = data.get("player_1_x", self.player_1.x)
             self.player_1.y = data.get("player_1_y", self.player_1.y)
 
         # Player 2
-        if self.player_2:
+        if self.player_2 and player_2:
             self.player_2.x = data.get("player_2_x", self.player_2.x)
             self.player_2.y = data.get("player_2_y", self.player_2.y)
 
         # Partie
-        self.score = data.get("score", self.score)
-        self.winner = data.get("winner", self.winner)
-        self.running = data.get("running", self.running)
+        if game:
+            self.score = data.get("score", self.score)
+            self.winner = data.get("winner", self.winner)
+            self.running = data.get("running", self.running)
+            if data.get("frozen", self.frozen) and not self.frozen: self.freeze()
+            self.ended = data.get("ended", self.ended)
     
     def freeze(self):
         """Met le jeu en gêle"""
