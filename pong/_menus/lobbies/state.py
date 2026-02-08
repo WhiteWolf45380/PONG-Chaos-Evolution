@@ -27,7 +27,7 @@ class Lobbies(pm.states.State):
             panel="lobbies_menu_view"
         )
 
-        # Bouton d'affichage des lobbies
+        # Bouton de join
         self.join_button = pm.ui.RectButton(
             self.view.centerx,
             self.view.height * 0.6,
@@ -39,8 +39,21 @@ class Lobbies(pm.states.State):
             panel="lobbies_menu_view"
         )
 
-    def update(self):
+        # Bouton de refresh
+        self.join_button = pm.ui.RectButton(
+            self.view.centerx,
+            self.view.height * 0.4,
+            200,
+            80,
+            anchor="center",
+            text="Refresh",
+            callback=self.refresh,
+            panel="lobbies_menu_view"
+        )
+
+    def refresh(self):
         pm.network.update()
+        print(pm.network.get_lobbies())
 
     def host(self):
         pm.network.host(name="Partie test", mode="classic")

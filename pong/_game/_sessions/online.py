@@ -11,6 +11,9 @@ class Online(Session):
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
 
+    def on_enter(self):
+        return super().on_enter()
+
     # ======================================== LANCEMENT ========================================
     def start(self):
         """Initialisation d'une session"""
