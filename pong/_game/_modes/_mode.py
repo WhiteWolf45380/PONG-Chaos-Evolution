@@ -121,10 +121,10 @@ class Mode(pm.states.State):
             "ball_x": self.ball.x,
             "ball_y": self.ball.y,
             "ball_angle": self.ball.angle,
-            "player_1_x": self.player_1.x,
-            "player_1_y": self.player_1.y,
-            "player_2_x": self.player_2.x if self.player_2 else None,
-            "player_2_y": self.player_2.y if self.player_2 else None,
+            "paddle_0_x": self.player_1.x if self.paddle_0 else None,
+            "paddle_0_y": self.player_1.y if self.paddle_0 else None,
+            "paddle_1_x": self.player_2.x if self.paddle_1 else None,
+            "paddle_1_y": self.player_2.y if self.paddle_1 else None,
             "score": self.score,
             "winner": self.winner,
             "running": self.running,
@@ -143,15 +143,15 @@ class Mode(pm.states.State):
             self.ball.y = data.get("ball_y", self.ball.y)
             self.ball.angle = data.get("ball_angle", self.ball.angle)
 
-        # Player 1
-        if self.player_1 and player_1:
-            self.player_1.x = data.get("player_1_x", self.player_1.x)
-            self.player_1.y = data.get("player_1_y", self.player_1.y)
+        # Paddle 0
+        if self.paddle_0 and player_1:
+            self.paddle_0.x = data.get("paddle_0_x", self.paddle_0.x)
+            self.paddle_0.y = data.get("paddle_0_y", self.paddle_0.y)
 
-        # Player 2
+        # Paddle 1
         if self.player_2 and player_2:
-            self.player_2.x = data.get("player_2_x", self.player_2.x)
-            self.player_2.y = data.get("player_2_y", self.player_2.y)
+            self.paddle_1.x = data.get("paddle_1_x", self.paddle_1.x)
+            self.paddle_1.y = data.get("paddle_1_y", self.paddle_1.y)
 
         # Partie
         if game:
@@ -159,6 +159,7 @@ class Mode(pm.states.State):
             self.winner = data.get("winner", self.winner)
             self.running = data.get("running", self.running)
             if data.get("frozen", self.frozen) and not self.frozen: self.freeze()
+            elif not data.get("frozen", self.frozen) and self.frozen: self.unfreeze()
             self.ended = data.get("ended", self.ended)
     
     def freeze(self):
