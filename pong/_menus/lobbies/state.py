@@ -26,9 +26,14 @@ class Lobbies(pm.states.State):
             filling=True,
             filling_color=(255, 255, 255, 20),
             filling_color_hover=(255, 255, 255, 40),
+            border_width=2,
+            border_color=(0, 0, 0, 5),
             icon=pygame.image.load(get_path("_assets/icons/back.png")),
             icon_keep_ratio=True,
-            icon_scale_ratio=0.7,
+            icon_scale_ratio=0.6,
+            hover_scale_ratio=1.05,
+            hover_scale_duration=0.05,
+            callback=self.handle_back,
             panel="lobbies_menu_view",
         )
 
@@ -46,12 +51,12 @@ class Lobbies(pm.states.State):
             filling_color=(90, 85, 80),
             filling_color_hover=(100, 95, 90),
             border_width=3,
-            border_color=(65, 57, 50),
+            border_color=(0, 0, 0, 10),
             border_color_hover=(70, 63, 55),
             border_radius=20,
             hover_scale_ratio=1.03,
             hover_scale_duration=0.07,
-            callback=self.host,
+            callback=self.handle_host,
             panel="lobbies_menu_view",
         )
 
@@ -66,13 +71,15 @@ class Lobbies(pm.states.State):
             filling_color=(255, 255, 255, 20),
             filling_hover=True,
             filling_color_hover=(255, 255, 255, 40),
+            border_width=2,
+            border_color=(0, 0, 0, 5),
             border_radius=10,
             icon=pygame.image.load(get_path("_assets/icons/refresh.png")),
             icon_keep_ratio=True,
-            icon_scale_ratio=0.7,
+            icon_scale_ratio=0.6,
             hover_scale_ratio=1.05,
             hover_scale_duration=0.05,
-            callback=self.refresh,
+            callback=self.handle_refresh,
             panel="lobbies_menu_view",
         )
 
@@ -81,18 +88,22 @@ class Lobbies(pm.states.State):
         """Actualisation de l'état"""
 
     # ======================================== HANDLERS ========================================
-    def refresh(self):
+    def handle_back(self):
+        """Retour au menu principal"""
+        pm.states.activate("main_menu", transition=True)
+
+    def handle_refresh(self):
         """Met à jour la liste des salons"""
         pm.network.update()
         print(pm.network.get_lobbies())
 
-    def host(self):
+    def handle_host(self):
         """Héberge un lobby"""
         pm.network.host(name="Partie test", mode="classic")
         pm.states.activate("game", transition=True)
         ctx.modifiers.set("paddle_side", 0)
 
-    def join(self):
+    def handle_join(self):
         """Rejoint un lobby"""
         pm.network.join("192.168.1.22")
         pm.states.activate("game", transition=True)

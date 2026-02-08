@@ -7,7 +7,7 @@ class LobbiesMenuView(pm.panels.Panel):
     Panel de vue du menu des lobbies
     """
     def __init__(self, width : int = 1280, height : int = 1080):
-        super().__init__('lobbies_menu_view', rect=(0, 0, width, height), centered=True)
+        super().__init__('lobbies_menu_view', rect=(0, 0, width, height), centered=True, border_width=3, border_color=(50, 45, 40), border_around=True)
 
         # Fond
         self.background_color = (60, 55, 50)
