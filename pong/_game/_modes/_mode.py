@@ -232,7 +232,7 @@ class Mode(pm.states.State):
 
     def from_dict(self, data: dict, ball: bool = False, paddle_0: bool = False, paddle_1: bool = False, ennemy: bool = False, game: bool = False):
         """Applique l'état reçu"""
-        if not data:
+        if not data or not self.playing:
             return
 
         # Balle
