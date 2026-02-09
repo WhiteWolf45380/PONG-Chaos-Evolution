@@ -119,7 +119,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
         ip = pm.ui.get_selected("lobby")
         pm.network.join(ip)
         ctx.modifiers.set("paddle_side", 1)
-        pm.states.activate("waiting_animation", transition=True)
+        pm.states.activate("game", transition=True)
     
     # ======================================== METHODES DYNAMIQUES ========================================
     def load(self, rooms: dict):
@@ -128,7 +128,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
         self.clear(rooms=rooms)
         for ip, lobby in rooms.items():
             if ip not in self.all:
-                self.all[ip] = (lobby, None)
+                self.all[ip] = [lobby, None]
         self.sort()
         self.render()
 
