@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm, ctx, pygame, get_path
+from ..._core import pm, ctx, pygame, get_path, __version__
 from ._panels import LobbiesMenuView, LobbiesMenuRooms
 from time import time
 
@@ -96,11 +96,11 @@ class Lobbies(pm.states.State):
     def handle_refresh(self):
         """Mise à jour de la liste des salons"""
         pm.network.update()
-        self.rooms.load(dict(pm.network.get_lobbies()))
+        self.rooms.load(dict(pm.network.get_lobbies(version=__version__)))
 
     def handle_host(self):
         """Héberge un lobby"""
-        pm.network.host(name="Partie test", mode="classic", time=time())
+        pm.network.host(name="Partie test", mode="classic", time=time(), version=__version__)
         ctx.modifiers.set("paddle_side", 0)
         pm.states.activate("waiting_animation", transition=True)
     
