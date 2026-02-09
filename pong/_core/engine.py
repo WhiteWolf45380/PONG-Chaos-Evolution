@@ -46,6 +46,12 @@ class Engine:
         self.lobbies = Lobbies()
         ctx.lobbies = self.lobbies
 
+        # Instanciation des animations
+        from .._animations import Waiting
+
+        self.waiting = Waiting()
+        ctx.waiting = self.waiting
+
         # Fond par défaut
         self.background = pm.ui.Surface(
             x=0,

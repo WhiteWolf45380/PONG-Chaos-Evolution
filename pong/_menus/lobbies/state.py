@@ -102,7 +102,7 @@ class Lobbies(pm.states.State):
         """Héberge un lobby"""
         pm.network.host(name="Partie test", mode="classic", time=time())
         ctx.modifiers.set("paddle_side", 0)
-        pm.states.activate("game", transition=True)
+        pm.states.activate("waiting_animation", transition=True)
     
     # ======================================== HOOKS ========================================
     def on_enter(self):
