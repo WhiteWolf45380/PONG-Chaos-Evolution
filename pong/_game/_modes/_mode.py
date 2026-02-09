@@ -168,9 +168,9 @@ class Mode(pm.states.State):
             current.visible = False
             current.reset()
             self.nums_index += 1
-
             if self.nums_index >= len(self.nums):
                 self.curtain.visible = False
+                self.nums_index = 0
                 self.unfreeze()
                 return
 
@@ -232,7 +232,7 @@ class Mode(pm.states.State):
 
     def from_dict(self, data: dict, ball: bool = False, paddle_0: bool = False, paddle_1: bool = False, ennemy: bool = False, game: bool = False):
         """Applique l'état reçu"""
-        if not data or not self.playing:
+        if not data:
             return
 
         # Balle
@@ -261,7 +261,6 @@ class Mode(pm.states.State):
             self.score_0 = data.get("score_0", self.score_0)
             self.score_1 = data.get("score_1", self.score_1)
             self.winner = data.get("winner", self.winner)
-            self.frozen = data.get("frozen", self.frozen)
             self.paused = data.get("paused", self.paused)
             self.ended = data.get("ended", self.ended)
     

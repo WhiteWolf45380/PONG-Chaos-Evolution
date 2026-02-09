@@ -56,8 +56,8 @@ class Online(Session):
     def _update_client(self):
         """Synchronisation côté client"""
         data = pm.network.receive()
-        if data.get("ended", False): self.end()
         if data:
+            if data.get("ended", False): self.end()
             self.current.from_dict(data, ball=True, ennemy=True, game=True)
         pm.network.send(self.current.to_dict())
 
@@ -67,4 +67,5 @@ class Online(Session):
         super().end()
         if pm.network.is_host or pm.network.is_connected:
             pm.network.disconnect()
+            pm.network
         print("[Online] Session ended")
