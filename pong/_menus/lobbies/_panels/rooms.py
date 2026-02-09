@@ -180,6 +180,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
                     callback=self.handle_join,
                     panel=str(self),
                 )
+                self.all[ip][1] = selector
         self._update_count()
     
     def filter(self):

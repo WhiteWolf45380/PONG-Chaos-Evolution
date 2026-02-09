@@ -1,5 +1,6 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm, ctx, pygame, get_path, __version__
+from ..._core import pm, ctx, pygame, get_path
+from ... import __version__
 from ._panels import LobbiesMenuView, LobbiesMenuRooms
 from time import time
 

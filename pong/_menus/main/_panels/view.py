@@ -1,5 +1,6 @@
 # ======================================== IMPORTS ========================================
-from ...._core import pm, pygame, get_path, __version__
+from ...._core import pm, pygame, get_path
+from .... import __version__
 
 # ======================================== PANEL ========================================
 class MainMenuView(pm.panels.Panel):
