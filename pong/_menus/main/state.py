@@ -53,7 +53,7 @@ class Main(pm.states.State):
             )
 
         # Fond
-        self.balls_n = 15
+        self.balls_n = 10
         self.balls = [BallObject() for _ in range(self.balls_n)]
 
         # Paramètres dynamique

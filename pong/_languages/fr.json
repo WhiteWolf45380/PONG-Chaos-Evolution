@@ -5,5 +5,7 @@
     "main_settings": "Paramètres",
     "main_leave": "Quitter",
     "lobbies_title": "Menu des salons",
-    "lobbies_host": "Héberger"
+    "lobbies_host": "Héberger",
+    "lobbies_previous": "Précédent",
+    "lobbies_next": "Suivant"
 }

@@ -5,5 +5,7 @@
     "main_settings": "Settings",
     "main_leave": "Leave",
     "lobbies_title": "Lobbies Menu",
-    "lobbies_host": "Host"
+    "lobbies_host": "Host",
+    "lobbies_previous": "Previous",
+    "lobbies_next": "Next"
 }

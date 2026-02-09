@@ -1,6 +1,7 @@
 # ======================================== IMPORTS ========================================
 from ..._core import pm, ctx, pygame, get_path
 from ._panels import LobbiesMenuView, LobbiesMenuRooms
+from time import time
 
 # ======================================== ETAT ========================================
 class Lobbies(pm.states.State):
@@ -99,15 +100,8 @@ class Lobbies(pm.states.State):
 
     def handle_host(self):
         """Héberge un lobby"""
-        pm.network.host(name="Partie test", mode="classic")
+        pm.network.host(name="Partie test", mode="classic", time=time())
         pm.states.activate("game", transition=True)
-        ctx.modifiers.set("paddle_side", 0)
-
-    def handle_join(self):
-        """Rejoint un lobby"""
-        pm.network.join("192.168.1.22")
-        pm.states.activate("game", transition=True)
-        ctx.modifiers.set("paddle_side", 1)
     
     # ======================================== HOOKS ========================================
     def on_enter(self):

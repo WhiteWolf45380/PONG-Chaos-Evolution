@@ -10,7 +10,6 @@ class Online(Session):
         super().__init__("online")
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
-        self._ready = False
 
     def on_enter(self):
         return super().on_enter()
@@ -22,10 +21,10 @@ class Online(Session):
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
         if self._is_host:
-            self._ready = True
+            ctx.modifiers.set("paddle_side", 0)
             self.allow_freeze = True
         else:
-            self._ready = False
+            ctx.modifiers.set("paddle_side", 1)
             self.allow_freeze = False
         print(f"[Online] Start session | Host: {self._is_host}, Connected: {self._connected}")
 
