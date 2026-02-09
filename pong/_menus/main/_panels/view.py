@@ -1,5 +1,6 @@
 # ======================================== IMPORTS ========================================
 from ...._core import pm, pygame, get_path
+from .... import __version__
 
 # ======================================== PANEL ========================================
 class MainMenuView(pm.panels.Panel):
@@ -29,6 +30,17 @@ class MainMenuView(pm.panels.Panel):
             anchor="center",
             panel="main_menu_view"
             )
+        
+        # Version
+        self.version_text = pm.ui.Text(
+            x=self.width * 0.95,
+            y=self.height * 0.95,
+            text=f"v{__version__}",
+            anchor="bottomright",
+            font_size=45,
+            font_color=(255, 255, 255),
+            panel=str(self),
+        )
         
         # Voile assombrissant
         self.dark_curtain = pygame.Surface((width, height))

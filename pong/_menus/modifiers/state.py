@@ -16,6 +16,9 @@ class Modifiers(pm.states.State):
         # Paramètres de la partie
         self.params = {}
 
+        # Catégorie Game
+        self.add("score_limit", 3, category="game")                                    # (int)  : score à atteindre
+
         # Catégorie: Ball
         self.add("radius", 18, category="ball", add_prefix=True)                                        # (int)  : rayon de la balle
         self.add("color", (255, 255, 255), category="ball", add_prefix=True)                            # (color): couleur de la balle

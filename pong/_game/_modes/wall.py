@@ -24,10 +24,12 @@ class Wall(Mode):
     # ======================================== FIN ========================================
     def is_end(self, side: int):
         """Vérifie la fin de partie"""
-        if side == ctx.modifiers['paddle_side']:
+        player_side = ctx.modifiers['paddle_side']
+        if side == player_side:
             self.ended = True
             return True
-        self.score += 1
+        if player_side == 0: self.score_0 += 1
+        else: self.score_1 += 1
         return False
 
     def end(self):

@@ -26,6 +26,18 @@ class Ball(pm.entities.CircleEntity):
         self.border_color: tuple[int, int, int] = (120, 120, 120)
         self.border_around: bool = True
 
+        # Fonction de vérification de fin de partie
+        self.check_end: callable = check_end
+
+        # Seconde intialisation
+        self.init()
+
+    def init(self):
+        """Initialisaiton des constantes"""
+        # position
+        self.center = self.view.center
+        self.radius = self["radius"]
+
         # Traînée        
         self.trail: list[tuple] = []
 
@@ -41,17 +53,19 @@ class Ball(pm.entities.CircleEntity):
         self.celerity_max: int = 2500
         self.celerity: float = self.celerity_min
 
-        # Fonction de vérification de fin de partie
-        self.check_end: callable = check_end
-
     # ======================================== ACTUALISATION ========================================
     def update(self) -> None | int:
         """
         Actualisation de la frame
         """
+        # Partie en cours
+        mode = pm.states.get_object(pm.states.get_active_by_layer(2))
+        if not mode.playing:
+            return
+
         # Détermination du côté
         side = int(self.centerx // (0.5 * self.view.width))
-        side_paddle: Paddle = getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), f'paddle_{side}')
+        side_paddle: Paddle = getattr(mode, f'paddle_{side}')
 
         # Trainée
         self.trail.append((self.centerx, self.centery))
@@ -146,6 +160,10 @@ class Ball(pm.entities.CircleEntity):
         return pm.geometry.Vector(self.dx, self.dy)
 
     # ======================================== METHODES DYNAMIQUES ========================================
+    def reset(self):
+        """Remise à zéro de la position"""
+        self.init()
+
     def bounce(self, normal: pm.types.VectorObject):
         """
         Fait rebondir la balle

@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import ctx, pm, TYPE_CHECKING
+from ..._core import ctx, pm
 
 # ======================================== OBJET ========================================
 class Paddle(pm.entities.RectEntity):
@@ -16,21 +16,37 @@ class Paddle(pm.entities.RectEntity):
 
         # Initialisation de l'entité
         super().__init__(0, 0, self["size"] / 6, self["size"], self["border_radius"], zorder=2, panel="game_view")
-        self.center: tuple[float, float] = (x, y)
+        self.center_init: tuple[float, float] = (x, y)
+
+        # Seconde initialisation
+        self.init()
+
+    def init(self):
+        """Initialisation des constantes"""
+        # Position
+        self.center = self.center_init
 
         # Déplacement
         self.celerity: int = 700
 
         # Paramètres dynamiques
-        self.cooldown: float = 0  
+        self.cooldown: float = 0
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation de la frame"""
+        mode = pm.states.get_object(pm.states.get_active_by_layer(2))
+        if not mode.playing:
+            return
+
         # Actualisation du cooldown
         self.cooldown = max(0, self.cooldown - pm.time.dt)
     
     # ======================================== METHODES DYNAMIQUES ========================================
+    def reset(self):
+        """Remise à zéro"""
+        self.init()
+
     def move_up(self):
         """Se dirige vers le haut"""
         super().move_up(pm.time.scale_value(self.celerity), min=0)

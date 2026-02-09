@@ -23,8 +23,12 @@ class Classic(Mode):
     # ======================================== FIN ========================================
     def is_end(self, side: int):
         """Vérifie la fin de partie"""
-        self.winner = 1 - side
-        self.ended = True
+        if side == 0: self.score_1 += 1
+        else: self.score_0 += 1
+        if self.score_0 >= self.score_limit or self.score_1 >= self.score_limit:
+            self.winner = 1 - side
+            self.ended = True
+        self.next_round = True
         return True
 
     def end(self):
