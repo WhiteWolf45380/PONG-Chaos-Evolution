@@ -62,7 +62,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
         self.pages_count_text = pm.ui.Text(
             x=self.width * 0.98,
             y=self.height * 0.98,
-            text=f"01/01",
+            text=f"0/0",
             anchor="bottomright",
             font_size=48,
             font_color=(255, 255, 255),
@@ -75,16 +75,16 @@ class LobbiesMenuRooms(pm.panels.Panel):
         self.all = {}   # {"ip": (**kwargs, selector)}
         self.sorted_ips = []
 
-        self.rows = 4
-        self.rows_margin = 100
-        self.rows_space = 50
+        self.rows = 3
+        self.rows_margin = 65
+        self.rows_space = 80
 
         self.cols = 2
-        self.cols_margin = 100
-        self.cols_space = 50
+        self.cols_margin = 40
+        self.cols_space = 150
 
-        self.rooms_width = self.width - 2 * self.cols_margin - (self.cols - 1) * self.cols_space
-        self.rooms_height = self.height - 2 * self.rows_space - (self.rows - 1) * self.rows_space
+        self.rooms_width = (self.width - 2 * self.cols_margin - (self.cols - 1) * self.cols_space) / self.cols
+        self.rooms_height = (self.height - 2 * self.rows_space - (self.rows - 1) * self.rows_space) / self.rows
 
         self.current_page = 0
         self.current_hovered = None
@@ -95,7 +95,8 @@ class LobbiesMenuRooms(pm.panels.Panel):
 
     def _update_count(self):
         """Actualise le compteur de pages"""
-        self.pages_count_text.text = f"{int(self.current_page + 1)}/{int(len(self.all) / (self.cols * self.rows) + 1)}"
+        total = len(self.all)
+        self.pages_count_text.text = f"{int(self.current_page + (1 if total > 0 else 0))}/{int(total / (self.cols * self.rows) + (1 if total > 0 else 0))}"
 
     # ======================================== FOND ========================================
     def draw_back(self, surface: pygame.Surface):
@@ -106,17 +107,18 @@ class LobbiesMenuRooms(pm.panels.Panel):
     def handle_previous(self):
         """Affichage des salons précédents"""
         self.current_page = max(0, self.current_page - 1)
-        self.render()
+        self.filter()
 
     def handle_next(self):
         """Affichage des salons suivants"""
         self.current_page = min(int(len(self.all) // (self.cols * self.rows)), self.current_page + 1)
-        self.render()
+        self.filter()
     
     def handle_join(self):
         """Rejoint un lobby"""
         ip = pm.ui.get_selected("lobby")
         pm.network.join(ip)
+        ctx.modifiers.set("paddle_side", 1)
         pm.states.activate("game", transition=True)
     
     # ======================================== METHODES DYNAMIQUES ========================================
@@ -155,16 +157,28 @@ class LobbiesMenuRooms(pm.panels.Panel):
         for i, ip in enumerate(self.sorted_ips):
             selector = self.all[ip][1]
             if selector is None:
+                content = self.all[ip][0]
                 selector = pm.ui.RectSelector(
                     x=self.cols_margin + (i // self.rows) * (self.rooms_width + self.cols_space),
                     y=self.rows_margin + (i % self.rows),
                     width=self.rooms_width,
                     height=self.rooms_height,
-                    filling_color=(0, 0, 0, 150),
-                    filling_color_hover=(0, 0, 0, 200),
+                    filling_color=(0, 0, 0, 100),
+                    filling_color_hover=(0, 0, 0, 150),
+                    title=content["name"],
+                    text=content["mode"],
+                    description=ip,
+                    font_color=(255, 255, 255),
+                    title_anchor="topleft",
+                    text_anchor="left",
+                    description_anchor="bottomleft",
+                    text_width_ratio=1.0,
+                    text_height_ratio=1.0,
+                    border_radius=5,
                     selection_id="lobby",
                     selector_id=ip,
                     callback=self.handle_join,
+                    panel=str(self),
                 )
         self._update_count()
     

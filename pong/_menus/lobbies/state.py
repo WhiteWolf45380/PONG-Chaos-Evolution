@@ -17,7 +17,7 @@ class Lobbies(pm.states.State):
         self.bind_panel(self.view)
 
         # Panel des salons
-        self.list = LobbiesMenuRooms()
+        self.rooms = LobbiesMenuRooms()
 
         # Boutton de retour
         self.back_button = pm.ui.CircleButton(
@@ -94,19 +94,21 @@ class Lobbies(pm.states.State):
         pm.states.activate("main_menu", transition=True)
 
     def handle_refresh(self):
-        """Met à jour la liste des salons"""
+        """Mise à jour de la liste des salons"""
         pm.network.update()
-        print(pm.network.get_lobbies())
+        self.rooms.load(dict(pm.network.get_lobbies()))
 
     def handle_host(self):
         """Héberge un lobby"""
         pm.network.host(name="Partie test", mode="classic", time=time())
+        ctx.modifiers.set("paddle_side", 0)
         pm.states.activate("game", transition=True)
     
     # ======================================== HOOKS ========================================
     def on_enter(self):
         """Ouverture du menu"""
         ctx.engine.background.visible = True
+        self.handle_refresh()
         return super().on_enter()
     
     def on_exit(self):

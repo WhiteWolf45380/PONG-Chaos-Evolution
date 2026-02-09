@@ -21,10 +21,8 @@ class Online(Session):
         self._is_host = pm.network.is_host
         self._connected = pm.network.is_connected
         if self._is_host:
-            ctx.modifiers.set("paddle_side", 0)
             self.allow_freeze = True
         else:
-            ctx.modifiers.set("paddle_side", 1)
             self.allow_freeze = False
         print(f"[Online] Start session | Host: {self._is_host}, Connected: {self._connected}")
 

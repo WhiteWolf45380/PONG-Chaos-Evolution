@@ -71,7 +71,6 @@ class Engine:
     def update(self):
         """Actualisation de la frame"""
         pm.screen.fill((30, 30, 47))
-        print(pm.time.fps)
 
     def run(self):
         """Lance l'éxécution"""
