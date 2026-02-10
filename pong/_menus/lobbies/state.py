@@ -101,7 +101,7 @@ class Lobbies(pm.states.State):
 
     def handle_host(self):
         """Héberge un lobby"""
-        pm.network.host(name="Partie test", mode="classic", time=time(), version=__version__)
+        pm.network.host(name="Partie test", mode="classic", max_players=2, max_spectators=5, time=time(), version=__version__)
         ctx.modifiers.set("paddle_side", 0)
         pm.states.activate("waiting_animation", transition=True)
     
