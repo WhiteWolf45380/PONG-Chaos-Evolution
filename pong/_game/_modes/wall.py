@@ -34,5 +34,5 @@ class Wall(Mode):
 
     def end(self):
         """Fin de partie"""
-        print(f"La partie est terminée !\nScore: {self.score}")
+        print(f"La partie est terminée !\nScore: {getattr(self, f'score_{ctx}', 0)}")
         super().end()

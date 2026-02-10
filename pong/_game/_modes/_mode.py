@@ -1,6 +1,7 @@
 # ======================================== IMPORTS ========================================
 from ..._core import ctx, pm
 from .._objects import Ball, Paddle
+import time
 
 # ======================================== MODE DE JEU ========================================
 class Mode(pm.states.State):
@@ -184,7 +185,8 @@ class Mode(pm.states.State):
 
     def end(self):
         """Fin de partie"""
-        pm.stop()
+        time.sleep(2)
+        pm.states.activate("main", transition=True, duration=3.0)
 
     # ======================================== METHODES PUBLIQUES ========================================
     @property

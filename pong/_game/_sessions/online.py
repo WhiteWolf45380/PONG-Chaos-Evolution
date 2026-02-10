@@ -11,9 +11,6 @@ class Online(Session):
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
 
-    def on_enter(self):
-        return super().on_enter()
-
     # ======================================== LANCEMENT ========================================
     def start(self):
         """Initialisation d'une session"""
@@ -25,6 +22,11 @@ class Online(Session):
         else:
             self.allow_freeze = False
         print(f"[Online] Start session | Host: {self._is_host}, Connected: {self._connected}")
+    
+    def on_enter(self):
+        """Activation de l'état"""
+        ctx.modes.selected = "classic"
+        return super().on_enter()
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

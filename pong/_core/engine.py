@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from . import ctx, pm, get_folder, get_path, pygame
+from . import ctx, pm, get_path, pygame
 
 # ======================================== CLASSE PRINCIPALE ========================================
 class Engine:
@@ -13,7 +13,7 @@ class Engine:
         pm.time.set_fps_limit(60)
         pm.screen.set_vsync(True)
 
-        pm.languages.load_directory(get_folder("_languages"))
+        pm.languages.load_directory(get_path("_languages"))
         pm.languages.set_language('fr', fallback='en')
 
         pm.screen.set_caption("PONG : Chaos Evolution")
@@ -76,6 +76,7 @@ class Engine:
 
     def update(self):
         """Actualisation de la frame"""
+        print(self.modes.selected)
         pm.screen.fill((30, 30, 47))
 
     def run(self):

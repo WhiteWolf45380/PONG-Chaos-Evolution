@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 # Packages installés / build
+*.spec
 *.egg
 *.egg-info/
 dist/

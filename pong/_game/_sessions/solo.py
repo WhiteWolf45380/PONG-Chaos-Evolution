@@ -1,4 +1,5 @@
 # ======================================== IMPORTS ========================================
+from ..._core import ctx
 from ._session import Session
 
 # ======================================== MODE DE JEU ========================================
@@ -12,6 +13,11 @@ class Solo(Session):
     def start(self):
         """Initialisation d'une session"""
         super().start()
+
+    def on_enter(self):
+        """Activation de l'état"""
+        ctx.modes.selected = "wall"
+        return super().on_enter()
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

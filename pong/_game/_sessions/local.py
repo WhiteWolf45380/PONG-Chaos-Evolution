@@ -1,6 +1,6 @@
 # ======================================== IMPORTS ========================================
 from ._session import Session
-from ..._core import pm
+from ..._core import pm, ctx
 
 # ======================================== MODE DE JEU ========================================
 class Local(Session):
@@ -15,6 +15,11 @@ class Local(Session):
         super().start()
         pm.inputs.add_listener(pm.settings["p2_up"], self.p2_move_up, repeat=True, condition=self.is_running)
         pm.inputs.add_listener(pm.settings["p2_down"], self.p2_move_down, repeat=True, condition=self.is_running)
+    
+    def on_enter(self):
+        """Activation de l'état"""
+        ctx.modes.selected = "classic"
+        return super().on_enter()
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
