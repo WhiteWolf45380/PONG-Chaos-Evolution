@@ -8,8 +8,8 @@ class Online(Session):
     def __init__(self):
         # Initialisation de l'état
         super().__init__("online")
-        self._is_host = pm.network.is_host
-        self._connected = pm.network.is_connected
+        self._is_host = pm.network.is_hosting()
+        self._connected = pm.network.is_connected()
 
     def on_enter(self):
         return super().on_enter()
@@ -18,8 +18,8 @@ class Online(Session):
     def start(self):
         """Initialisation d'une session"""
         super().start()
-        self._is_host = pm.network.is_host
-        self._connected = pm.network.is_connected
+        self._is_host = pm.network.is_hosting()
+        self._connected = pm.network.is_connected()
         if self._is_host:
             self.allow_freeze = True
         else:
@@ -37,7 +37,7 @@ class Online(Session):
             return
 
         # Vérification de la connexion
-        self._connected = pm.network.is_connected
+        self._connected = pm.network.is_connected()
         if not self._connected:
             pm.network.update() # en attente
             return
@@ -64,8 +64,7 @@ class Online(Session):
     # ======================================== FIN ========================================
     def end(self):
         """Fin de la session"""
-        super().end()
-        if pm.network.is_host or pm.network.is_connected:
+        if pm.network.is_hosting() or pm.network.is_connected():
             pm.network.disconnect()
             pm.network
         print("[Online] Session ended")
