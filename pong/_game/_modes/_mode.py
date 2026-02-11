@@ -195,6 +195,7 @@ class Mode(pm.states.State):
         """Fin de partie"""
         if self.end_done:
             return False
+        self.end_done = True
         self.reset()
         self.kill_all()
         pm.states.activate("main_menu", transition=True, duration=3.0)
