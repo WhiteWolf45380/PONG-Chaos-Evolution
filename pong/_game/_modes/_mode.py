@@ -236,7 +236,7 @@ class Mode(pm.states.State):
         """Applique l'état reçu"""
         if not data:
             return
-
+        print(data)
         # Balle
         if self.ball and ball:
             self.ball.x = data.get("ball_x", self.ball.x)
