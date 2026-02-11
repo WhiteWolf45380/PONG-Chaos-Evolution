@@ -42,14 +42,12 @@ class Game(pm.states.State):
         ctx.engine.background.visible = True
 
         # Activation de la session
-        if self.current_session is None or str(self.current_session) != ctx.main.session_type:
-            self.current_session = self.sessions[ctx.main.session_type]
-            self.current_session.activate()
+        self.current_session = self.sessions[ctx.main.session_type]
+        self.current_session.activate()
 
         # Activation du mode de jeu
-        if self.current_mode is None or str(self.current_mode) != ctx.modes.selected:
-            self.current_mode = self.modes[ctx.modes.selected]
-            self.current_mode.activate()
+        self.current_mode = self.modes[ctx.modes.selected]
+        self.current_mode.activate()
 
     def on_exit(self):
         ctx.engine.background.visible = False

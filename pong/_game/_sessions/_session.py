@@ -40,7 +40,7 @@ class Session(pm.states.State):
     def end(self):
         """Fin de la session"""
         pm.inputs.remove_listener(pm.settings["p1_up"], self.p1_move_up)
-        pm.inputs.remove_listener(pm.settings["p1_down"], self.p1_move_up)
+        pm.inputs.remove_listener(pm.settings["p1_down"], self.p1_move_down)
         self.initialized = False
     
     def on_exit(self):

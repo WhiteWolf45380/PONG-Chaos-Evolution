@@ -89,6 +89,7 @@ class Mode(pm.states.State):
         self.frozen: bool = False
         self.paused: bool = False
         self.ended: bool = False
+        self.end_done: bool = False
         self.next_round: bool = False
 
         self.score_limit: int = ctx.modifiers["score_limit"]
@@ -114,7 +115,6 @@ class Mode(pm.states.State):
         if self.paddles == 1:
             self.player_2.freeze()
             self.player_2.hide()
-            setattr(self, f'paddle_{1 - ctx.modifiers["paddle_side"]}', None)
         
         # Lancement
         self.start()
@@ -196,7 +196,6 @@ class Mode(pm.states.State):
         if self.end_done:
             return False
         self.end_done = True
-        self.reset()
         self.kill_all()
         pm.states.activate("main_menu", transition=True, duration=3.0)
         return True

@@ -14,7 +14,7 @@ class GameView(pm.panels.Panel):
         self.background_color = (0, 0, 15)
 
         # Décor
-        self.art_color = (180, 185, 190)
+        self.art_color = (135, 130, 125)
 
         # line de séparation
         self.art_line = pm.entities.LineEntity(self.center, (0, 1), auto=False)
@@ -46,7 +46,7 @@ class GameView(pm.panels.Panel):
             anchor="center",
             font_path=get_path("_assets/fonts/arcade.ttf"),
             font_size=96,
-            font_color=(200, 200, 200),
+            font_color=self.art_color,
             auto=False,
         )
 
@@ -58,7 +58,7 @@ class GameView(pm.panels.Panel):
             anchor="center",
             font_path=get_path("_assets/fonts/arcade.ttf"),
             font_size=96,
-            font_color=(200, 200, 200),
+            font_color=self.art_color,
             auto=False,
         )
 
@@ -75,13 +75,15 @@ class GameView(pm.panels.Panel):
 
         # Scores
         s0 = getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'score_0', 0)
-        if self.s0 != s0:
-            self.s0_text.text = str(s0)
-            self.s0 = s0
-        surface.blit(self.s0_text.surface, self.s0_text.rect)
+        if s0 is not None:
+            if self.s0 != s0:
+                self.s0_text.text = str(s0)
+                self.s0 = s0
+            surface.blit(self.s0_text.surface, self.s0_text.rect)
 
         s1 = getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'score_1', 0)
-        if self.s1 != s1:
-            self.s1_text.text = str(s1)
-            self.s1 = s1
-        surface.blit(self.s1_text.surface, self.s1_text.rect)
+        if s1 is not None:
+            if self.s1 != s1:
+                self.s1_text.text = str(s1)
+                self.s1 = s1
+            surface.blit(self.s1_text.surface, self.s1_text.rect)

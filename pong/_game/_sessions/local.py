@@ -30,5 +30,5 @@ class Local(Session):
     def end(self):
         """Fin de la session"""
         super().end()
-        pm.inputs.remove_listener(pm.settings["p1_up"], self.p2_move_up)
-        pm.inputs.remove_listener(pm.settings["p1_down"], self.p2_move_up)
+        pm.inputs.remove_listener(pm.settings["p2_up"], self.p2_move_up)
+        pm.inputs.remove_listener(pm.settings["p2_down"], self.p2_move_down)

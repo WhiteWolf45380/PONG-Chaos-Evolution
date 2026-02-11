@@ -16,6 +16,12 @@ class Wall(Mode):
         # Initialisation du mode
         super().__init__("wall", paddles=1)
 
+    # ======================================== LANCEMENT ========================================
+    def on_enter(self):
+        """Activation de l'état"""
+        super().on_enter()
+        setattr(self, f"score_{1 - ctx.modifiers.get('paddle_side')}", None)
+
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
