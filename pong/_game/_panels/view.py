@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm, pygame, get_path
+from ..._core import ctx, pm, pygame, get_path
 
 # ======================================== PANEL ========================================
 class GameView(pm.panels.Panel):
@@ -62,6 +62,31 @@ class GameView(pm.panels.Panel):
             auto=False,
         )
 
+        # Distinction des joueurs
+        self.p1 = 0
+        self.p1_text = pm.ui.Text(
+            x=self.width * 0.05,
+            y=self.height * 0.05,
+            text="P1",
+            anchor="topleft",
+            font_path=get_path("_assets/fonts/arcade.ttf"),
+            font_size=32,
+            font_color=self.art_color,
+            auto=False,
+        )
+
+        self.p2 = 1
+        self.p2_text = pm.ui.Text(
+            x=self.width * 0.95,
+            y=self.height * 0.05,
+            text="P2",
+            anchor="topright",
+            font_path=get_path("_assets/fonts/arcade.ttf"),
+            font_size=32,
+            font_color=self.art_color,
+            auto=False,
+        )
+
     def draw_back(self, surface: pygame.Surface):
         """Dessin par frame"""
         # Fond
@@ -87,3 +112,18 @@ class GameView(pm.panels.Panel):
                 self.s1_text.text = str(s1)
                 self.s1 = s1
             surface.blit(self.s1_text.surface, self.s1_text.rect)
+        
+        # Distinction des joueurs
+        p1 = ctx.modifiers.get("paddle_side")
+        if p1 is not None:
+            if self.p1 != p1:
+                self.p1_text.text = str(p1)
+                self.p1 = p1
+            surface.blit(self.p1_text.surface, self.p1_text.rect)
+        
+        p2 = 1 - ctx.modifiers.get("paddle_side")
+        if p2 is not None and getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'paddles', 2) >= 2:
+            if self.p2 != p2:
+                self.p2_text.text = str(p2)
+                self.p2 = p2
+            surface.blit(self.p2_text.surface, self.p2_text.rect)
