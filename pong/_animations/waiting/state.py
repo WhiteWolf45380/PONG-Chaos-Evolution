@@ -19,7 +19,7 @@ class Waiting(pm.states.State):
     def update(self):
         """Actualisation par frame"""
         pm.network.update()
-        if pm.network.is_lobby_ready():
+        if pm.network.is_game_started():
             self.start()
 
     # ======================================== START ========================================
