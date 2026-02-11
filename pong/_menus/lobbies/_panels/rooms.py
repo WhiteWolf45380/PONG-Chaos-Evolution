@@ -75,16 +75,16 @@ class LobbiesMenuRooms(pm.panels.Panel):
         self.all = {}   # {"ip": (**kwargs, selector)}
         self.sorted_ips = []
 
-        self.rows = 3
-        self.rows_margin = 65
-        self.rows_space = 80
+        self.rows = 4
+        self.rows_margin = 30
+        self.rows_space = 50
 
         self.cols = 2
-        self.cols_margin = 40
+        self.cols_margin = 50
         self.cols_space = 150
 
         self.rooms_width = (self.width - 2 * self.cols_margin - (self.cols - 1) * self.cols_space) / self.cols
-        self.rooms_height = (self.height - 2 * self.rows_space - (self.rows - 1) * self.rows_space) / self.rows
+        self.rooms_height = (self.next_button.rect.y - 2 * self.rows_space - (self.rows - 1) * self.rows_space) / self.rows
 
         self.current_page = 0
         self.current_hovered = None
@@ -163,20 +163,32 @@ class LobbiesMenuRooms(pm.panels.Panel):
                     y=self.rows_margin + (i % self.rows),
                     width=self.rooms_width,
                     height=self.rooms_height,
+
                     filling_color=(0, 0, 0, 100),
                     filling_color_hover=(0, 0, 0, 150),
+
                     title=content["name"],
-                    text=content["mode"],
-                    description=ip,
-                    font_color=(255, 255, 255),
                     title_anchor="topleft",
+                    title_size_ratio=0.9,
+
+                    text=content["mode"],
                     text_anchor="left",
-                    description_anchor="bottomleft",
-                    text_width_ratio=1.0,
-                    text_height_ratio=1.0,
-                    border_radius=5,
+                    text_size_ratio=0.9,
+
+                    description=ip,
+                    description_anchor="bottomright",
+                    description_size_ratio=0.8,
+
+                    font_color=(255, 255, 255),
+                    padding=10,
+
+                    border_radius=8,
+                    border_width=2,
+                    border_color=(0, 0, 0, 10),
+
                     selection_id="lobby",
                     selector_id=ip,
+        
                     callback=self.handle_join,
                     panel=str(self),
                 )

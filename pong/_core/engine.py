@@ -58,9 +58,9 @@ class Engine:
             y=0,
             width=1920,
             height=1080,
-            color=(0, 0, 30),
+            color=(0, 0, 40),
             gradient=True,
-            gradient_color=(0, 0, 10),
+            gradient_color=(0, 0, 15),
             gradient_direction="vertical",
             gradient_fluctuation=True,
             gradient_fluctuation_amplitude=0.7,
@@ -76,7 +76,6 @@ class Engine:
 
     def update(self):
         """Actualisation de la frame"""
-        print(self.modes.selected)
         pm.screen.fill((30, 30, 47))
 
     def run(self):
