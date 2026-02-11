@@ -7,5 +7,8 @@
     "lobbies_title": "Menu des salons",
     "lobbies_host": "Héberger",
     "lobbies_previous": "Précédent",
-    "lobbies_next": "Suivant"
+    "lobbies_next": "Suivant",
+    "game_results_default": "Fin de partie",
+    "game_results_score": "Score final : {score}",
+    "game_results_winner": "Le joueur {winner} l'emporte"
 }

@@ -1,4 +1,5 @@
 # ======================================== IMPORTS ========================================
+from ..._core import ctx, pm
 from ._mode import Mode
 
 # ======================================== MODE DE JEU ========================================
@@ -33,6 +34,6 @@ class Classic(Mode):
 
     def end(self):
         """Fin de partie"""
-        if not super().end():
+        winner = 1 if self.winner == ctx.modifiers.get("paddle_side") else 2
+        if not super().end(pm.languages("game_results_winner", winner=self.winner)):
             return
-        print(f"La partie est terminée !\nLe gagnant est le joueur {self.winner}")

@@ -191,13 +191,14 @@ class Mode(pm.states.State):
         """Vérifie la fin de partie après la collision d'un mur vertical"""
         return False
 
-    def end(self):
+    def end(self, text: str = None):
         """Fin de partie"""
         if self.end_done:
             return False
         self.end_done = True
         self.kill_all()
-        pm.states.activate("main_menu", transition=True, duration=3.0)
+        ctx.results.load(text)
+        pm.states.activate("results_animation")
         return True
 
     # ======================================== METHODES PUBLIQUES ========================================

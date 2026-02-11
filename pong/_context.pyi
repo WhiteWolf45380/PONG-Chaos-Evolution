@@ -3,7 +3,7 @@ from typing import Optional
 from ._core.engine import Engine
 from ._game import Game
 from ._menus import Main, Modes, Modifiers, Settings, Lobbies
-from ._animations import Waiting
+from ._animations import Waiting, Results
 
 # ======================================== EXPOSITIONS ========================================
 engine: Optional[Engine]
@@ -14,3 +14,4 @@ modifiers: Optional[Modifiers]
 settings: Optional[Settings]
 lobbies: Optional[Lobbies]
 waiting: Optional[Waiting]
+results: Optional[Results]

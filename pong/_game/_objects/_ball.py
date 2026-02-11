@@ -40,6 +40,7 @@ class Ball(pm.entities.CircleEntity):
 
         # Traînée        
         self.trail: list[tuple] = []
+        self.trail_limit = int(self["trail_length"] * (pm.time.smoothfps / 60))
 
         # Angle
         self.disabled_side: str = random.choice(("left", "right")) if ctx.modes.selected != 1 else "right"
@@ -69,7 +70,7 @@ class Ball(pm.entities.CircleEntity):
 
         # Trainée
         self.trail.append((self.centerx, self.centery))
-        while len(self.trail) > int(self["trail_length"] * (pm.time.smoothfps / 60)):
+        while len(self.trail) > self.trail_limit:
             self.trail.pop(0)
 
         # Vitesse croissante
@@ -106,7 +107,7 @@ class Ball(pm.entities.CircleEntity):
         
         for i, pos in enumerate(self.trail):
             advancement = (i + 1) / len(self.trail)
-            color = tuple(int(self["color"][j] * advancement + self.view.background_color[j] * (1 - advancement)) for j in range(3))
+            color = tuple(int(self["trail_color"][j] * advancement + self.view.background_color[j] * (1 - advancement)) for j in range(3))
             radius = max(1, int(self.radius * (advancement ** 0.75)) * 0.9)
             pygame.draw.circle(surface, color, tuple(map(int, pos)), radius)
 
@@ -133,7 +134,7 @@ class Ball(pm.entities.CircleEntity):
                 pos_y = start_pos[1] + t * (end_pos[1] - start_pos[1])
                 
                 advancement = (i + t) / num_segments
-                color = tuple(int(self["color"][k] + (self.view.background_color[k] - self["color"][k]) * (1 - advancement))for k in range(3))
+                color = tuple(int(self["trail_color"][k] + (self.view.background_color[k] - self["trail_color"][k]) * (1 - advancement))for k in range(3))
                 radius = self.radius * advancement**0.75
                 
                 pygame.draw.circle(surface, color, (int(pos_x), int(pos_y)), max(1, int(radius)))

@@ -7,5 +7,8 @@
     "lobbies_title": "Lobbies Menu",
     "lobbies_host": "Host",
     "lobbies_previous": "Previous",
-    "lobbies_next": "Next"
+    "lobbies_next": "Next",
+    "game_results_default": "Game Over",
+    "game_results_score": "Final score : {score}",
+    "game_results_winner": "Player {winner} won !"
 }

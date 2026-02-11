@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import ctx
+from ..._core import ctx, pm
 from ._mode import Mode
 
 # ======================================== MODE DE JEU ========================================
@@ -40,6 +40,5 @@ class Wall(Mode):
 
     def end(self):
         """Fin de partie"""
-        if not super().end():
+        if not super().end(pm.languages("game_results_score", score=getattr(self, f'score_{ctx.modifiers["paddle_side"]}', 0))):
             return
-        print(f"La partie est terminée !\nScore: {getattr(self, f'score_{ctx}', 0)}")
