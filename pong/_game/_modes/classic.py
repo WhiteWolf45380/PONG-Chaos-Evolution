@@ -33,5 +33,6 @@ class Classic(Mode):
 
     def end(self):
         """Fin de partie"""
+        if not super().end():
+            return
         print(f"La partie est terminée !\nLe gagnant est le joueur {self.winner}")
-        super().end()

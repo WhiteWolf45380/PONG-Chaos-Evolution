@@ -119,7 +119,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
         ip = pm.ui.get_selected("lobby")
         pm.network.join(ip)
         ctx.modifiers.set("paddle_side", 1)
-        pm.states.activate("waiting_animation", transition=True)
+        pm.states.activate("waiting_animation", transition=False)
     
     # ======================================== METHODES DYNAMIQUES ========================================
     def load(self, rooms: dict):

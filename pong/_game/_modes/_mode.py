@@ -38,6 +38,7 @@ class Mode(pm.states.State):
         self.frozen: bool = False       # jeu en gêle
         self.paused: bool = False       # jeu en pause
         self.ended: bool = False        # menu de fin de partie
+        self.end_done: bool = False     # Fin déjà traitée
         self.next_round: bool = False   # en attente du prochain round
 
         self.score_limit: int = 3
@@ -118,17 +119,23 @@ class Mode(pm.states.State):
         # Lancement
         self.start()
     
+    # ======================================== METHODES DYNAMIQUES ========================================
     def reset(self):
         """Prépartion des positions"""
         self.ball.reset()
         self.paddle_0.reset()
         self.paddle_1.reset()
-        self.next_round = False
-        self.start()
+    
+    def kill_all(self):
+        """Elimine tous les objets"""
+        self.ball.kill()
+        self.paddle_0.kill()
+        self.paddle_1.kill()
 
     def start(self):
         """Lance la partie"""
         self.freeze()
+        self.next_round = False
         self.nums_index = 0
         self.nums_timer = 0.0
         self.nums[0].visible = True
@@ -146,6 +153,7 @@ class Mode(pm.states.State):
             self.end()
         elif self.next_round:
             self.reset()
+            self.start()
 
     def _update_count(self):
         """Actualise le décompte"""
@@ -185,8 +193,12 @@ class Mode(pm.states.State):
 
     def end(self):
         """Fin de partie"""
-        time.sleep(2)
-        pm.states.activate("main", transition=True, duration=3.0)
+        if self.end_done:
+            return False
+        self.reset()
+        self.kill_all()
+        pm.states.activate("main_menu", transition=True, duration=3.0)
+        return True
 
     # ======================================== METHODES PUBLIQUES ========================================
     @property
@@ -236,7 +248,7 @@ class Mode(pm.states.State):
         """Applique l'état reçu"""
         if not data:
             return
-        print(data)
+
         # Balle
         if self.ball and ball:
             self.ball.x = data.get("ball_x", self.ball.x)
