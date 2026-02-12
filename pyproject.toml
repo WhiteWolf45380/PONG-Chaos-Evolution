@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pong"
-version = "0.3.2"
+version = "0.3.3"
 description = "Jeu Pong revisité"
 authors = [{ name = "WhiteWolf45380" }]
 dependencies = [

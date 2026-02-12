@@ -50,9 +50,7 @@ class Ball(pm.entities.CircleEntity):
         self.bouncing_epsilon: float = math.radians(self["bouncing_epsilon"]) # bruit dans le rebond
 
         # Déplacement
-        self.celerity_min: int = 700
-        self.celerity_max: int = 2500
-        self.celerity: float = self.celerity_min
+        self.celerity: float = self["celerity_min"]
 
     # ======================================== ACTUALISATION ========================================
     def update(self) -> None | int:
@@ -67,6 +65,7 @@ class Ball(pm.entities.CircleEntity):
         # Détermination du côté
         side = int(self.centerx // (0.5 * self.view.width))
         side_paddle: Paddle = getattr(mode, f'paddle_{side}')
+        if getattr(mode, 'paddles', 2) == 1 and side != ctx.modifiers.get("paddle_side"): side_paddle = None
 
         # Trainée
         self.trail.append((self.centerx, self.centery))
@@ -74,7 +73,7 @@ class Ball(pm.entities.CircleEntity):
             self.trail.pop(0)
 
         # Vitesse croissante
-        self.celerity = min(self.celerity + pm.time.scale_value((self.celerity_max - self.celerity_min) / self["acceleration_duration"]), self.celerity_max)
+        self.celerity = min(self.celerity + pm.time.scale_value((self["celerity_max"] - self["celerity_min"]) / self["acceleration_duration"]), self["celerity_max"])
         celerity = pm.time.scale_value(self.celerity)
 
         # Déplacement
