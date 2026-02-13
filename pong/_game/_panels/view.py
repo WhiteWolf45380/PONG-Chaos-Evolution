@@ -63,8 +63,8 @@ class GameView(pm.panels.Panel):
         )
 
         # Distinction des joueurs
-        self.p1 = 0
-        self.p1_text = pm.ui.Text(
+        self.paddle0 = 1
+        self.paddle0_text = pm.ui.Text(
             x=self.width * 0.05,
             y=self.height * 0.05,
             text="P1",
@@ -75,8 +75,8 @@ class GameView(pm.panels.Panel):
             auto=False,
         )
 
-        self.p2 = 1
-        self.p2_text = pm.ui.Text(
+        self.paddle1 = 2
+        self.paddle1_text = pm.ui.Text(
             x=self.width * 0.95,
             y=self.height * 0.05,
             text="P2",
@@ -114,16 +114,16 @@ class GameView(pm.panels.Panel):
             surface.blit(self.s1_text.surface, self.s1_text.rect)
         
         # Distinction des joueurs
-        p1 = ctx.modifiers.get("paddle_side")
-        if p1 is not None:
-            if self.p1 != p1:
-                self.p1_text.text = str(p1)
-                self.p1 = p1
-            surface.blit(self.p1_text.surface, self.p1_text.rect)
+        paddle0 = 1 if ctx.modifiers.get("paddle_side") == 0 else 2
+        if paddle0 is not None:
+            if self.paddle0 != paddle0:
+                self.paddle0_text.text = f"P{paddle0}"
+                self.paddle0 = paddle0
+            surface.blit(self.paddle0_text.surface, self.paddle0_text.rect)
         
-        p2 = 1 - ctx.modifiers.get("paddle_side")
-        if p2 is not None and getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'paddles', 2) >= 2:
-            if self.p2 != p2:
-                self.p2_text.text = str(p2)
-                self.p2 = p2
-            surface.blit(self.p2_text.surface, self.p2_text.rect)
+        paddle1 = 2 if ctx.modifiers.get("paddle_side") == 0 else 1
+        if paddle1 is not None and getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'paddles', 2) >= 2:
+            if self.paddle1 != paddle1:
+                self.paddle1_text.text = f"P{paddle1}"
+                self.paddle1 = paddle1
+            surface.blit(self.paddle1_text.surface, self.paddle1_text.rect)

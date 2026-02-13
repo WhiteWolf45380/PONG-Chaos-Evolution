@@ -41,7 +41,7 @@ class Online(Session):
         # Vérification de la connexion
         self._connected = pm.network.is_connected()
         if not self._connected:
-            pm.network.update() # en attente
+            pm.states.activate("main_menu")
             return
 
         # Synchronisation
@@ -61,12 +61,13 @@ class Online(Session):
         if data:
             if data.get("ended", False): self.end()
             self.current.from_dict(data, ball=True, ennemy=True, game=True)
+        else:
+            self.current.freeze()
         pm.network.send(self.current.to_dict())
 
     # ======================================== FIN ========================================
     def end(self):
         """Fin de la session"""
-        if pm.network.is_hosting() or pm.network.is_connected():
+        if pm.network.is_connected():
             pm.network.disconnect()
-            pm.network
         print("[Online] Session ended")

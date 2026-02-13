@@ -96,7 +96,6 @@ class Lobbies(pm.states.State):
 
     def handle_refresh(self):
         """Mise à jour de la liste des salons"""
-        pm.network.update()
         self.rooms.load(dict(pm.network.get_lobbies(version=__version__)))
 
     def handle_host(self):

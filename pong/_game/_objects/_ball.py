@@ -68,6 +68,7 @@ class Ball(pm.entities.CircleEntity):
         if getattr(mode, 'paddles', 2) == 1 and side != ctx.modifiers.get("paddle_side"): side_paddle = None
 
         # Trainée
+        print(self.centerx, self.centery)
         self.trail.append((self.centerx, self.centery))
         while len(self.trail) > self.trail_limit:
             self.trail.pop(0)
