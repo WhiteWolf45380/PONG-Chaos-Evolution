@@ -139,8 +139,7 @@ class Mode(pm.states.State):
         self.nums_index = 0
         self.nums_timer = 0.0
         self.nums[0].visible = True
-        self.curtain.set_alpha(0)
-        self.curtain.visible = True
+        self.curtain.fade_out(duration=0.3, start_alpha=255, target_alpha=180)
     
     # ======================================== ACTUALISATION ========================================
     def update(self):
@@ -168,17 +167,12 @@ class Mode(pm.states.State):
         current.reset()
         current.scale(factor)
 
-        if self.nums_index == 0:
-            self.curtain.set_alpha(int(self.curtain_alpha_max * min(1, 2 * t)))
-        elif self.nums_index == len(self.nums) - 1:
-            self.curtain.set_alpha(int(self.curtain_alpha_max * max(0, 1 - 2 * t)))
-
         if t >= 1.0:
             current.visible = False
             current.reset()
             self.nums_index += 1
             if self.nums_index >= len(self.nums):
-                self.curtain.visible = False
+                self.curtain.fade_out(0.3)
                 self.nums_index = 0
                 self.unfreeze()
                 return
