@@ -16,7 +16,7 @@ class GamePause(pm.panels.Panel):
             y=0,
             width=width,
             height=height,
-            color=(0, 0, 0, 150),
+            color=(0, 0, 0, 180),
             panel=str(self),
             zorder=0,
         )
@@ -27,13 +27,14 @@ class GamePause(pm.panels.Panel):
             y=self.centery,
             anchor="center",
             text="Partie en pause...",
-            font_size=112,
+            font="linuxlibertinegsemibold",
+            font_size=100,
             font_color=(255, 255, 255),
             shadow=True,
             panel=str(self),
             zorder=1
         )
-        self.text.blink(alpha_min=0, alpha_max=255, speed=0.5, visible_time=1)
+        self.text.blink(alpha_min=0, alpha_max=255, speed=0.5, visible_time=0.5)
 
         # Bouton de retour à la partie
         self.resume_button: pm.types.RectButtonObject = pm.ui.RectButton(

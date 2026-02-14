@@ -16,7 +16,7 @@ class Results(pm.states.State):
         self.bind_panel(self.view)
 
         # Animation
-        self.duration = 3.0
+        self.duration = 2.5
         self.fade_duration = 0.7
         self.timer = 0.0
 
