@@ -217,9 +217,9 @@ class Mode(pm.states.State):
         """Déplacement vers le bas du joueur 2"""
         if self.playing: self.player_2.move_down()
     
-    def to_dict(self) -> dict:
+    def to_dict(self, *filters) -> dict:
         """Sérialise l'état de la partie"""
-        return {
+        game_dict =  {
             "ball_x": self.ball.x,
             "ball_y": self.ball.y,
             "ball_celerity": self.ball.celerity,
@@ -233,13 +233,16 @@ class Mode(pm.states.State):
             "player_1_y": self.player_1.y if self.player_1 else None,
             "player_2_x": self.player_2.x if self.player_2 else None,
             "player_2_y": self.player_2.y if self.player_2 else None,
-            "score_0": self.score_0,
-            "score_1": self.score_1,
-            "winner": self.winner,
-            "frozen": self.frozen,
-            "paused": self.paused,
-            "ended": self.ended,
+            "game_score_0": self.score_0,
+            "game_score_1": self.score_1,
+            "game_winner": self.winner,
+            "game_frozen": self.frozen,
+            "game_paused": self.paused,
+            "game_ended": self.ended,
         }
+        if not filters:
+            return game_dict
+        return {k: v for k, v in game_dict.items() if any(k.startswith(p) for p in filters)}
 
     def from_dict(self, data: dict, ball: bool = False, paddle_0: bool = False, paddle_1: bool = False, ennemy: bool = False, game: bool = False):
         """Applique l'état reçu"""
@@ -271,11 +274,11 @@ class Mode(pm.states.State):
 
         # Partie
         if game:
-            self.score_0 = data.get("score_0", self.score_0)
-            self.score_1 = data.get("score_1", self.score_1)
-            self.winner = data.get("winner", self.winner)
-            self.paused = data.get("paused", self.paused)
-            self.ended = data.get("ended", self.ended)
+            self.score_0 = data.get("game_score_0", self.score_0)
+            self.score_1 = data.get("game_score_1", self.score_1)
+            self.winner = data.get("game_winner", self.winner)
+            self.paused = data.get("game_paused", self.paused)
+            self.ended = data.get("game_ended", self.ended)
     
     def freeze(self):
         """Met le jeu en gêle"""

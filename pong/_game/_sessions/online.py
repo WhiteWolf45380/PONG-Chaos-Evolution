@@ -54,7 +54,7 @@ class Online(Session):
         if data:
             self._last_data = data
             self.current.from_dict(self._last_data, ennemy=True)
-        pm.network.send(self.current.to_dict())
+        pm.network.send(self.current.to_dict('ball', 'player_1', 'game'))
         
     def _update_client(self):
         """Synchronisation côté client"""
@@ -62,7 +62,7 @@ class Online(Session):
         if data:
             self._last_data = data
             self.current.from_dict(self._last_data, ball=True, ennemy=True, game=True)
-        pm.network.send(self.current.to_dict())
+        pm.network.send(self.current.to_dict('player_1'))
 
     # ======================================== FIN ========================================
     def end(self):
