@@ -10,6 +10,7 @@ class Online(Session):
         super().__init__("online")
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
+        self._last_data = {}
 
     # ======================================== LANCEMENT ========================================
     def start(self):
@@ -41,7 +42,6 @@ class Online(Session):
         # Vérification de la connexion
         self._connected = pm.network.is_connected()
         if not self._connected:
-            pm.states.activate("main_menu")
             return
 
         # Synchronisation
@@ -52,17 +52,16 @@ class Online(Session):
         """Synchronisation côté hôte"""
         data = pm.network.receive()
         if data:
-            self.current.from_dict(data, ennemy=True)
+            self._last_data = data
+            self.current.from_dict(self._last_data, ennemy=True)
         pm.network.send(self.current.to_dict())
         
     def _update_client(self):
         """Synchronisation côté client"""
         data = pm.network.receive()
         if data:
-            if data.get("ended", False): self.end()
-            self.current.from_dict(data, ball=True, ennemy=True, game=True)
-        else:
-            self.current.freeze()
+            self._last_data = data
+            self.current.from_dict(self._last_data, ball=True, ennemy=True, game=True)
         pm.network.send(self.current.to_dict())
 
     # ======================================== FIN ========================================
@@ -70,4 +69,5 @@ class Online(Session):
         """Fin de la session"""
         if pm.network.is_connected():
             pm.network.disconnect()
-        print("[Online] Session ended")
+        print("[Online] Session ended") 
+        super().end()

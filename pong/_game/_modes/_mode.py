@@ -222,7 +222,9 @@ class Mode(pm.states.State):
         return {
             "ball_x": self.ball.x,
             "ball_y": self.ball.y,
+            "ball_celerity": self.ball.celerity,
             "ball_angle": self.ball.angle,
+            "ball_trail": self.ball.trail,
             "paddle_0_x": self.paddle_0.x if self.paddle_0 else None,
             "paddle_0_y": self.paddle_0.y if self.paddle_0 else None,
             "paddle_1_x": self.paddle_1.x if self.paddle_1 else None,
@@ -248,7 +250,9 @@ class Mode(pm.states.State):
         if self.ball and ball:
             self.ball.x = data.get("ball_x", self.ball.x)
             self.ball.y = data.get("ball_y", self.ball.y)
+            self.ball.celerity = data.get("ball_celerity", self.ball.celerity)
             self.ball.angle = data.get("ball_angle", self.ball.angle)
+            self.ball.trail = data.get("ball_trail", self.ball.trail)
 
         # Paddle 0
         if self.paddle_0 and paddle_0:
