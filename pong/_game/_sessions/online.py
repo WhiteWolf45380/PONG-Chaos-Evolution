@@ -68,6 +68,7 @@ class Online(Session):
     def end(self):
         """Fin de la session"""
         if pm.network.is_connected():
+            self.update()
             pm.network.disconnect()
         print("[Online] Session ended") 
         super().end()
