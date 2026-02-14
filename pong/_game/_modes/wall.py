@@ -14,7 +14,7 @@ class Wall(Mode):
     """
     def __init__(self):
         # Initialisation du mode
-        super().__init__("wall", paddles=1)
+        super().__init__("wall", max_players=1)
 
     # ======================================== LANCEMENT ========================================
     def on_enter(self):

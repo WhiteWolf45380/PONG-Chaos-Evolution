@@ -14,7 +14,7 @@ class Classic(Mode):
     """
     def __init__(self):
         # Initialisation du mode
-        super().__init__("classic", paddles=2)
+        super().__init__("classic", max_players=2)
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

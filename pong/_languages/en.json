@@ -8,6 +8,8 @@
     "lobbies_host": "Host",
     "lobbies_previous": "Previous",
     "lobbies_next": "Next",
+    "lobbies_search_text": "Looking for players",
+    "lobbies_search_cancel": "Cancel",
     "game_pause_resume": "Resume",
     "game_pause_leave": "Leave",
     "game_results_default": "Game Over",

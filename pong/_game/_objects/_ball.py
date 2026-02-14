@@ -40,7 +40,7 @@ class Ball(pm.entities.CircleEntity):
 
         # Traînée        
         self.trail: list[tuple] = []
-        self.trail_limit = int(self["trail_length"] * (pm.time.smoothfps / 60))
+        self.trail_timer = 0.0
 
         # Angle
         self.disabled_side: str = random.choice(("left", "right")) if ctx.modes.selected != 1 else "right"
@@ -65,11 +65,12 @@ class Ball(pm.entities.CircleEntity):
         # Détermination du côté
         side = int(self.centerx // (0.5 * self.view.width))
         side_paddle: Paddle = getattr(mode, f'paddle_{side}')
-        if getattr(mode, 'paddles', 2) == 1 and side != ctx.modifiers.get("paddle_side"): side_paddle = None
+        if getattr(mode, 'max_players', 2) == 1 and side != ctx.modifiers.get("paddle_side"): side_paddle = None
 
         # Trainée
-        self.trail.append((self.centerx, self.centery))
-        while len(self.trail) > self.trail_limit:
+        self.trail_timer += pm.time.dt
+        self.trail.append((self.trail_timer, self.centerx, self.centery))
+        while len(self.trail) > 0 and self.trail_timer - self.trail[0][0] > self["trail_length"]:
             self.trail.pop(0)
 
         # Vitesse croissante
@@ -105,6 +106,7 @@ class Ball(pm.entities.CircleEntity):
             return
         
         for i, pos in enumerate(self.trail):
+            pos = pos[1:]
             advancement = (i + 1) / len(self.trail)
             color = tuple(int(self["trail_color"][j] * advancement + self.view.background_color[j] * (1 - advancement)) for j in range(3))
             radius = max(1, int(self.radius * (advancement ** 0.75)) * 0.9)
@@ -119,11 +121,11 @@ class Ball(pm.entities.CircleEntity):
         current_pos = (self.centerx, self.centery)
         for i in range(num_segments):
             if i == num_segments - 1:
-                start_pos = self.trail[i]
+                start_pos = self.trail[i][1:]
                 end_pos = current_pos
             else:
-                start_pos = self.trail[i]
-                end_pos = self.trail[i + 1]
+                start_pos = self.trail[i][1:]
+                end_pos = self.trail[i + 1][1:]
 
             subdivisions = 5
             for j in range(subdivisions):

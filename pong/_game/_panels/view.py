@@ -122,7 +122,7 @@ class GameView(pm.panels.Panel):
             surface.blit(self.paddle0_text.surface, self.paddle0_text.rect)
         
         paddle1 = 2 if ctx.modifiers.get("paddle_side") == 0 else 1
-        if paddle1 is not None and getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'paddles', 2) >= 2:
+        if paddle1 is not None and getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'max_players', 2) >= 2:
             if self.paddle1 != paddle1:
                 self.paddle1_text.text = f"P{paddle1}"
                 self.paddle1 = paddle1

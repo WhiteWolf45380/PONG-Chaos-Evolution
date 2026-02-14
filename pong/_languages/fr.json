@@ -8,6 +8,8 @@
     "lobbies_host": "Héberger",
     "lobbies_previous": "Précédent",
     "lobbies_next": "Suivant",
+    "lobbies_search_text": "Recherche de joueurs",
+    "lobbies_search_cancel": "Annuler",
     "game_pause_resume": "Continuer",
     "game_pause_leave": "Partir",
     "game_results_default": "Fin de partie",

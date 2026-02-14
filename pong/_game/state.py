@@ -1,6 +1,6 @@
 # ======================================== IMPORTS ========================================
 from .._core import ctx, pm, pygame
-from ._panels import GameView, GamePause
+from ._panels import GameView, GameCount, GamePause
 from ._sessions import Session, Solo, Local, Online
 from ._modes import Mode, Wall, Classic
 
@@ -15,6 +15,7 @@ class Game(pm.states.State):
         # Panels
         self.view: pm.types.Panel = GameView()
         self.bind_panel(self.view)
+        self.count: pm.types.Panel = GameCount()
         self.pause: pm.types.Panel = GamePause()
 
         # Modes de jeu

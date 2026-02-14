@@ -9,6 +9,7 @@ class GamePause(pm.panels.Panel):
     def __init__(self, width : int = 1440, height : int = 1080):
         # Initialisation du panel
         super().__init__('game_pause', predecessor='game_view', rect=(0, 0, width, height), centered=True, srcalpha=True)
+        self.bring_to_front()
 
         # Fond
         self.background: pm.types.SurfaceObject = pm.ui.Surface(
@@ -24,11 +25,11 @@ class GamePause(pm.panels.Panel):
         # Text
         self.text: pm.types.TextObject = pm.ui.Text(
             x=self.centerx,
-            y=self.centery,
+            y=self.height * 0.35,
             anchor="center",
             text="Partie en pause...",
             font="linuxlibertinegsemibold",
-            font_size=100,
+            font_size=84,
             font_color=(255, 255, 255),
             shadow=True,
             panel=str(self),
@@ -39,7 +40,7 @@ class GamePause(pm.panels.Panel):
         # Bouton de retour à la partie
         self.resume_button: pm.types.RectButtonObject = pm.ui.RectButton(
             x=self.width * 0.4,
-            y=self.height * 0.75,
+            y=self.height * 0.65,
             width=220,
             height=75,
             anchor="center",
@@ -65,7 +66,7 @@ class GamePause(pm.panels.Panel):
         # Bouton de fin de partie
         self.leave_button: pm.types.RectButtonObject = pm.ui.RectButton(
             x=self.width * 0.6,
-            y=self.height * 0.75,
+            y=self.height * 0.65,
             width=220,
             height=75,
             anchor="center",

@@ -6,11 +6,11 @@ import time
 # ======================================== MODE DE JEU ========================================
 class Mode(pm.states.State):
     """Mode de jeu"""
-    def __init__(self, name: str, paddles: int = 2):
+    def __init__(self, name: str, max_players: int = 2):
         """
         Args:
             name (str): nom du mode de jeu
-            paddles (int, optional): nombre de raquettes
+            max_players (int, optional): nombre de joueurs maximum
         """
 
         # Initialisation de l'état
@@ -32,7 +32,7 @@ class Mode(pm.states.State):
         self.player_2 : Paddle | None = None
 
         # Paramètres fixes
-        self.paddles: int = paddles
+        self.max_players: int = max_players
 
         # Paramètres dynamiques
         self.frozen: bool = False       # jeu en gêle
@@ -45,38 +45,6 @@ class Mode(pm.states.State):
         self.score_0: int = 0
         self.score_1: int = 0
         self.winner: int = None
-
-        # Animation de lancement
-        self.nums: list = []
-        self.nums_index: int = 0
-        self.nums_timer: float = 0.0
-        for i in range(3, 0, -1):
-            num: pm.types.TextObject = pm.ui.Text(
-                x=self.view.centerx,
-                y=self.view.centery,
-                text=str(i),
-                font_size=256,
-                font_color=(255, 255, 255),
-                shadow=True,
-                shadow_offset=3,
-                anchor="center",
-                panel=str(self.view),
-                zorder=2,
-            )
-            num.visible = False
-            self.nums.append(num)
-
-        self.curtain_alpha_max = 120
-        self.curtain = pm.ui.Surface(
-            x=0,
-            y=0,
-            width=self.view.width,
-            height=self.view.height,
-            color=(0, 0, 0, 255),
-            zorder=1,
-            panel=str(self.view),
-        )
-        self.curtain.visible = False
     
     def __str__(self) -> str:
         """Renvoie le nom du mode"""
@@ -98,7 +66,10 @@ class Mode(pm.states.State):
         self.winner: int = None
 
         # Balle
-        if self.ball is not None: self.ball.kill()
+        if self.ball is not None:
+            print("tre")
+            self.ball.kill()
+
         self.ball = Ball(self.is_end)
 
         # Raquettes
@@ -112,7 +83,7 @@ class Mode(pm.states.State):
         self.player_2 = getattr(self, f'paddle_{1 - ctx.modifiers["paddle_side"]}')
 
         # Limitation
-        if self.paddles == 1:
+        if self.max_players == 1:
             self.player_2.freeze()
             self.player_2.hide()
         
@@ -136,10 +107,8 @@ class Mode(pm.states.State):
         """Lance la partie"""
         self.freeze()
         self.next_round = False
-        self.nums_index = 0
-        self.nums_timer = 0.0
-        self.nums[0].visible = True
-        self.curtain.fade_out(duration=0.3, start_alpha=255, target_alpha=150)
+        pm.panels["game_count"].set_count([3, 2, 1, "Go!"])
+        pm.panels["game_count"].activate()
     
     # ======================================== ACTUALISATION ========================================
     def update(self):
@@ -147,38 +116,12 @@ class Mode(pm.states.State):
         if self.paused:
             pass
         elif self.frozen:
-            self._update_count()
+            pass
         elif self.ended:
             self.end()
         elif self.next_round:
             self.reset()
             self.start()
-
-    def _update_count(self):
-        """Actualise le décompte"""
-        self.nums_timer += pm.time.dt
-        t = min(self.nums_timer / 1.0, 1.0)
-
-        factor = 1 - 4 * (t - 0.5) ** 3
-        factor = max(0.1, min(1.0, factor))
-
-        current: pm.types.TextObject = self.nums[self.nums_index]
-        current.set_alpha(int(255 * factor))
-        current.reset()
-        current.scale(factor)
-
-        if t >= 1.0:
-            current.visible = False
-            current.reset()
-            self.nums_index += 1
-            if self.nums_index >= len(self.nums):
-                self.curtain.fade_out(0.3)
-                self.nums_index = 0
-                self.unfreeze()
-                return
-
-            self.nums[self.nums_index].visible = True
-            self.nums_timer = 0.0
         
     # ======================================== FIN ========================================
     def is_end(self, side: int):
