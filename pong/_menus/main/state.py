@@ -22,7 +22,7 @@ class Main(pm.states.State):
             "local": None,
             "online": None,
             "settings": None,
-            "leave": None,
+            "quit": None,
         }
 
         top = self.view.title.rect.bottom + self.view.height * 0.08
@@ -83,6 +83,6 @@ class Main(pm.states.State):
         """Action du bouton Paramètres"""
         pm.states.activate("settings_menu", transition=True)
     
-    def handle_leave(self):
+    def handle_quit(self):
         """Action du bouton Quitter"""
         pm.stop()

@@ -139,7 +139,7 @@ class Mode(pm.states.State):
         self.nums_index = 0
         self.nums_timer = 0.0
         self.nums[0].visible = True
-        self.curtain.fade_out(duration=0.3, start_alpha=255, target_alpha=180)
+        self.curtain.fade_out(duration=0.3, start_alpha=255, target_alpha=150)
     
     # ======================================== ACTUALISATION ========================================
     def update(self):
