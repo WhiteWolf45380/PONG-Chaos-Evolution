@@ -42,9 +42,16 @@ class Online(Session):
             return
 
         # Vérification de la connexion
-        self._connected = pm.network.is_connected()
-        if not self._connected:
+        if pm.network.is_connection_lost():
+            error = pm.network.get_last_error()
+            print(f"Connexion perdue: {error}")
+            pm.states.activate("main_menu")
             return
+        
+        # Vérification des erreurs
+        if pm.network.has_error():
+            error = pm.network.get_last_error()
+            print(f"Erreur réseau: {error}")
 
         # Synchronisation
         if self._is_host: self._update_host()

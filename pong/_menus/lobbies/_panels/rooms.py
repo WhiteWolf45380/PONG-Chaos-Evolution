@@ -117,7 +117,10 @@ class LobbiesMenuRooms(pm.panels.Panel):
     def handle_join(self):
         """Rejoint un lobby"""
         ip = pm.ui.get_selected("lobby")
-        pm.network.join(ip)
+        if not pm.network.join(ip):
+            error = pm.network.get_last_error()
+            print(f"Échec de connexion: {error}")
+            pm.states.activate("main_menu")
         ctx.modifiers.set("p1_side", 1 - self.all[ip][0].get("host_side", 0))
         pm.states.activate("waiting_animation", transition=False)
     
