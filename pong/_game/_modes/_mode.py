@@ -226,10 +226,10 @@ class Mode(pm.states.State):
             self.score_0 = data.get("game_score_0", self.score_0)
             self.score_1 = data.get("game_score_1", self.score_1)
             self.winner = data.get("game_winner", self.winner)
-            self.frozen = data.get("game_frozen", self.frozen)
+            self.next_round = data.get("game_next_round", self.next_round)
+            self.frozen = data.get("game_frozen", self.frozen) and not self.next_round
             self.paused = data.get("game_paused", self.paused)
             self.ended = data.get("game_ended", self.ended) or self.ended
-            self.next_round = data.get("game_next_round", self.next_round) or self.next_round
     
     def freeze(self):
         """Met le jeu en gêle"""
