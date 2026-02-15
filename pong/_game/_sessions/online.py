@@ -1,6 +1,7 @@
 # ======================================== IMPORTS ========================================
 from ._session import Session
-from    ..._core import pm, ctx
+from ..._core import pm, ctx
+import time
 
 # ======================================== MODE DE JEU ========================================
 class Online(Session):
@@ -52,9 +53,9 @@ class Online(Session):
     
     def _init(self):
         """Initialisation"""
-        t0 = pm.time.timer
+        t0 = time.time()
         while not self._is_initialized:
-            if pm.time.get_elapsed(t0) > self.INIT_TIMEOUT:
+            if time.time() - t0 > self.INIT_TIMEOUT:
                 break
             self._update_init()
 
