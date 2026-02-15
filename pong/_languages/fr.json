@@ -4,15 +4,23 @@
     "main_online": "Jouer en ligne",
     "main_settings": "Paramètres",
     "main_quit": "Quitter",
+
     "lobbies_title": "Menu des salons",
     "lobbies_host": "Héberger",
     "lobbies_previous": "Précédent",
     "lobbies_next": "Suivant",
+
     "lobbies_search_text": "Recherche de joueurs",
     "lobbies_search_cancel": "Annuler",
+
     "game_pause_resume": "Continuer",
     "game_pause_leave": "Partir",
+
     "game_results_default": "Fin de partie",
     "game_results_score": "Score final : {score}",
-    "game_results_winner": "{winner} a gagné !"
+    "game_results_winner": "{winner} a gagné !",
+
+    "error_connection": "Connexion au salon impossible",
+    "error_host": "Un client a été déconnecté",
+    "error_client": "La connexion avec l'hôte a été perdue"
 }

@@ -15,10 +15,11 @@ class LobbiesMenuView(pm.panels.Panel):
         # Titre
         self.title = pm.ui.Text(
             x=self.centerx,
-            y=self.height * 0.06,
+            y=self.height * 0.04,
             anchor="midtop",
             text=pm.languages("lobbies_title"),
-            font_size=108,
+            font="davidclmmedium",
+            font_size=96,
             font_color=(230, 225, 210),
             shadow=True,
             underline=True,

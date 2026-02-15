@@ -19,6 +19,15 @@ class Engine:
         pm.screen.set_caption("PONG : Chaos Evolution")
         pm.screen.set_icon(pygame.image.load(get_path("_assets/icons/icon.ico")))
 
+        # Messages système
+        pm.ui.set_messages_y(pm.screen.height * 0.2)
+        pm.ui.set_messages_spacing(pm.screen.height * 0.02)
+        self.messages_types = {
+            "default": (10, 150, 20),
+            "system": (180, 100, 20),
+            "error": (200, 40, 60)
+        }
+
         # Registration dans le context manager
         ctx.engine = self
 
@@ -84,6 +93,21 @@ class Engine:
     def run(self):
         """Lance l'éxécution"""
         pm.run(self.update)
+
+    def sys_message(self, text: str, sender: str = "System", type: str = "default"):
+        """Génère un message système"""
+        if sender is not None:
+            text = f"[{sender}] {text}"
+        message = pm.ui.Text(
+            text=text,
+            anchor="center",
+            font="segoeuisemibold",
+            font_size=48,
+            font_color=self.messages_types.get(type, self.messages_types["default"]),
+            shadow=True,
+            auto=False,
+        )
+        pm.ui.sys_message(message)
 
 # ======================================== EXPORTS ========================================
 __all__ = ["Engine"]

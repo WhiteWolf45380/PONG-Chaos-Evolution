@@ -38,20 +38,21 @@ class Online(Session):
         super().update()
 
         # Vérification que la partie soit en cours
-        if self.current is None:
+        if self.current is None or not self._connected:
             return
 
         # Vérification de la connexion
         if pm.network.is_connection_lost():
             error = pm.network.get_last_error()
-            print(f"Connexion perdue: {error}")
-            pm.states.activate("main_menu")
+            self._connected = False
+            if self._is_host:
+                print(f"Client perdu: {error}")
+                ctx.engine.sys_message(pm.languages("error_host"), sender="Network", type="error") 
+            else:
+                print(f"Connexion perdue: {error}")
+                ctx.engine.sys_message(pm.languages("error_client"), sender="Network", type="error") 
+                pm.states.activate("main_menu")
             return
-        
-        # Vérification des erreurs
-        if pm.network.has_error():
-            error = pm.network.get_last_error()
-            print(f"Erreur réseau: {error}")
 
         # Synchronisation
         if self._is_host: self._update_host()

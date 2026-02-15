@@ -4,15 +4,23 @@
     "main_online": "Online",
     "main_settings": "Settings",
     "main_quit": "Quit",
-    "lobbies_title": "Lobbies Menu",
+
+    "lobbies_title": "Lobby Menu",
     "lobbies_host": "Host",
     "lobbies_previous": "Previous",
     "lobbies_next": "Next",
-    "lobbies_search_text": "Looking for players",
+
+    "lobbies_search_text": "Searching for players",
     "lobbies_search_cancel": "Cancel",
+
     "game_pause_resume": "Resume",
     "game_pause_leave": "Leave",
+
     "game_results_default": "Game Over",
     "game_results_score": "Final score : {score}",
-    "game_results_winner": "{winner} won !"
+    "game_results_winner": "{winner} won !",
+
+    "error_connection": "Failed to connect to the lobby",
+    "error_host": "A client disconnected",
+    "error_client": "Lost connection to the host"
 }

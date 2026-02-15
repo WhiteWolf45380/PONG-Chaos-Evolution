@@ -121,6 +121,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
             error = pm.network.get_last_error()
             print(f"Échec de connexion: {error}")
             pm.states.activate("lobbies_menu", transition=True, duration=0.5)
+            ctx.engine.sys_message(pm.languages("error_connection"), sender="Network", type="error") 
             return
         ctx.modifiers.set("p1_side", 1 - self.all[ip][0].get("host_side", 0))
         pm.states.activate("waiting_animation", transition=False)
