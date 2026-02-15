@@ -30,14 +30,15 @@ class Classic(Mode):
         if side == 0: self.score_1 += 1
         else: self.score_0 += 1
         if self.score_0 >= self.score_limit or self.score_1 >= self.score_limit and super().is_end():
-            self.winner = getattr(self, f'paddle_{1 - side}', self.paddle_0).get_player()
+            self.winner = 1 - side
             self.ended = True
         self.next_round = True
         return True
 
     def end(self):
         """Fin de partie"""
-        text = pm.languages("game_results_winner", winner=ctx.modifiers.get(f"p{self.winner}_pseudo", fallback=f"P{self.winner}"))
-        color = getattr(self, f'player_{self.winner}', self.player_1).color
+        player_winner = getattr(self, f'paddle_{self.winner}', self.paddle_0).get_player()
+        text = pm.languages("game_results_winner", winner=ctx.modifiers.get(f"p{player_winner}_pseudo", fallback=f"P{player_winner}"))
+        color = getattr(self, f'player_{player_winner}', self.player_1).color
         if not super().end(text, color=color):
             return
