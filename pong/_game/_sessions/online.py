@@ -11,7 +11,8 @@ class Online(Session):
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
         self._last_data = {}
-        self._pseudos_sync = False
+        self._pseudo_received = False
+        self._pseudo_sent = False
 
     # ======================================== LANCEMENT ========================================
     def start(self):
@@ -20,7 +21,9 @@ class Online(Session):
         self.current.player_2.set_status("ennemy")
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
-        self._pseudos_sync = False
+        ctx.modifiers.set("p1_pseudo", ctx.modifiers.get("online_pseudo") + f"({'host' if self._is_host else 'client'})")
+        self._pseudo_received = False
+        self._pseudo_sent = False
         if self._is_host:
             self.allow_freeze = True
         else:
@@ -64,12 +67,14 @@ class Online(Session):
         data = pm.network.receive()
         if data:
             self._last_data = data
-            if not self._pseudos_sync and 'pseudo' in data:
-                ctx.modifiers.set("p2_pseudo", data['pseudo'])
-                self._pseudos_sync = True
+            if not self._pseudo_received and 'pseudo' in data:
+                ctx.modifiers.set("p2_pseudo", data['pseudo'] + " (client)")
+                self._pseudo_received = True
             self.current.from_dict(self._last_data, ennemy=True)
         send_data = self.current.to_dict('ball', 'player_1', 'game')
-        if not self._pseudos_sync: send_data['pseudo'] = ctx.modifiers.get("p1_pseudo")
+        if not self._pseudo_sent:
+            send_data['pseudo'] = ctx.modifiers.get("online_pseudo")
+            self._pseudo_sent = True
         pm.network.send(send_data)
         
     def _update_client(self):
@@ -77,12 +82,14 @@ class Online(Session):
         data = pm.network.receive()
         if data:
             self._last_data = data
-            if not self._pseudos_sync and 'pseudo' in data:
-                ctx.modifiers.set("p2_pseudo", data['pseudo'])
-                self._pseudos_sync = True
+            if not self._pseudo_received and 'pseudo' in data:
+                ctx.modifiers.set("p2_pseudo", data['pseudo'] + " (host)")
+                self._pseudo_received = True
             self.current.from_dict(self._last_data, ball=True, ennemy=True, game=True)
         send_data = self.current.to_dict('player_1')
-        if not self._pseudos_sync: send_data['pseudo'] = ctx.modifiers.get("p1_pseudo")
+        if not self._pseudo_sent:
+            send_data['pseudo'] = ctx.modifiers.get("online_pseudo")
+            self._pseudo_sent = True
         pm.network.send(send_data)
 
     # ======================================== FIN ========================================
