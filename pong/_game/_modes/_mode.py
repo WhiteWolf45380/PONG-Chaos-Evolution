@@ -125,7 +125,7 @@ class Mode(pm.states.State):
             self.start()
         
     # ======================================== FIN ========================================
-    def is_end(self, side: int):
+    def is_end(self):
         """Vérifie la fin de partie après la collision d'un mur vertical"""
         if ctx.game.current_session.name == "online" and not pm.network.is_hosting():
             return False
