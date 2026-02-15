@@ -114,6 +114,7 @@ class Mode(pm.states.State):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
+        print(self.next_round)
         if self.paused:
             pass
         elif self.frozen:
@@ -125,7 +126,7 @@ class Mode(pm.states.State):
             self.start()
         
     # ======================================== FIN ========================================
-    def is_end(self, side: int):
+    def is_end(self):
         """Vérifie la fin de partie après la collision d'un mur vertical"""
         return True
 
