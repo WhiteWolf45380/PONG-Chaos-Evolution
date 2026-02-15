@@ -129,6 +129,8 @@ class Mode(pm.states.State):
     # ======================================== FIN ========================================
     def is_end(self):
         """Vérifie la fin de partie après la collision d'un mur vertical"""
+        if ctx.game.current_session.name == "online" and not ctx.game.current_session._is_host:
+            return False
         return True
 
     def end(self, text: str = None, color: pygame.Color = (255, 255, 255)):
