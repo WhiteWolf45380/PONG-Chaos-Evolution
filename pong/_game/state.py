@@ -80,26 +80,31 @@ class Game(pm.states.State):
     # ======================================== METHODES PUBLIQUES ========================================
     def toggle_pause(self):
         """Active/Désactive la pause de la partie"""
-        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True) or self.current_mode.frozen: return
+        if self.current_mode is None or self.current_mode.frozen: return
+        allows_freeze = getattr(self.current_session, 'allow_freeze', True)
         if not self.current_mode.paused:
-            self.current_mode.pause()
+            if allows_freeze: self.current_mode.pause()
+            self.pause.text.visible = allows_freeze
             self.pause.activate()
         else:
-            self.current_mode.unpause()
+            if allows_freeze: self.current_mode.unpause()
             self.pause.deactivate()
     
     def pause(self):
         """Active la pause de la partie"""
-        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True) or self.current_mode.frozen: return
+        if self.current_mode is None or self.current_mode.frozen: return
+        allows_freeze = getattr(self.current_session, 'allow_freeze', True)
         if not self.current_mode.paused:
-            self.current_mode.pause()
+            if allows_freeze: self.current_mode.pause()
+            self.pause.text.visible = allows_freeze
             self.pause.activate()
         
     def unpause(self):
         """Désactive la pause de la partie"""
-        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True) or self.current_mode.frozen: return
+        if self.current_mode is None or self.current_mode.frozen: return
+        allows_freeze = getattr(self.current_session, 'allow_freeze', True)
         if self.current_mode.paused:
-            self.current_mode.unpause()
+            if allows_freeze: self.current_mode.unpause()
             self.pause.deactivate()
 
     def end_session(self):
