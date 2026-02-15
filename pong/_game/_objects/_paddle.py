@@ -27,6 +27,12 @@ class Paddle(pm.entities.RectEntity):
             1: (self.view.width - self.OFFSET, self.view.centery)
         }
 
+        # Design
+        self.border = True
+        self.border_width = 2
+        self.color = self[f"color_{status if status in self.available_status else 'default'}"]
+        self.border_color = self[f"border_color_{status if status in self.available_status else 'default'}"]
+
         # Seconde initialisation
         self.init()
 
@@ -100,3 +106,4 @@ class Paddle(pm.entities.RectEntity):
         """Fixe le statut"""
         self.status = status
         self.color = self[f"color_{status if status in self.available_status else 'default'}"]
+        self.border_color = self[f"border_color_{status if status in self.available_status else 'default'}"]

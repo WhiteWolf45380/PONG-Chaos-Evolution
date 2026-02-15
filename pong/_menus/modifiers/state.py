@@ -38,13 +38,17 @@ class Modifiers(pm.states.State):
         self.add("bouncing_epsilon", 5, category="ball", add_prefix=True)                               # (int)  : aléatoire de l'angle dans les rebonds
 
         # Catégorie: Paddle
+        self.add("celerity", 500, category="paddle", add_prefix=True)                                   # (int)  : vitesse de la raquette
         self.add("size", 120, category="paddle", add_prefix=True)                                       # (int)  : hauteur de la raquette
         self.add("border_radius", 10, category="paddle", add_prefix=True)                               # (int)  : arrondi des coins de la raquette
         self.add("color_default", (255, 255, 255), category="paddle", add_prefix=True)                  # (color): couleur de la raquette par défaut
-        self.add("color_player", (46, 204, 113), category="paddle", add_prefix=True)                    # (color): couleur de la raquette du joueur
-        self.add("color_friend", (52, 152, 219), category="paddle", add_prefix=True)                    # (color): couleur de la raquette d'un ami
-        self.add("color_ennemy", (231, 76, 60), category="paddle", add_prefix=True)                     # (color): couleur de la raquette d'un ennemi
-        self.add("celerity", 500, category="paddle", add_prefix=True)                                   # (int)  : vitesse de la raquette
+        self.add("border_color_default", (60, 60, 60), category="paddle", add_prefix=True)              # (color): couleur de la bordure par défaut
+        self.add("color_player", (38, 166, 91), category="paddle", add_prefix=True)                     # (color): couleur de la raquette du joueur
+        self.add("border_color_player", (57, 230, 20), category="paddle", add_prefix=True)              # (color): couleur de la bordure du joueur
+        self.add("color_friend", (41, 121, 185), category="paddle", add_prefix=True)                    # (color): couleur de la raquette d'un ami
+        self.add("border_color_friend", (0, 191, 230), category="paddle", add_prefix=True)              # (color): couleur de la bordure d'un ami
+        self.add("color_ennemy", (183, 49, 44), category="paddle", add_prefix=True)                     # (color): couleur de la raquette d'un ennemi
+        self.add("border_color_ennemy", (230, 59, 48), category="paddle", add_prefix=True)              # (color): couleur de la bordure par défaut
 
         # Panel du menu
         self.menu = ModifiersMenuView()
