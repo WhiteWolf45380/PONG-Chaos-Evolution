@@ -55,7 +55,17 @@ class Online(Session):
             return
 
         # Vérification de la connexion
-        if pm.network.is_connection_lost() and not self.current.ended:
+        if pm.network.is_connection_lost():
+            try:
+                data = pm.network.receive()
+                if data and "game_ended" in data:
+                    self.current.ended = data["game_ended"]
+            except Exception as _:
+                pass
+    
+            if not self.current.ended:
+                return self.end()
+    
             error = pm.network.get_last_error()
             self._connected = False
             if self._is_host:
