@@ -13,6 +13,8 @@ class Solo(Session):
     def start(self):
         """Initialisation d'une session"""
         super().start()
+        self.current.player_2.set_status("ennemy")
+        ctx.modifiers.set("p2_pseudo", "Bot")
 
     def on_enter(self):
         """Activation de l'état"""

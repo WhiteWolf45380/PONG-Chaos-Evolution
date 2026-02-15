@@ -44,11 +44,11 @@ class Game(pm.states.State):
         ctx.engine.background.visible = True
 
         # Activation de la session
-        self.current_session = self.sessions[ctx.main.session_type]
+        if self.current_session is None: self.current_session = self.sessions["solo"]
         self.current_session.activate()
 
         # Activation du mode de jeu
-        self.current_mode = self.modes[ctx.modes.selected]
+        if self.current_mode is None: self.current_mode = self.modes["classic"]
         self.current_mode.activate()
 
     def on_exit(self):
@@ -59,7 +59,25 @@ class Game(pm.states.State):
     def update(self):
         """Actualisation de la frame"""
 
-    # ======================================== METHODES DYNAMIQUES ========================================
+    # ======================================== GETTERS ========================================
+    def get_session(self) -> Session:
+        """Renvoie la session en cours"""
+        return self.current_session
+
+    def get_mode(self) -> Mode:
+        """Renvoie le mode de jeu en cours"""
+        return self.current_mode
+
+    # ======================================== SETTERS ========================================
+    def set_session(self, session: str):
+        """Fixe la session"""
+        self.current_session = self.sessions.get(session)
+    
+    def set_mode(self, mode: str):
+        """Fixe le mode de jeu"""
+        self.current_mode = self.modes.get(mode) 
+
+    # ======================================== METHODES PUBLIQUES ========================================
     def toggle_pause(self):
         """Active/Désactive la pause de la partie"""
         if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True) or self.current_mode.frozen: return

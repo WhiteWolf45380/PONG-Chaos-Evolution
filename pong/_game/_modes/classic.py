@@ -16,6 +16,9 @@ class Classic(Mode):
         # Initialisation du mode
         super().__init__("classic", max_players=2)
 
+        # Sessions conformes
+        self.allowed_sessions = ["solo", "local", "online"]
+
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""

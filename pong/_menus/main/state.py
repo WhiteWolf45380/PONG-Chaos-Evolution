@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm
+from ..._core import ctx, pm
 from ._panels import MainMenuView
 from ._objects import BallObject
 
@@ -67,17 +67,17 @@ class Main(pm.states.State):
     def handle_solo(self):
         """Action du bouton Solo"""
         self.session_type = "solo"
-        pm.states.activate("game", transition=True)
+        self.forward()
     
     def handle_local(self):
         """Action du bouton Local"""
         self.session_type = "local"
-        pm.states.activate("game", transition=True)
+        self.forward()
     
     def handle_online(self):
         """Action du bouton Online"""
         self.session_type = "online"
-        pm.states.activate("lobbies_menu", transition=True)
+        self.forward("lobbies_menu")
     
     def handle_settings(self):
         """Action du bouton Paramètres"""
@@ -86,3 +86,10 @@ class Main(pm.states.State):
     def handle_quit(self):
         """Action du bouton Quitter"""
         pm.stop()
+    
+    # ======================================== METHODES PUBLIQUES ========================================
+    def forward(self, state: str = "modes_menu"):
+        """Passe au menu suivant"""
+        ctx.modes.load(self.session_type)
+        ctx.game.set_session(self.session_type)
+        pm.states.activate(state, transition=True)

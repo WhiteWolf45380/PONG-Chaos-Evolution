@@ -20,6 +20,7 @@ class Online(Session):
         self.current.player_2.set_status("ennemy")
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
+        self._pseudos_sync = False
         if self._is_host:
             self.allow_freeze = True
         else:
@@ -63,16 +64,26 @@ class Online(Session):
         data = pm.network.receive()
         if data:
             self._last_data = data
+            if not self._pseudos_sync and 'pseudo' in data:
+                ctx.modifiers.set("p2_pseudo", data['pseudo'])
+                self._pseudos_sync = True
             self.current.from_dict(self._last_data, ennemy=True)
-        pm.network.send(self.current.to_dict('ball', 'player_1', 'game'))
+        send_data = self.current.to_dict('ball', 'player_1', 'game')
+        if not self._pseudos_sync: send_data['pseudo'] = ctx.modifiers.get("p1_pseudo")
+        pm.network.send(send_data)
         
     def _update_client(self):
         """Synchronisation côté client"""
         data = pm.network.receive()
         if data:
             self._last_data = data
+            if not self._pseudos_sync and 'pseudo' in data:
+                ctx.modifiers.set("p2_pseudo", data['pseudo'])
+                self._pseudos_sync = True
             self.current.from_dict(self._last_data, ball=True, ennemy=True, game=True)
-        pm.network.send(self.current.to_dict('player_1'))
+        send_data = self.current.to_dict('player_1')
+        if not self._pseudos_sync: send_data['pseudo'] = ctx.modifiers.get("p1_pseudo")
+        pm.network.send(send_data)
 
     # ======================================== FIN ========================================
     def end(self):

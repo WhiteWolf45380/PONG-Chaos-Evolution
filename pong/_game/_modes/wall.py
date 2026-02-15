@@ -16,6 +16,9 @@ class Wall(Mode):
         # Initialisation du mode
         super().__init__("wall", max_players=1)
 
+        # Sessions conformes
+        self.allowed_sessions = ["solo"]
+
     # ======================================== LANCEMENT ========================================
     def on_enter(self):
         """Activation de l'état"""

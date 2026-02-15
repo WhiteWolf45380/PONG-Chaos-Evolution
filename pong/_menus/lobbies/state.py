@@ -19,6 +19,7 @@ class Lobbies(pm.states.State):
 
         # Panel des salons
         self.rooms = LobbiesMenuRooms()
+        self.bind_panel(self.rooms)
 
         # Boutton de retour
         self.back_button = pm.ui.CircleButton(
@@ -36,7 +37,7 @@ class Lobbies(pm.states.State):
             hover_scale_ratio=1.05,
             hover_scale_duration=0.05,
             callback=self.handle_back,
-            panel="lobbies_menu_view",
+            panel=str(self.view),
         )
 
         # Boutton de host
@@ -47,19 +48,19 @@ class Lobbies(pm.states.State):
             height=90,
             anchor="center",
             text=pm.languages("lobbies_host"),
-            font_color=(220, 215, 200),
-            font_color_hover=(240, 235, 220),
+            font_color=(200, 215, 220),
+            font_color_hover=(220, 235, 240),
             underline=True,
             filling_color=(255, 255, 255, 15),
-            filling_color_hover=(255, 255, 255, 30),
+            filling_color_hover=(255, 255, 255, 25),
             border_width=3,
             border_color=(0, 0, 0, 10),
-            border_color_hover=(70, 63, 55),
+            border_color_hover=(0, 0, 0, 20),
             border_radius=20,
             hover_scale_ratio=1.03,
             hover_scale_duration=0.07,
             callback=self.handle_host,
-            panel="lobbies_menu_view",
+            panel=str(self.view),
         )
 
         # Bouton de refresh
@@ -82,7 +83,7 @@ class Lobbies(pm.states.State):
             hover_scale_ratio=1.05,
             hover_scale_duration=0.05,
             callback=self.handle_refresh,
-            panel="lobbies_menu_view",
+            panel=str(self.view),
         )
 
     # ======================================== ACTUALISATION ========================================
@@ -104,7 +105,7 @@ class Lobbies(pm.states.State):
             name="Partie test",
             mode="classic",
             host_side=ctx.modifiers.get("p1_side"),
-            max_players=ctx.game.modes[ctx.modes.selected].max_players,
+            max_players=getattr(ctx.game.current_mode, 'max_players', 2),
             max_spectators=10,
             time=time(),
             version=__version__

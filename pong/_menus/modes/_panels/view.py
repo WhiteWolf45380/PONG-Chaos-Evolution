@@ -7,10 +7,25 @@ class ModesMenuView(pm.panels.Panel):
     Panel de vue du menu de choix du mode de jeu
     """
     def __init__(self, width : int = 1440, height : int = 1080):
-        super().__init__('modes_menu_view', rect=(0, 0, width, height), centered=True)
+        # Initialisation du panel
+        super().__init__('modes_menu_view', rect=(0, 0, width, height), centered=True, border_width=3, border_color=(40, 45, 50), border_around=True)
 
         # Fond
-        self.background_color = (0, 0, 15)
+        self.background_color = (50, 55, 60)
+
+        # Titre
+        self.title = pm.ui.Text(
+            x=self.centerx,
+            y=self.height * 0.04,
+            anchor="midtop",
+            text=pm.languages("modes_title"),
+            font="davidclmmedium",
+            font_size=96,
+            font_color=(210, 225, 230),
+            shadow=True,
+            underline=True,
+            panel=str(self),
+        )
 
     def draw_back(self, surface: pygame.Surface):
         """Dessin par frame"""

@@ -12,6 +12,8 @@ class Mode(pm.states.State):
             name (str): nom du mode de jeu
             max_players (int, optional): nombre de joueurs maximum
         """
+        # Sessions conformes
+        self.allowed_sessions = ["solo", "local", "online"]
 
         # Initialisation de l'état
         self.name: str = name
