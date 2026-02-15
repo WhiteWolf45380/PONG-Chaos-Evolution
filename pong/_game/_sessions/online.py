@@ -90,7 +90,7 @@ class Online(Session):
         if data:
             self._last_data = data
             if not self._pseudo_sync and 'pseudo' in data:
-                ctx.modifiers._pseudo_sync("p2_pseudo", data['pseudo'])
+                ctx.modifiers.set("p2_pseudo", data['pseudo'])
                 self._pseudo_received = True
             self.current.from_dict(self._last_data, ball=True, ennemy=True, game=True)
         send_data = self.current.to_dict('player_1')
