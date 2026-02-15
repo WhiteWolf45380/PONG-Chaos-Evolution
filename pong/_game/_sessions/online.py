@@ -11,6 +11,7 @@ class Online(Session):
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
         self._last_data = {}
+        self._pseudos_sync = False
 
     # ======================================== LANCEMENT ========================================
     def start(self):

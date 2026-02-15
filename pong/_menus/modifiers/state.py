@@ -17,9 +17,10 @@ class Modifiers(pm.states.State):
         self.params = {}
 
         # Catégorie: Players
+        self.add("online_pseudo", 'Guest', category="players", sessions=["online"])
         self.add("p1_pseudo", 'P1', category="players")                                                 # (str)  : pseudo du joueur 1
-        self.add("p2_pseudo", 'P2', category="players")                                                 # (str)  : pseudo du joueur 2
-        self.add("p1_side", 0, category="players", modes=['wall_game', 'solo'])                         # (int)  : côté du joueur 1
+        self.add("p2_pseudo", 'P2', category="players", sessions=["solo"])                              # (str)  : pseudo du joueur 2
+        self.add("p1_side", 0, category="players")                                                      # (int)  : côté du joueur 1
 
         # Catégorie Game
         self.add("score_limit", 3, category="game")                                                     # (int)  : score à atteindre
@@ -58,7 +59,7 @@ class Modifiers(pm.states.State):
         """Actualisation par frame"""
     
     # ======================================== ENREGISTREMENT ========================================
-    def add(self, name: str, value: object = None, category: Optional[str] = None, modes: Optional[str] | Optional[Iterable[str]] = None, add_prefix: bool = False):
+    def add(self, name: str, value: object = None, category: Optional[str] = None, sessions: Optional[str] | Optional[Iterable[str]] = None, modes: Optional[str] | Optional[Iterable[str]] = None, add_prefix: bool = False):
         """
         Ajoute un nouveau paramètre de partie
 
@@ -75,6 +76,12 @@ class Modifiers(pm.states.State):
         if name in self.params:
             raise AttributeError(f"Parameter {name} already exists")
         
+        # Normalise la session en liste
+        if isinstance(sessions, str):
+            sessions = [sessions]
+        elif sessions is None:
+            sessions = []
+        
         # Normalise le mode en liste
         if isinstance(modes, str):
             modes = [modes]
@@ -84,7 +91,8 @@ class Modifiers(pm.states.State):
         self.params[name] = {
             "value": value,
             "category": category,
-            "modes": modes
+            "sessions": sessions,
+            "modes": modes,
         }
 
     # ======================================== GETTERS ========================================
@@ -118,6 +126,43 @@ class Modifiers(pm.states.State):
             return value[index]
         return value
     
+    def get_with_filters(self, category: str | None = None, session: str | None = None, mode: str | None = None, remove_prefix: bool = False):
+        """
+        Renvoie tous les paramètres se conformant aux filtres
+        
+        Args:
+            category (str | None): catégorie à filtrer
+            session (str | None): session à filtrer
+            mode (str | None): mode de jeu à filtrer
+            remove_prefix (bool): retire le préfixe des paramètres
+            
+        Returns:
+            Dictionnaire {nom: valeur} des paramètres correspondant aux filtres
+        """
+        prefix = f"{category}_" if category is not None else None
+        result = {}
+        
+        for name, param in self.params.items():
+            # Filtre par catégorie
+            if category is not None and param["category"] != category:
+                continue
+            
+            # Filtre par session
+            if session is not None and session not in param["sessions"]:
+                continue
+            
+            # Filtre par mode
+            if mode is not None and mode not in param["modes"]:
+                continue
+            
+            key = name
+            if remove_prefix and prefix and name.startswith(prefix):
+                key = name[len(prefix):]
+            
+            result[key] = param["value"]
+        
+        return result
+    
     def get_by_category(self, category: str | None, remove_prefix: bool = False) -> dict:
         """
         Renvoie tous les paramètres d'une catégorie
@@ -142,12 +187,28 @@ class Modifiers(pm.states.State):
             result[key] = param["value"]
         return result
     
-    def get_by_mode(self, mode: str | None) -> dict:
+    def get_by_session(self, session: str) -> dict:
+        """
+        Renvoie tous les paramètres d'une session
+
+        Args:
+            session (str): session à vérifier
+            
+        Returns:
+            Dictionnaire {nom: valeur} des paramètres compatibles avec cette session
+        """
+        return {
+            name: param["value"]
+            for name, param in self.params.items()
+            if session in param["sessions"]
+        }
+    
+    def get_by_mode(self, mode: str) -> dict:
         """
         Renvoie tous les paramètres d'un mode de jeu
 
         Args:
-            mode (str | None): mode de jeu à vérifier (None pour les paramètres globaux)
+            mode (str): mode de jeu à vérifier
             
         Returns:
             Dictionnaire {nom: valeur} des paramètres compatibles avec ce mode
@@ -155,7 +216,7 @@ class Modifiers(pm.states.State):
         return {
             name: param["value"]
             for name, param in self.params.items()
-            if (mode is None and not param["modes"]) or mode in param["modes"]
+            if mode in param["modes"]
         }
     
     def get_categories(self) -> list[str]:
