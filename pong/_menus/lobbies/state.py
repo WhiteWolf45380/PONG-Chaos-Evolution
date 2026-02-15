@@ -116,6 +116,7 @@ class Lobbies(pm.states.State):
     def on_enter(self):
         """Ouverture du menu"""
         ctx.engine.background.visible = True
+        pm.ui.unselect("lobby")
         self.handle_refresh()
         return super().on_enter()
     
