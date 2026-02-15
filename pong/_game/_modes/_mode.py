@@ -36,11 +36,12 @@ class Mode(pm.states.State):
         self.max_players: int = max_players
 
         # Paramètres dynamiques
-        self.frozen: bool = False       # jeu en gêle
-        self.paused: bool = False       # jeu en pause
-        self.ended: bool = False        # menu de fin de partie
-        self.end_done: bool = False     # Fin déjà traitée
-        self.next_round: bool = False   # en attente du prochain round
+        self.frozen: bool = False           # jeu en gêle
+        self.paused: bool = False           # jeu en pause
+        self.ended: bool = False            # menu de fin de partie
+        self.end_done: bool = False         # Fin déjà traitée
+        self.next_round: bool = False       # en attente du prochain round
+        self.next_round_done: bool = False # attente du prochain round traitée
 
         self.score_limit: int = 3
         self.score_0: int = 0
@@ -108,13 +109,13 @@ class Mode(pm.states.State):
         """Lance la partie"""
         self.freeze()
         self.next_round = False
+        self.next_round_done = True
         pm.panels["game_count"].set_count([3, 2, 1, "Go!"])
         pm.panels["game_count"].activate()
     
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
-        print(self.next_round)
         if self.paused:
             pass
         elif self.frozen:
@@ -226,10 +227,11 @@ class Mode(pm.states.State):
             self.score_0 = data.get("game_score_0", self.score_0)
             self.score_1 = data.get("game_score_1", self.score_1)
             self.winner = data.get("game_winner", self.winner)
-            self.next_round = data.get("game_next_round", self.next_round)
-            self.frozen = data.get("game_frozen", self.frozen) and not self.next_round
+            self.frozen = data.get("game_frozen", self.frozen)
             self.paused = data.get("game_paused", self.paused)
             self.ended = data.get("game_ended", self.ended) or self.ended
+            self.next_round = self.frozen and not self.next_round_done
+            if not self.frozen: self.next_round_done = False
     
     def freeze(self):
         """Met le jeu en gêle"""
