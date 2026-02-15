@@ -124,6 +124,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
             ctx.engine.sys_message(pm.languages("error_connection"), sender="Network", type="error") 
             return
         ctx.modifiers.set("p1_side", 1 - self.all[ip][0].get("host_side", 0))
+        ctx.game.set_mode(self.all[ip][0].get("mode"))
         pm.states.activate("waiting_animation", transition=False)
     
     # ======================================== METHODES DYNAMIQUES ========================================

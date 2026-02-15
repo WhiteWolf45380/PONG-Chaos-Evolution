@@ -1,7 +1,6 @@
 # ======================================== IMPORTS ========================================
-from ..._core import ctx, pm
+from ..._core import ctx, pm, pygame
 from .._objects import Ball, Paddle
-import time
 
 # ======================================== MODE DE JEU ========================================
 class Mode(pm.states.State):
@@ -130,12 +129,12 @@ class Mode(pm.states.State):
         """Vérifie la fin de partie après la collision d'un mur vertical"""
         return False
 
-    def end(self, text: str = None):
+    def end(self, text: str = None, color: pygame.Color = (255, 255, 255)):
         """Fin de partie"""
         if self.end_done:
             return False
         self.end_done = True
-        ctx.results.load(text)
+        ctx.results.load(text, color=color)
         pm.states.activate("results_animation")
         return True
     

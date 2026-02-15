@@ -36,6 +36,7 @@ class Results(pm.states.State):
 
         # Message spécifique au mode de jeu
         self.text = None
+        self.color = (255, 255, 255)
         self.special_text = pm.ui.Text(
             x=self.view.centerx,
             y=self.view.centery,
@@ -99,7 +100,7 @@ class Results(pm.states.State):
         return super().on_exit()
     
     # ======================================== METHODES DYNAMIQUES ========================================
-    def load(self, text: str):
+    def load(self, text: str, color: pygame.Color = (255, 255, 255)):
         """
         Charge un texte pour l'animation
         
@@ -109,6 +110,9 @@ class Results(pm.states.State):
         self.text = text
         if self.text is not None:
             self.render()
+        if color != self.color:
+            self.special_text.set_color(color)
+            self.color = color
         
     def render(self):
         """Génère la surface du texte"""

@@ -43,5 +43,7 @@ class Wall(Mode):
 
     def end(self):
         """Fin de partie"""
-        if not super().end(pm.languages("game_results_score", score=getattr(self, f'score_{ctx.modifiers["p1_side"]}', 0))):
+        text = pm.languages("game_results_score", score=getattr(self, f'score_{ctx.modifiers["p1_side"]}', 0))
+        color = self.player_1.color
+        if not super().end(text, color=color):
             return

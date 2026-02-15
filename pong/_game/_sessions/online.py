@@ -21,7 +21,7 @@ class Online(Session):
         self.current.player_2.set_status("ennemy")
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
-        ctx.modifiers.set("p1_pseudo", ctx.modifiers.get("online_pseudo") + f"({'host' if self._is_host else 'client'})")
+        ctx.modifiers.set("p1_pseudo", ctx.modifiers.get("online_pseudo"))
         self._pseudo_received = False
         self._pseudo_sent = False
         if self._is_host:
@@ -68,7 +68,7 @@ class Online(Session):
         if data:
             self._last_data = data
             if not self._pseudo_received and 'pseudo' in data:
-                ctx.modifiers.set("p2_pseudo", data['pseudo'] + " (client)")
+                ctx.modifiers.set("p2_pseudo", data['pseudo'])
                 self._pseudo_received = True
             self.current.from_dict(self._last_data, ennemy=True)
         send_data = self.current.to_dict('ball', 'player_1', 'game')
@@ -83,7 +83,7 @@ class Online(Session):
         if data:
             self._last_data = data
             if not self._pseudo_received and 'pseudo' in data:
-                ctx.modifiers.set("p2_pseudo", data['pseudo'] + " (host)")
+                ctx.modifiers.set("p2_pseudo", data['pseudo'])
                 self._pseudo_received = True
             self.current.from_dict(self._last_data, ball=True, ennemy=True, game=True)
         send_data = self.current.to_dict('player_1')

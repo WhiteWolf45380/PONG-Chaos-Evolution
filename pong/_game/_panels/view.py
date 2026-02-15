@@ -65,24 +65,24 @@ class GameView(pm.panels.Panel):
         # Pseudos
         self.paddle0_pseudo = "P1"
         self.paddle0_text = pm.ui.Text(
-            x=self.width * 0.05,
+            x=self.width * 0.25,
             y=self.height * 0.05,
             text=self.paddle0_pseudo,
-            anchor="topleft",
+            anchor="midtop",
             font_path=get_path("_assets/fonts/arcade.ttf"),
-            font_size=32,
+            font_size=24,
             font_color=self.art_color,
             auto=False,
         )
 
-        self.paddle1_pseudo = "P¨2"
+        self.paddle1_pseudo = "P2"
         self.paddle1_text = pm.ui.Text(
-            x=self.width * 0.95,
+            x=self.width * 0.75,
             y=self.height * 0.05,
             text=self.paddle1_pseudo,
-            anchor="topright",
+            anchor="midtop",
             font_path=get_path("_assets/fonts/arcade.ttf"),
-            font_size=32,
+            font_size=24,
             font_color=self.art_color,
             auto=False,
         )

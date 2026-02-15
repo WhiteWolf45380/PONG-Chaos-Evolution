@@ -37,5 +37,7 @@ class Classic(Mode):
 
     def end(self):
         """Fin de partie"""
-        if not super().end(pm.languages("game_results_winner", winner=ctx.modifiers.get(f"p{self.winner}_pseudo", fallback=f"P{self.winner}"))):
+        text = pm.languages("game_results_winner", winner=ctx.modifiers.get(f"p{self.winner}_pseudo", fallback=f"P{self.winner}"))
+        color = getattr(self, f'player_{self.winner}', self.player_1).color
+        if not super().end(text, color=color):
             return
