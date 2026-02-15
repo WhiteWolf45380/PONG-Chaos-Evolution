@@ -55,7 +55,7 @@ class Online(Session):
             return
 
         # Vérification de la connexion
-        if pm.network.is_connection_lost():
+        if pm.network.is_connection_lost() and not self.current.ended:
             error = pm.network.get_last_error()
             self._connected = False
             if self._is_host:
@@ -64,7 +64,6 @@ class Online(Session):
             else:
                 print(f"Connexion perdue: {error}")
                 ctx.engine.sys_message(pm.languages("error_client"), sender="Network", type="error") 
-                pm.states.activate("main_menu")
             return
 
         # Synchronisation
