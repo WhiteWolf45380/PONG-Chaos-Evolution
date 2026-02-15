@@ -62,7 +62,7 @@ class Game(pm.states.State):
     # ======================================== METHODES DYNAMIQUES ========================================
     def toggle_pause(self):
         """Active/Désactive la pause de la partie"""
-        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True): return
+        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True) or self.current_mode.frozen: return
         if not self.current_mode.paused:
             self.current_mode.pause()
             self.pause.activate()
@@ -72,14 +72,14 @@ class Game(pm.states.State):
     
     def pause(self):
         """Active la pause de la partie"""
-        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True): return
+        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True) or self.current_mode.frozen: return
         if not self.current_mode.paused:
             self.current_mode.pause()
             self.pause.activate()
         
     def unpause(self):
         """Désactive la pause de la partie"""
-        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True): return
+        if self.current_mode is None or not getattr(self.current_session, 'allow_freeze', True) or self.current_mode.frozen: return
         if self.current_mode.paused:
             self.current_mode.unpause()
             self.pause.deactivate()

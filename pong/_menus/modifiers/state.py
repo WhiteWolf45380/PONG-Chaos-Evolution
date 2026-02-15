@@ -23,11 +23,11 @@ class Modifiers(pm.states.State):
         self.add("radius", 15, category="ball", add_prefix=True)                                        # (int)  : rayon de la balle
         self.add("color", (255, 255, 255), category="ball", add_prefix=True)                            # (color): couleur de la balle
         self.add("trail", "continuous", category="ball", add_prefix=True)                               # (str)  : type de traînée
-        self.add("trail_length", 0.2, category="ball", add_prefix=True)                                 # (float): longueur de la traînée en secondes
+        self.add("trail_length", 0.13, category="ball", add_prefix=True)                                # (float): longueur de la traînée en secondes
         self.add("trail_color", (0, 200, 200), category="ball", add_prefix=True)                        # (color): couleur de la traînée
         self.add("celerity_min", 600, category="ball", add_prefix=True)                                 # (int)  : vitesse initiale de la balle
-        self.add("celerity_max", 2000, category="ball", add_prefix=True)                                # (int)  : vitesse finale de la balle
-        self.add("acceleration_duration", 60, category="ball", add_prefix=True)                         # (int)  : durée d'accéleration de la balle en secondes
+        self.add("celerity_max", 2400, category="ball", add_prefix=True)                                # (int)  : vitesse finale de la balle
+        self.add("acceleration_duration", 64, category="ball", add_prefix=True)                         # (int)  : durée d'accéleration de la balle en secondes
         self.add("angle_min", 15, category="ball", add_prefix=True)                                     # (int)  : angle minimal de déplacement de la balle
         self.add("angle_max", 30, category="ball", add_prefix=True)                                     # (int)  : angle maximal de déplacement de la balle
         self.add("bouncing_epsilon", 5, category="ball", add_prefix=True)                               # (int)  : aléatoire de l'angle dans les rebonds

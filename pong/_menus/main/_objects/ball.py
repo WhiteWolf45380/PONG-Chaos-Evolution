@@ -30,7 +30,8 @@ class BallObject(pm.entities.CircleEntity):
 
         # Traînée       
         self.trail = []
-        self.trail_limit = 6
+        self.trail_timer = 0.0
+        self.trail_length = 0.13
 
         # Angle
         self.angle_min = math.radians(20)
@@ -47,8 +48,9 @@ class BallObject(pm.entities.CircleEntity):
         Actualisation de la frame
         """
         # Trainée
-        self.trail.append((self.centerx, self.centery))
-        while len(self.trail) > int(self.trail_limit):
+        self.trail_timer += pm.time.dt
+        self.trail.append((self.trail_timer, self.centerx, self.centery))
+        while len(self.trail) > 0 and self.trail_timer - self.trail[0][0] > self.trail_length:
             self.trail.pop(0)
 
         # Déplacement
@@ -75,11 +77,11 @@ class BallObject(pm.entities.CircleEntity):
         current_pos = (self.centerx, self.centery)
         for i in range(num_segments):
             if i == num_segments - 1:
-                start_pos = self.trail[i]
+                start_pos = self.trail[i][1:]
                 end_pos = current_pos
             else:
-                start_pos = self.trail[i]
-                end_pos = self.trail[i + 1]
+                start_pos = self.trail[i][1:]
+                end_pos = self.trail[i + 1][1:]
 
             subdivisions = 5
             for j in range(subdivisions):

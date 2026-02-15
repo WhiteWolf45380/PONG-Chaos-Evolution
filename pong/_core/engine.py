@@ -10,7 +10,7 @@ class Engine:
         # Initialisation du framework modulable
         pm.init()
 
-        pm.time.set_fps_limit(60)
+        pm.time.set_fps_limit(15)
         pm.screen.set_vsync(True)
 
         pm.languages.load_directory(get_path("_languages"))

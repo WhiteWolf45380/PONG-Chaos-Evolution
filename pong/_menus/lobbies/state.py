@@ -72,7 +72,7 @@ class Lobbies(pm.states.State):
             filling=True,
             filling_color=(255, 255, 255, 20),
             filling_hover=True,
-            filling_color_hover=(255, 255, 255, 40),
+            filling_color_hover=(255, 255, 255, 20),
             border_width=2,
             border_color=(0, 0, 0, 5),
             border_radius=10,

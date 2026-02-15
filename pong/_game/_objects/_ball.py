@@ -202,7 +202,7 @@ class Ball(pm.entities.CircleEntity):
         """
         if paddle.cooldown > 0:
             return
-        if abs(p1.x - paddle.centerx) <= (paddle.width / 2 + self.radius):
+        if abs(self.centerx - self.view.centerx) + self.radius >= abs(paddle.centerx - self.view.centerx) - paddle.width / 2:
             line = pm.geometry.Line(p0, p1 - p0)
 
             rect_inflation = 2 * self.radius
@@ -212,6 +212,7 @@ class Ball(pm.entities.CircleEntity):
             intersections = rect._line_intersection(line)
             if intersections:
                 I = min(intersections, key=lambda P: p0.distance(P))
+                self.center = I
                 normal: pm.types.VectorObject = pm.geometry.Circle(I, self.radius).rect_collision_normal(paddle.rect)
                 self.bounce(normal)
                 paddle.collision()

@@ -66,10 +66,7 @@ class Mode(pm.states.State):
         self.winner: int = None
 
         # Balle
-        if self.ball is not None:
-            print("tre")
-            self.ball.kill()
-
+        if self.ball is not None: self.ball.kill()
         self.ball = Ball(self.is_end)
 
         # Raquettes
@@ -133,10 +130,13 @@ class Mode(pm.states.State):
         if self.end_done:
             return False
         self.end_done = True
-        self.kill_all()
         ctx.results.load(text)
         pm.states.activate("results_animation")
         return True
+    
+    def on_exit(self):
+        self.kill_all()
+        return super().on_exit()
 
     # ======================================== METHODES PUBLIQUES ========================================
     @property

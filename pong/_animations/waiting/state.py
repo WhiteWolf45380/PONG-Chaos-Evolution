@@ -53,6 +53,8 @@ class Waiting(pm.states.State):
     
     def handle_cancel(self):
         """Annuler de la recherche"""
+        if pm.network._connected:
+            pm.network.disconnect()
         pm.states.activate("lobbies_menu", transition=True)
 
     # ======================================== HOOKS ========================================
