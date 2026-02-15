@@ -118,7 +118,7 @@ class Mode(pm.states.State):
         """Actualisation par frame"""
         if self.paused:
             pass
-        elif self.frozen:
+        elif self.frozen and self.next_round_done:
             pass
         elif self.ended:
             self.end()
