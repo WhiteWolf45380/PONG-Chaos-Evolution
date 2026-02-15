@@ -14,5 +14,5 @@
     "game_pause_leave": "Leave",
     "game_results_default": "Game Over",
     "game_results_score": "Final score : {score}",
-    "game_results_winner": "Player {winner} won !"
+    "game_results_winner": "{winner} won !"
 }

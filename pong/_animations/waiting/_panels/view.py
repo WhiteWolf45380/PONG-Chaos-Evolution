@@ -23,12 +23,6 @@ class WaitingAnimationView(pm.panels.Panel):
             font_size=64,
             font_color=(255, 255, 255),
             shadow=True,
-            gradient=True,
-            gradient_color=(150, 150, 150),
-            gradient_direction="diagonal",
-            gradient_fluctuation=True,
-            gradient_fluctuation_amplitude=0.5,
-            gradient_fluctuation_speed=3.0,
             panel=str(self),
             zorder=1,
         )
@@ -50,6 +44,12 @@ class WaitingAnimationView(pm.panels.Panel):
             font_size=56,
             font_color=(255, 255, 255),
             shadow=True,
+            gradient=True,
+            gradient_color=(150, 150, 150),
+            gradient_direction="diagonal",
+            gradient_fluctuation=True,
+            gradient_fluctuation_amplitude=0.5,
+            gradient_fluctuation_speed=3.0,
             panel=str(self),
             zorder=2
         )

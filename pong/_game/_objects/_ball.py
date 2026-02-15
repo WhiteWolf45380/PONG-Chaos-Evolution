@@ -65,7 +65,7 @@ class Ball(pm.entities.CircleEntity):
         # Détermination du côté
         side = int(self.centerx // (0.5 * self.view.width))
         side_paddle: Paddle = getattr(mode, f'paddle_{side}')
-        if getattr(mode, 'max_players', 2) == 1 and side != ctx.modifiers.get("paddle_side"): side_paddle = None
+        if getattr(mode, 'max_players', 2) == 1 and side != ctx.modifiers.get("p1_side"): side_paddle = None
 
         # Trainée
         self.trail_timer += pm.time.dt

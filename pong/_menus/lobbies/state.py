@@ -70,9 +70,9 @@ class Lobbies(pm.states.State):
             height=64,
             anchor="center",
             filling=True,
-            filling_color=(255, 255, 255, 20),
+            filling_color=(255, 255, 255, 15),
             filling_hover=True,
-            filling_color_hover=(255, 255, 255, 20),
+            filling_color_hover=(255, 255, 255, 30),
             border_width=2,
             border_color=(0, 0, 0, 5),
             border_radius=10,
@@ -100,8 +100,15 @@ class Lobbies(pm.states.State):
 
     def handle_host(self):
         """Héberge un lobby"""
-        pm.network.host(name="Partie test", mode="classic", max_players=ctx.game.modes[ctx.modes.selected].max_players, max_spectators=10, time=time(), version=__version__)
-        ctx.modifiers.set("paddle_side", 0)
+        pm.network.host(
+            name="Partie test",
+            mode="classic",
+            host_side=ctx.modifiers.get("p1_side"),
+            max_players=ctx.game.modes[ctx.modes.selected].max_players,
+            max_spectators=10,
+            time=time(),
+            version=__version__
+        )
         pm.states.activate("waiting_animation", transition=True)
     
     # ======================================== HOOKS ========================================

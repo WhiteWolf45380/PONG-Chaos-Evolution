@@ -20,7 +20,7 @@ class Wall(Mode):
     def on_enter(self):
         """Activation de l'état"""
         super().on_enter()
-        setattr(self, f"score_{1 - ctx.modifiers.get('paddle_side')}", None)
+        setattr(self, f"score_{1 - ctx.modifiers.get('p1_side')}", None)
 
     # ======================================== ACTUALISATION ========================================
     def update(self):
@@ -30,7 +30,7 @@ class Wall(Mode):
     # ======================================== FIN ========================================
     def is_end(self, side: int):
         """Vérifie la fin de partie"""
-        player_side = ctx.modifiers['paddle_side']
+        player_side = ctx.modifiers['p1_side']
         if side == player_side:
             self.ended = True
             return True
@@ -40,5 +40,5 @@ class Wall(Mode):
 
     def end(self):
         """Fin de partie"""
-        if not super().end(pm.languages("game_results_score", score=getattr(self, f'score_{ctx.modifiers["paddle_side"]}', 0))):
+        if not super().end(pm.languages("game_results_score", score=getattr(self, f'score_{ctx.modifiers["p1_side"]}', 0))):
             return

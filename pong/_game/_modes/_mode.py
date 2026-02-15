@@ -71,13 +71,16 @@ class Mode(pm.states.State):
 
         # Raquettes
         if self.paddle_0 is not None: self.paddle_0.kill()
-        self.paddle_0 = Paddle(Paddle.OFFSET, self.view.centery)
+        self.paddle_0 = Paddle(side=0)
         if self.paddle_1 is not None: self.paddle_1.kill()
-        self.paddle_1 = Paddle(self.view.width - Paddle.OFFSET, self.view.centery)
+        self.paddle_1 = Paddle(side=1)
 
         # Association
-        self.player_1 = getattr(self, f'paddle_{ctx.modifiers["paddle_side"]}')
-        self.player_2 = getattr(self, f'paddle_{1 - ctx.modifiers["paddle_side"]}')
+        self.player_1 = getattr(self, f'paddle_{ctx.modifiers["p1_side"]}')
+        self.player_1.set_player(1)
+    
+        self.player_2 = getattr(self, f'paddle_{1 - ctx.modifiers["p1_side"]}')
+        self.player_2.set_player(2)
 
         # Limitation
         if self.max_players == 1:
@@ -146,19 +149,19 @@ class Mode(pm.states.State):
 
     def p1_move_up(self):
         """Déplacement vers le haut du joueur 1"""
-        if self.playing: self.player_1.move_up()
+        if not self.paused: self.player_1.move_up()
 
     def p1_move_down(self):
         """Déplacement vers le bas du joueur 1"""
-        if self.playing: self.player_1.move_down()
+        if not self.paused: self.player_1.move_down()
     
     def p2_move_up(self):
         """Déplacement vers le haut du joueur 2"""
-        if self.playing: self.player_2.move_up()
+        if not self.paused: self.player_2.move_up()
 
     def p2_move_down(self):
         """Déplacement vers le bas du joueur 2"""
-        if self.playing: self.player_2.move_down()
+        if not self.paused: self.player_2.move_down()
     
     def to_dict(self, *filters) -> dict:
         """Sérialise l'état de la partie"""

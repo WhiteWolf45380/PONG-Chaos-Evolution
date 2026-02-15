@@ -16,6 +16,7 @@ class Online(Session):
     def start(self):
         """Initialisation d'une session"""
         super().start()
+        self.current.player_2.set_status("ennemy")
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
         if self._is_host:

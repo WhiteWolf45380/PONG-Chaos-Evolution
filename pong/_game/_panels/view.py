@@ -62,12 +62,12 @@ class GameView(pm.panels.Panel):
             auto=False,
         )
 
-        # Distinction des joueurs
-        self.paddle0 = 1
+        # Pseudos
+        self.paddle0_pseudo = "P1"
         self.paddle0_text = pm.ui.Text(
             x=self.width * 0.05,
             y=self.height * 0.05,
-            text="P1",
+            text=self.paddle0_pseudo,
             anchor="topleft",
             font_path=get_path("_assets/fonts/arcade.ttf"),
             font_size=32,
@@ -75,11 +75,11 @@ class GameView(pm.panels.Panel):
             auto=False,
         )
 
-        self.paddle1 = 2
+        self.paddle1_pseudo = "P¨2"
         self.paddle1_text = pm.ui.Text(
             x=self.width * 0.95,
             y=self.height * 0.05,
-            text="P2",
+            text=self.paddle1_pseudo,
             anchor="topright",
             font_path=get_path("_assets/fonts/arcade.ttf"),
             font_size=32,
@@ -98,32 +98,39 @@ class GameView(pm.panels.Panel):
         # Titre du jeu
         surface.blit(self.art_text.surface, self.art_text.rect)
 
-        # Scores
-        s0 = getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'score_0', 0)
-        if s0 is not None:
-            if self.s0 != s0:
-                self.s0_text.text = str(s0)
-                self.s0 = s0
-            surface.blit(self.s0_text.surface, self.s0_text.rect)
+        # Caractéristiques des joueurs
+        max_players = getattr(pm.states["game"].current_mode, 'max_players', 2)
 
-        s1 = getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'score_1', 0)
-        if s1 is not None:
-            if self.s1 != s1:
-                self.s1_text.text = str(s1)
-                self.s1 = s1
-            surface.blit(self.s1_text.surface, self.s1_text.rect)
+        # Scores
+        if max_players >= 1:
+            s0 = getattr(pm.states["game"].current_mode, 'score_0', None)
+            if s0 is not None:
+                if self.s0 != s0:
+                    self.s0_text.text = str(s0)
+                    self.s0 = s0
+                surface.blit(self.s0_text.surface, self.s0_text.rect)
+
+        if max_players >= 2:
+            s1 = getattr(pm.states["game"].current_mode, 'score_1', None)
+            if s1 is not None:
+                if self.s1 != s1:
+                    self.s1_text.text = str(s1)
+                    self.s1 = s1
+                surface.blit(self.s1_text.surface, self.s1_text.rect)
         
-        # Distinction des joueurs
-        paddle0 = 1 if ctx.modifiers.get("paddle_side") == 0 else 2
-        if paddle0 is not None:
-            if self.paddle0 != paddle0:
-                self.paddle0_text.text = f"P{paddle0}"
-                self.paddle0 = paddle0
+        # Pseudos
+        paddle0 = 1 if ctx.modifiers.get("p1_side") == 0 else 2
+        if paddle0 <= max_players:
+            paddle0_pseudo = ctx.modifiers.get(f"p{paddle0}_pseudo", fallback=f'P{paddle0}')
+            if paddle0_pseudo != self.paddle0_pseudo:
+                self.paddle0_text.text = paddle0_pseudo
+                self.paddle0_pseudo = paddle0_pseudo
             surface.blit(self.paddle0_text.surface, self.paddle0_text.rect)
         
-        paddle1 = 2 if ctx.modifiers.get("paddle_side") == 0 else 1
-        if paddle1 is not None and getattr(pm.states.get_object(pm.states.get_active_by_layer(2)), 'max_players', 2) >= 2:
-            if self.paddle1 != paddle1:
-                self.paddle1_text.text = f"P{paddle1}"
-                self.paddle1 = paddle1
+        paddle1 = 2 if ctx.modifiers.get("p1_side") == 0 else 1
+        if paddle1 <= max_players:
+            paddle1_pseudo = ctx.modifiers.get(f"p{paddle1}_pseudo", fallback=f'P{paddle1}')
+            if paddle1_pseudo != self.paddle1_pseudo:
+                self.paddle1_text.text = paddle1_pseudo
+                self.paddle1_pseudo = paddle1_pseudo
             surface.blit(self.paddle1_text.surface, self.paddle1_text.rect)

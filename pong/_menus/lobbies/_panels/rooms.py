@@ -118,7 +118,7 @@ class LobbiesMenuRooms(pm.panels.Panel):
         """Rejoint un lobby"""
         ip = pm.ui.get_selected("lobby")
         pm.network.join(ip)
-        ctx.modifiers.set("paddle_side", 1)
+        ctx.modifiers.set("p1_side", 1 - self.all[ip][0].get("host_side", 0))
         pm.states.activate("waiting_animation", transition=False)
     
     # ======================================== METHODES DYNAMIQUES ========================================

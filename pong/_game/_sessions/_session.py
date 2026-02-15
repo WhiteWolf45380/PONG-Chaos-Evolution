@@ -20,6 +20,7 @@ class Session(pm.states.State):
     # ======================================== LANCEMENT ========================================
     def start(self):
         """Initialisation d'une session"""
+        self.current.player_1.set_status("player")
         pm.inputs.add_listener(pm.settings["p1_up"], self.p1_move_up, repeat=True, condition=self.is_running)
         pm.inputs.add_listener(pm.settings["p1_down"], self.p1_move_down, repeat=True, condition=self.is_running)
         self.initialized = True
@@ -51,7 +52,7 @@ class Session(pm.states.State):
     # ======================================== METHODES PUBLIQUES ========================================
     def is_running(self):
         """Vérifie que la partie soit en cours"""
-        return pm.states.is_active("game") and self.current.playing
+        return pm.states.is_active("game") and not self.current.paused
 
     def p1_move_up(self):
         """Déplacement vers le haut du joueur 1"""

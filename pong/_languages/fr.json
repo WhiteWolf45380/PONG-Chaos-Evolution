@@ -14,5 +14,5 @@
     "game_pause_leave": "Partir",
     "game_results_default": "Fin de partie",
     "game_results_score": "Score final : {score}",
-    "game_results_winner": "Le joueur {winner} l'emporte"
+    "game_results_winner": "{winner} a gagné !"
 }

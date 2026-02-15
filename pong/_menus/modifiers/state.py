@@ -1,6 +1,6 @@
 # ======================================== IMPORTS ========================================
 from ..._core import pm
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Any
 
 from ._panels import ModifiersMenuView
 
@@ -16,8 +16,13 @@ class Modifiers(pm.states.State):
         # Paramètres de la partie
         self.params = {}
 
+        # Catégorie: Players
+        self.add("p1_pseudo", 'P1', category="players")                                                 # (str)  : pseudo du joueur 1
+        self.add("p2_pseudo", 'P2', category="players")                                                 # (str)  : pseudo du joueur 2
+        self.add("p1_side", 0, category="players", modes=['wall_game', 'solo'])                         # (int)  : côté du joueur 1
+
         # Catégorie Game
-        self.add("score_limit", 3, category="game")                                    # (int)  : score à atteindre
+        self.add("score_limit", 3, category="game")                                                     # (int)  : score à atteindre
 
         # Catégorie: Ball
         self.add("radius", 15, category="ball", add_prefix=True)                                        # (int)  : rayon de la balle
@@ -35,9 +40,11 @@ class Modifiers(pm.states.State):
         # Catégorie: Paddle
         self.add("size", 120, category="paddle", add_prefix=True)                                       # (int)  : hauteur de la raquette
         self.add("border_radius", 10, category="paddle", add_prefix=True)                               # (int)  : arrondi des coins de la raquette
-        self.add("color", (255, 255, 255), category="paddle", add_prefix=True)                          # (color): couleur de la raquette
+        self.add("color_default", (255, 255, 255), category="paddle", add_prefix=True)                  # (color): couleur de la raquette par défaut
+        self.add("color_player", (46, 204, 113), category="paddle", add_prefix=True)                    # (color): couleur de la raquette du joueur
+        self.add("color_friend", (52, 152, 219), category="paddle", add_prefix=True)                    # (color): couleur de la raquette d'un ami
+        self.add("color_ennemy", (231, 76, 60), category="paddle", add_prefix=True)                     # (color): couleur de la raquette d'un ennemi
         self.add("celerity", 500, category="paddle", add_prefix=True)                                   # (int)  : vitesse de la raquette
-        self.add("side", 0, category="paddle", modes=['wall_game', 'solo'], add_prefix=True)            # (int)  : côté de la raquette
 
         # Panel du menu
         self.menu = ModifiersMenuView()
@@ -89,7 +96,7 @@ class Modifiers(pm.states.State):
             raise KeyError(f"Parameter {name} does not exist")
         return self.params[name]["value"]
     
-    def get(self, name: str, index: Optional[int] = None):
+    def get(self, name: str, index: Optional[int] = None, fallback: Any = None):
         """
         Renvoie un paramètre de partie
 
@@ -101,7 +108,7 @@ class Modifiers(pm.states.State):
             Valeur du paramètre (ou élément à l'index si spécifié)
         """
         if name not in self.params:
-            raise AttributeError(f"Parameter {name} does not exist")
+            return fallback
         value = self.params[name]["value"]
         if index is not None:
             return value[index]
