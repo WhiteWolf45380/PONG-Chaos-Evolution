@@ -12,6 +12,7 @@ class Session(pm.states.State):
         """
         # Initialisation de l'état
         super().__init__(f"{name}_session", layer=1)
+        self.name = name
 
         # Partie en cours
         self.initialized: bool = False

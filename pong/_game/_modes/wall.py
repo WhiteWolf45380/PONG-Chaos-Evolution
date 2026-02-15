@@ -34,7 +34,7 @@ class Wall(Mode):
     def is_end(self, side: int):
         """Vérifie la fin de partie"""
         player_side = ctx.modifiers['p1_side']
-        if side == player_side:
+        if side == player_side and super().is_end():
             self.ended = True
             return True
         if player_side == 0: self.score_0 += 1

@@ -29,7 +29,7 @@ class Classic(Mode):
         """Vérifie la fin de partie"""
         if side == 0: self.score_1 += 1
         else: self.score_0 += 1
-        if self.score_0 >= self.score_limit or self.score_1 >= self.score_limit:
+        if self.score_0 >= self.score_limit or self.score_1 >= self.score_limit and super().is_end():
             self.winner = getattr(self, f'paddle_{1 - side}', self.paddle_0).get_player()
             self.ended = True
         self.next_round = True
