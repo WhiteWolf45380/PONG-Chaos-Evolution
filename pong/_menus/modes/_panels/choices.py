@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ...._core import ctx, pm, pygame
+from ...._core import ctx, pm, pygame, get_path
 import math
 
 # ======================================== PANEL ========================================
@@ -17,11 +17,15 @@ class ModesMenuChoices(pm.panels.Panel):
         self.current_session = None
         self.all = []                   # [(name, selector), ...]
 
-        self.margin = 15
+        self.margin = 10
+        self.padding = 40
         self.max_cols = 4
+
         self.choices_width = 0
         self.choices_height = 0
-        self.choices_space = self.margin
+
+        # Sauvegarde des images
+        self.previews = {}
 
     # ======================================== FOND ========================================
     def draw_back(self, surface: pygame.Surface):
@@ -63,33 +67,85 @@ class ModesMenuChoices(pm.panels.Panel):
         n = len(self.all)
         cols = min(n, self.max_cols)
         rows = math.ceil(n / cols)
+
+        full_width = self.width - 2 * self.margin
+        full_height = self.height - 2 * self.margin
+
+        # Calcul de la taille des cartes        
+        card_width = (full_width - self.padding * (cols + 1)) / cols
+        card_height = (full_height - self.padding * (rows + 1)) / rows
         
-        # Calcul de la taille des choix
-        self.choices_width = min((self.width - self.margin * (cols + 1)) / cols, self.width / 2)
-        self.choices_height = min((self.height - self.margin * (rows + 1)) / rows, self.height / 2)
+        # Limite de taille
+        max_card_width = self.width / 2
+        max_card_height = self.height / 2
+        
+        card_width = min(card_width, max_card_width)
+        card_height = min(card_height, max_card_height)
+        
+        # Conservation du ratio
+        ratio = self.width / self.height
+        if card_width / card_height > ratio:
+            card_width = card_height * ratio
+        else:
+            card_height = card_width / ratio
+        
+        self.choices_width = card_width
+        self.choices_height = card_height
+        
+        # Calcule de l'espacement
+        total_cards_width = cols * card_width
+        total_cards_height = rows * card_height
+        
+        spacing_x = (full_width - total_cards_width) / (cols + 1)
+        spacing_y = (full_height - total_cards_height) / (rows + 1)
         
         # Génération des sélecteurs
         for i, (choice, _) in enumerate(self.all):
+            # Calcul de la position théorique
             row = i // cols
             col = i % cols
             
-            x = self.width / (cols + 1) * (col + 1)
-            y = self.height / (rows + 1) * (row + 1)
+            # Positionnement
+            x = self.margin + spacing_x * (col + 1) + card_width * (col + 0.5)
+            y = self.margin + spacing_y * (row + 1) + card_height * (row + 0.5)
+
+            # Image
+            if choice not in self.previews:
+                try:
+                    preview = pygame.image.load(get_path(f"_assets/modes/{choice}/preview.png")).convert()
+                    overlay = pygame.Surface(preview.get_size(), pygame.SRCALPHA)
+                    overlay.fill((0, 0, 0, 120))
+                    preview.blit(overlay, (0, 0))
+                    self.previews[choice] = preview
+                except Exception:
+                    pass
             
+            # Génération du sélecteur
             selector = pm.ui.RectSelector(
                 x=x,
                 y=y,
-                width=self.choices_width,
-                height=self.choices_height,
-                title=choice,
+                width=card_width,
+                height=card_height,
+                icon=self.previews.get(choice),
+                icon_keep_ratio=True,
+                icon_scale_ratio=1.0,
+                text=choice,
+                text_size_ratio=0.8,
+                font_color=(255, 255, 255),
                 border_radius=20,
-                border_width=5,
-                border_color=(20, 25, 30),
+                border_width=4,
+                border_color=(255, 255, 255),
+                border_color_hover=(150, 100, 20),
                 border_color_selected=(30, 50, 200),
+                hover_scale_ratio=1.02,
+                hover_scale_duration=0.05,
+                selected_scale_ratio=0.97,
+                selected_scale_duration=0.05,
                 selection_id="mode",
                 selector_id=choice,
                 anchor="center",
                 panel=str(self)
             )
             
+            # Registration du sélecteur
             self.all[i] = (choice, selector)

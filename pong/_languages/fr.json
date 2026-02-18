@@ -10,6 +10,8 @@
     "lobbies_previous": "Précédent",
     "lobbies_next": "Suivant",
 
+    "lobbies_room_name": "Partie de {host}",
+
     "lobbies_search_text": "Recherche de joueurs",
     "lobbies_search_cancel": "Annuler",
 

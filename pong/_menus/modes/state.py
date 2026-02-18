@@ -32,7 +32,7 @@ class Modes(pm.states.State):
             filling_color_hover=(10, 10, 30, 60),
             border_width=2,
             border_color=(0, 0, 0, 5),
-            icon=pygame.image.load(get_path("_assets/icons/back.png")),
+            icon=pygame.image.load(get_path("_assets/icons/back.png")).convert_alpha(),
             icon_keep_ratio=True,
             icon_scale_ratio=0.6,
             hover_scale_ratio=1.05,
@@ -99,4 +99,8 @@ class Modes(pm.states.State):
             return
         self.selected = selected
         ctx.game.set_mode(selected)
-        pm.states.activate("game", transition=True)
+
+        if ctx.main.session_type == "online":
+            ctx.lobbies.start_host(selected)
+        else:
+            pm.states.activate("game", transition=True)

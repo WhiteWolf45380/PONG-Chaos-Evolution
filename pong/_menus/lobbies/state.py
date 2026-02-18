@@ -31,7 +31,7 @@ class Lobbies(pm.states.State):
             filling_color_hover=(255, 255, 255, 40),
             border_width=2,
             border_color=(0, 0, 0, 5),
-            icon=pygame.image.load(get_path("_assets/icons/back.png")),
+            icon=pygame.image.load(get_path("_assets/icons/back.png")).convert_alpha(),
             icon_keep_ratio=True,
             icon_scale_ratio=0.6,
             hover_scale_ratio=1.05,
@@ -77,7 +77,7 @@ class Lobbies(pm.states.State):
             border_width=2,
             border_color=(0, 0, 0, 5),
             border_radius=10,
-            icon=pygame.image.load(get_path("_assets/icons/refresh.png")),
+            icon=pygame.image.load(get_path("_assets/icons/refresh.png")).convert_alpha(),
             icon_keep_ratio=True,
             icon_scale_ratio=0.6,
             hover_scale_ratio=1.05,
@@ -101,11 +101,16 @@ class Lobbies(pm.states.State):
 
     def handle_host(self):
         """Héberge un lobby"""
+        pm.states.activate("modes_menu", transition=True)
+    
+    # ======================================== METHODES PUBLIQUESs ========================================
+    def start_host(self, mode):
+        """Démarre la recherche"""
         pm.network.host(
-            name="Partie test",
-            mode="classic",
+            name=pm.languages("lobbies_room_name", host=ctx.modifiers.get("online_pseudo")),
+            mode=mode,
             host_side=ctx.modifiers.get("p1_side"),
-            max_players=getattr(ctx.game.current_mode, 'max_players', 2),
+            max_players=getattr(ctx.game.modes.get(mode), 'max_players', 2),
             max_spectators=10,
             time=time(),
             version=__version__

@@ -86,14 +86,19 @@ class Engine:
         # Lancement d'une partie
         pm.states.activate("main_menu", transition=True, ease_out=False, duration=1.5)
 
+    # ======================================== ACTUALISATION FONDAMENTALE ========================================
     def update(self):
         """Actualisation de la frame"""
         pm.screen.fill((30, 30, 47))
+        if not pm.states.get_active_states():
+            pm.stop()
 
+    # ======================================== DEMARRAGE INITIAL ========================================
     def run(self):
         """Lance l'éxécution"""
         pm.run(self.update)
 
+    # ======================================== METHODES GLOBALES ========================================
     def sys_message(self, text: str, sender: str = "System", type: str = "default"):
         """Génère un message système"""
         if sender is not None:

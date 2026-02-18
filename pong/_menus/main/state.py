@@ -85,7 +85,7 @@ class Main(pm.states.State):
     
     def handle_quit(self):
         """Action du bouton Quitter"""
-        pm.stop()
+        pm.states.deactivate_all(fade_out=True)
     
     # ======================================== METHODES PUBLIQUES ========================================
     def forward(self, state: str = "modes_menu"):

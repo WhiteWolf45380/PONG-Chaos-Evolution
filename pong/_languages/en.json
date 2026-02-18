@@ -10,6 +10,8 @@
     "lobbies_previous": "Previous",
     "lobbies_next": "Next",
 
+    "lobbies_room_name": "{host}'s room",
+
     "lobbies_search_text": "Searching for players",
     "lobbies_search_cancel": "Cancel",
 
