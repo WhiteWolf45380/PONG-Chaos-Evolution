@@ -19,6 +19,9 @@ class Engine:
         pm.screen.set_caption("PONG : Chaos Evolution")
         pm.screen.set_icon(pygame.image.load(get_path("_assets/icons/icon.ico")))
 
+        # Méthodes à appelé lors de l'arrêt du programme
+        self.finals = []
+
         # Messages système
         pm.ui.set_messages_y(pm.screen.height * 0.2)
         pm.ui.set_messages_spacing(pm.screen.height * 0.02)
@@ -64,6 +67,9 @@ class Engine:
         self.results = Results()
         ctx.results = self.results
 
+        # Seconde initialisation
+        self.main.init()
+
         # Fond par défaut
         self.background = pm.ui.Surface(
             x=0,
@@ -86,17 +92,17 @@ class Engine:
         # Lancement d'une partie
         pm.states.activate("main_menu", transition=True, ease_out=False, duration=1.5)
 
+    # ======================================== DEMARRAGE INITIAL ========================================
+    def run(self):
+        """Lance l'éxécution"""
+        pm.run(self.update, final=self.final)
+
     # ======================================== ACTUALISATION FONDAMENTALE ========================================
     def update(self):
         """Actualisation de la frame"""
         pm.screen.fill((30, 30, 47))
         if not pm.states.get_active_states():
             pm.stop()
-
-    # ======================================== DEMARRAGE INITIAL ========================================
-    def run(self):
-        """Lance l'éxécution"""
-        pm.run(self.update)
 
     # ======================================== METHODES GLOBALES ========================================
     def sys_message(self, text: str, sender: str = "System", type: str = "default"):
@@ -113,6 +119,16 @@ class Engine:
             auto=False,
         )
         pm.ui.sys_message(message)
+    
+    # ======================================== FIN D'EXECUTION ========================================
+    def add_final(self, func: callable, priority: int = 0):
+        """Ajoute une méthode à la liste de fin d'éxéction"""
+        self.finals.insert(priority, func)
+
+    def final(self):
+        """Méthode appelée lors de l'arrêt du programme"""
+        for final_func in self.finals:
+            final_func()
 
 # ======================================== EXPORTS ========================================
 __all__ = ["Engine"]

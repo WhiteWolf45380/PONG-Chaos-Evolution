@@ -19,7 +19,7 @@ class Local(Session):
     
     def on_enter(self):
         """Activation de l'état"""
-        ctx.modes.selected = "classic"
+        ctx.modifiers.set("p2_pseudo", "P2")
         return super().on_enter()
 
     # ======================================== ACTUALISATION ========================================

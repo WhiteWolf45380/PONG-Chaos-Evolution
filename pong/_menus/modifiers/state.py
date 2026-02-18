@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import pm
+from ..._core import ctx, pm
 from typing import Iterable, Optional, Any
 
 from ._panels import ModifiersMenuView
@@ -15,11 +15,13 @@ class Modifiers(pm.states.State):
 
         # Paramètres de la partie
         self.params = {}
+        self.data_path = "modifiers.json"
+        ctx.engine.add_final(self.save)
 
         # Catégorie: Players
-        self.add("online_pseudo", 'Guest', category="players", sessions=["online"])
+        self.add("online_pseudo", None, category="players", to_save=True)                               # (str)  : pseudo en ligne
         self.add("p1_pseudo", 'P1', category="players")                                                 # (str)  : pseudo du joueur 1
-        self.add("p2_pseudo", 'P2', category="players", sessions=["solo"])                              # (str)  : pseudo du joueur 2
+        self.add("p2_pseudo", 'P2', category="players", sessions=["local"])                             # (str)  : pseudo du joueur 2
         self.add("p1_side", 0, category="players")                                                      # (int)  : côté du joueur 1
 
         # Catégorie Game
@@ -54,21 +56,35 @@ class Modifiers(pm.states.State):
         # Panel du menu
         self.menu = ModifiersMenuView()
 
+        # Chargement des données sauvegardées
+        self.load()
+
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
     
     # ======================================== ENREGISTREMENT ========================================
-    def add(self, name: str, value: object = None, category: Optional[str] = None, sessions: Optional[str] | Optional[Iterable[str]] = None, modes: Optional[str] | Optional[Iterable[str]] = None, add_prefix: bool = False):
+    def add (
+        self,
+        name: str,
+        value: object = None,
+        category: Optional[str] = None,
+        sessions: Optional[str] | Optional[Iterable[str]] = None,
+        modes: Optional[str] | Optional[Iterable[str]] = None,
+        add_prefix: bool = False,
+        to_save: bool = False
+    ):
         """
         Ajoute un nouveau paramètre de partie
 
         Args:
             name (str): nom du paramètre
-            value (object): valeur par défaut du paramètre
-            category (str | None): catégorie du paramètre (pour l'organisation)
-            mode (str | Iterable[str] | None): mode(s) associé(s) à ce paramètre
-            add_prefix (bool): ajoute automatquement un prefix selon la catégorie
+            value (object, optional): valeur par défaut du paramètre
+            category (str | None, optional): catégorie du paramètre (pour l'organisation)
+            sessions (str | Iterable[str], optional): sessions exclusives
+            modes (str | Iterable[str], optional): modes exclusifs
+            add_prefix (bool, optional): ajoute automatiquement un prefix selon la catégorie
+            to_save (bool, optional): sauvegarde du paramète dans un dossier externe
         """
         prefix = f"{category}_" if add_prefix and category is not None else ""
         name = prefix + name
@@ -93,6 +109,7 @@ class Modifiers(pm.states.State):
             "category": category,
             "sessions": sessions,
             "modes": modes,
+            "to_save": to_save,
         }
 
     # ======================================== GETTERS ========================================
@@ -259,3 +276,15 @@ class Modifiers(pm.states.State):
             self.params[name]["value"][index] = value
         else:
             self.params[name]["value"] = value
+    
+    # ======================================== GESTION DE DONNEES ========================================
+    def load(self):
+        """Charge un ensemble de paramètres"""
+        data = pm.data.load(self.data_path)
+        for k, v in data.items():
+            self.params[k] = v
+    
+    def save(self):
+        """Sauvegarde un ensemble de paramètres"""
+        data = {k: v for (k, v) in self.params.items() if v.get("to_save", False)}
+        pm.data.save(data, self.data_path)

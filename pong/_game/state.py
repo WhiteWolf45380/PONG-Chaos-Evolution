@@ -43,6 +43,13 @@ class Game(pm.states.State):
         super().on_enter()
         ctx.engine.background.visible = True
 
+        # Actualisation des pseudos
+        online_psd = ctx.modifiers["online_pseudo"]
+        if online_psd is not None:
+            ctx.modifiers.set("p1_pseudo", online_psd)
+        else:
+            ctx.modifiers.set("p1_pseudo", "P1")
+
         # Activation de la session
         if self.current_session is None: self.current_session = self.sessions["solo"]
         self.current_session.activate()
@@ -80,9 +87,9 @@ class Game(pm.states.State):
     # ======================================== METHODES PUBLIQUES ========================================
     def toggle_pause(self):
         """Active/Désactive la pause de la partie"""
-        if self.current_mode is None or self.current_mode.frozen: return
+        if self.current_mode is None: return
         allows_freeze = getattr(self.current_session, 'allow_freeze', True)
-        if not self.current_mode.paused:
+        if not self.pause.is_active():
             if allows_freeze: self.current_mode.pause()
             self.pause.text.visible = allows_freeze
             self.pause.activate()
@@ -92,18 +99,18 @@ class Game(pm.states.State):
     
     def pause(self):
         """Active la pause de la partie"""
-        if self.current_mode is None or self.current_mode.frozen: return
+        if self.current_mode is None: return
         allows_freeze = getattr(self.current_session, 'allow_freeze', True)
-        if not self.current_mode.paused:
+        if not self.pause.is_active():
             if allows_freeze: self.current_mode.pause()
             self.pause.text.visible = allows_freeze
             self.pause.activate()
         
     def unpause(self):
         """Désactive la pause de la partie"""
-        if self.current_mode is None or self.current_mode.frozen: return
+        if self.current_mode is None: return
         allows_freeze = getattr(self.current_session, 'allow_freeze', True)
-        if self.current_mode.paused:
+        if self.pause.is_active():
             if allows_freeze: self.current_mode.unpause()
             self.pause.deactivate()
 

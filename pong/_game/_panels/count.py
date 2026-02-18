@@ -66,6 +66,9 @@ class GameCount(pm.panels.Panel):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualise l'animation du décompte"""
+        if getattr(pm.states["game"].current_mode, 'paused', False):
+            return
+
         self.animation_timer += pm.time.dt
         progress = min(self.animation_timer / self.animation_duration, 1.0)
 

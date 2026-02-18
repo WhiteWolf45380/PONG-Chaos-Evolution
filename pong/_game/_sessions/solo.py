@@ -14,11 +14,10 @@ class Solo(Session):
         """Initialisation d'une session"""
         super().start()
         self.current.player_2.set_status("ennemy")
-        ctx.modifiers.set("p2_pseudo", "Bot")
 
     def on_enter(self):
         """Activation de l'état"""
-        ctx.modes.selected = "wall"
+        ctx.modifiers.set("p2_pseudo", "Bot")
         return super().on_enter()
 
     # ======================================== ACTUALISATION ========================================

@@ -106,8 +106,9 @@ class Lobbies(pm.states.State):
     # ======================================== METHODES PUBLIQUESs ========================================
     def start_host(self, mode):
         """Démarre la recherche"""
+        pseudo = ctx.modifiers.get("online_pseudo") if ctx.modifiers.get("online_pseudo") is not None else 'Guest'
         pm.network.host(
-            name=pm.languages("lobbies_room_name", host=ctx.modifiers.get("online_pseudo")),
+            name=pm.languages("lobbies_room_name", host=pseudo),
             mode=mode,
             host_side=ctx.modifiers.get("p1_side"),
             max_players=getattr(ctx.game.modes.get(mode), 'max_players', 2),
