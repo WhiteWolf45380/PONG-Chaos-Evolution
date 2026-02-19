@@ -107,6 +107,7 @@ class Lobbies(pm.states.State):
     def start_host(self, mode):
         """Démarre la recherche"""
         pseudo = ctx.modifiers.get("online_pseudo") if ctx.modifiers.get("online_pseudo") is not None else 'Guest'
+        ctx.modifiers.set("p1_side", 0)
         pm.network.host(
             name=pm.languages("lobbies_room_name", host=pseudo),
             mode=mode,
