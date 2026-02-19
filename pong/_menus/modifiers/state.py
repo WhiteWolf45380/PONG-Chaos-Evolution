@@ -136,7 +136,7 @@ class Modifiers(pm.states.State):
         Returns:
             Valeur du paramètre (ou élément à l'index si spécifié)
         """
-        if name not in self.params:
+        if self.params.get(name) is None:
             return fallback
         value = self.params[name]["value"]
         if index is not None:
