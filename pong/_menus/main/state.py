@@ -139,7 +139,6 @@ class Main(pm.states.State):
         if pseudo.strip() != "":
             ctx.modifiers.set("online_pseudo", pseudo)
         else:
-            self.pseudo_case.text = 'Guest'
             ctx.modifiers.set("online_pseudo", 'Guest')
     
     # ======================================== METHODES PUBLIQUES ========================================
