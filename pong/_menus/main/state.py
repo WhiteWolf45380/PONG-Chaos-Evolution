@@ -105,6 +105,11 @@ class Main(pm.states.State):
     def update(self):
         """Actualisation par frame"""
     
+    # ======================================== HOOKS ========================================
+    def on_exit(self):
+        self.pseudo_case.unfocus()
+        return super().on_exit()
+    
     # ======================================== HANDLERS ========================================
     def handle_solo(self):
         """Action du bouton Solo"""
