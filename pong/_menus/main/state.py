@@ -139,7 +139,8 @@ class Main(pm.states.State):
         if pseudo.strip() != "":
             ctx.modifiers.set("online_pseudo", pseudo)
         else:
-            ctx.modifiers.set("online_pseudo", None)
+            self.pseudo_case.text = 'Guest'
+            ctx.modifiers.set("online_pseudo", 'Guest')
     
     # ======================================== METHODES PUBLIQUES ========================================
     def forward(self, state: str = "modes_menu"):
