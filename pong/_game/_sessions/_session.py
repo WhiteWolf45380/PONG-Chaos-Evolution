@@ -49,6 +49,7 @@ class Session(pm.states.State):
         """Désactivation de l'état"""
         if self.initialized:
             self.end()
+        ctx.modifiers.set("p1_side", 0)
             
     # ======================================== METHODES PUBLIQUES ========================================
     def is_running(self):
