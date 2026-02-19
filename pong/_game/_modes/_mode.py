@@ -116,7 +116,6 @@ class Mode(pm.states.State):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation par frame"""
-        print(self.next_round, self.ended, self.end_done, self.score_0, self.score_1)
         if self.paused:
             pass
         elif self.frozen and self.next_round_done:
@@ -226,7 +225,6 @@ class Mode(pm.states.State):
             self.player_2.y = data.get("player_1_y", self.player_2.y)
 
         # Partie
-        print("received:", data.get("game_winner"), data.get("game_frozen"), data.get("game_paused"), data.get("game_ended"))
         if game:
             self.score_0 = data.get("game_score_0", self.score_0)
             self.score_1 = data.get("game_score_1", self.score_1)

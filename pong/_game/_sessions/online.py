@@ -61,8 +61,11 @@ class Online(Session):
         # Vérification de la fin de partie côté client
         if not self._connected:
             if not self.end_done:
+                try:
+                    self._update_client()
+                except Exception:
+                    pass
                 self.end_done = True
-                self.current.from_dict(pm.network.get_last_infos())
             return
 
         # Vérification de la connexion
@@ -120,7 +123,7 @@ class Online(Session):
     # ======================================== FIN ========================================
     def end(self):
         """Fin de la session"""
-        last_infos = self.current.to_dict('game')
-        pm.network.disconnect(last_infos)
+        pm.network.send(self.current.to_dict('game'))
+        pm.network.disconnect()
         print("[Online] Session ended") 
         super().end()

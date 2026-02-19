@@ -136,7 +136,7 @@ class Main(pm.states.State):
     
     def handle_pseudo(self, pseudo: str):
         """Modification du pseudo"""
-        if pseudo != "":
+        if pseudo.strip() != "":
             ctx.modifiers.set("online_pseudo", pseudo)
         else:
             ctx.modifiers.set("online_pseudo", None)
