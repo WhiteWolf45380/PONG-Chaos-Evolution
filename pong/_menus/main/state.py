@@ -63,16 +63,16 @@ class Main(pm.states.State):
             anchor="center",
             text="Pseudo",
             font="bahnschrift",
-            font_size=32,
+            font_size=30,
             font_color=(255, 255, 255),
             panel=str(self.view)
         )
 
         self.pseudo_case = pm.ui.TextCase(
             x=self.view.width * 0.1,
-            y=self.view.height * 0.53,
+            y=self.view.height * 0.52,
             width=200,
-            height=50,
+            height=47,
             anchor="center",
             text="",
             placeholder="Guest",

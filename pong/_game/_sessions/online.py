@@ -15,6 +15,7 @@ class Online(Session):
 
         # Données de secours
         self._last_data = {}
+        self.end_done = False
 
         # Initialisation
         self._pseud_sync = False
@@ -29,6 +30,9 @@ class Online(Session):
 
         self._is_host = pm.network.is_hosting()
         self._connected = pm.network.is_connected()
+
+        self._last_data = {}
+        self.end_done = False
 
         self._pseudo_sync = False
 
@@ -50,8 +54,15 @@ class Online(Session):
         # Actualisation de la session
         super().update()
 
-        # Vérification que la partie soit en cours
-        if self.current is None or not self._connected:
+        # Vérification qu'une partie soit en cours
+        if self.current is None:
+            return
+
+        # Vérification de la fin de partie côté client
+        if not self._connected:
+            if not self.end_done:
+                self.end_done = True
+                self.current.from_dict(pm.network.get_last_infos())
             return
 
         # Vérification de la connexion
@@ -109,8 +120,7 @@ class Online(Session):
     # ======================================== FIN ========================================
     def end(self):
         """Fin de la session"""
-        if pm.network.is_connected():
-            self.update()
-            pm.network.disconnect()
+        last_infos = self.current.to_dict('game')
+        pm.network.disconnect(last_infos)
         print("[Online] Session ended") 
         super().end()
