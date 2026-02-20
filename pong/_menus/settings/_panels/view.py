@@ -10,7 +10,7 @@ class SettingsMenuView(pm.panels.Panel):
         super().__init__('settings_menu_view', rect=(0, 0, width, height), centered=True)
 
         # Fond
-        self.background_color = (20, 20, 30)
+        self.background_color = (0, 0, 15)
 
     def draw_back(self, surface: pygame.Surface):
         """Dessin par frame"""
