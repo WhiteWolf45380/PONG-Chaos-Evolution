@@ -25,6 +25,8 @@
     "game_results_score": "Score final : {score}",
     "game_results_winner": "{winner} a gagné !",
 
+    "settings_title": "Parametres",
+
     "error_connection": "Connexion au salon impossible",
     "error_host": "Un client a été déconnecté",
     "error_client": "La connexion avec l'hôte a été perdue"

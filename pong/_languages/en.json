@@ -25,6 +25,8 @@
     "game_results_score": "Final score : {score}",
     "game_results_winner": "{winner} won !",
 
+    "settings_title": "Paramètres",
+
     "error_connection": "Failed to connect to the lobby",
     "error_host": "A client disconnected",
     "error_client": "Lost connection to the host"
