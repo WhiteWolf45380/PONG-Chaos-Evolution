@@ -15,7 +15,10 @@ class Settings(pm.states.State):
         self.view = SettingsMenuView()
         self.bind_panel(self.view)
 
-        # Paramètres
+        # Paramètres visuels
+        pm.settings.create("vsync", True, category="graphics", widget="toggle")
+
+        # Paramètres d'entrées
         pm.settings.create("p1_up", pygame.K_z, category="inputs", widget="inputbutton")
         pm.settings.create("p1_down", pygame.K_s, category="inputs", widget="inputbutton")
         pm.settings.create("p2_up", pygame.K_UP, category="inputs", widget="inputbutton")

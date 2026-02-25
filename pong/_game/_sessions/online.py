@@ -52,7 +52,8 @@ class Online(Session):
     def update(self):
         """Actualisation de la session"""
         # Actualisation de la session
-        super().update()
+        if not super().update():
+            return
 
         # Vérification qu'une partie soit en cours
         if self.current is None:

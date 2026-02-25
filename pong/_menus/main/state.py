@@ -25,14 +25,13 @@ class Main(pm.states.State):
             "solo": None,
             "local": None,
             "online": None,
-            "settings": None,
             "quit": None,
         }
 
-        top = self.view.title.rect.bottom + self.view.height * 0.08
-        bottom = self.view.height * 0.96
+        top = self.view.title.rect.bottom + self.view.height * 0.09
+        bottom = self.view.height * 0.94
         buttons_space = abs(bottom - top) / len(self.buttons)
-        buttons_height = buttons_space * 0.7
+        buttons_height = buttons_space * 0.68
         buttons_width = buttons_height * 3.6
         for i, button in enumerate(self.buttons):
             self.buttons[button] = pm.ui.RectButton(

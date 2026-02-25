@@ -30,13 +30,13 @@ class Session(pm.states.State):
     def update(self):
         """Actualisation de la session"""
         if not pm.states.is_active("game"):
-            return
-
+            return False
         self.current = pm.states.get_object(pm.states.get_active_by_layer(2))
         if isinstance(self.current, Mode):
             if not self.initialized: self.start()
         elif self.initialized:
             self.end()
+        return True
 
     # ======================================== FIN ========================================
     def end(self):

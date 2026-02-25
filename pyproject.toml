@@ -9,7 +9,9 @@ description = "Jeu Pong revisité"
 authors = [{ name = "WhiteWolf45380" }]
 dependencies = [
     "pygame",
-    "pygame_manager @ https://github.com/WhiteWolf45380/Pygame-Manager/archive/refs/heads/main.zip"
+    "pygame_manager @ https://github.com/WhiteWolf45380/Pygame-Manager/archive/refs/heads/main.zip",
+    "torch",
+    "matplotlib"
 ]
 
 [tool.setuptools.packages.find]

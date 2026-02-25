@@ -25,7 +25,8 @@ class Local(Session):
     # ======================================== ACTUALISATION ========================================
     def update(self):
         """Actualisation de la session"""
-        super().update()
+        if not super().update():
+            return
 
     # ======================================== FIN ========================================
     def end(self):
