@@ -1,4 +1,4 @@
-python -m PyInstaller `
+venv_build/Scripts/python.exe -m PyInstaller `
 --onefile  `
 --windowed `
 --clean `
