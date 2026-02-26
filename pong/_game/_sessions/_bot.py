@@ -6,7 +6,7 @@ import random
 import math
 import collections
 import numpy as np
-import matplotlib.pyplot as plt
+import sys
 
 
 class ReplayBuffer:
@@ -208,8 +208,13 @@ class Bot(nn.Module):
                   f"Score: {score:>4} (moy {avg_score:>4.1f}) | "
                   f"Loss: {mean_loss:.5f} | Err: {avg_error:>5.1f}px")
 
-    def save(self, path: str = "data/bot.pth"):
+    def save(self, path: str = "_data/bot.pth"):
         try:
+            if __name__ == "__main__":
+                path = f"pong/{path}"
+            else:
+                from ..._core import get_path
+                path = get_path(path)
             torch.save({
                 "net":           self.net.state_dict(),
                 "optimiser":     self.optimiser.state_dict(),
@@ -222,8 +227,13 @@ class Bot(nn.Module):
         except Exception as e:
             print(f"[Bot] Save error: {e}")
 
-    def load(self, path: str = "data/bot.pth"):
+    def load(self, path: str = "_data/bot.pth"):
         try:
+            if __name__ == "__main__":
+                path = f"pong/{path}"
+            else:
+                from ..._core import get_path
+                path = get_path(path)
             ckpt = torch.load(path, map_location=self.device)
             self.net.load_state_dict(ckpt["net"])
             self.optimiser.load_state_dict(ckpt["optimiser"])
@@ -378,6 +388,7 @@ def plot_training(bot: Bot, window: int = 50):
 
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
     try:
         bot = Bot(
             lr=3e-4,

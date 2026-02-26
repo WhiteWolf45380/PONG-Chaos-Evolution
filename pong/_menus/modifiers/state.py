@@ -1,5 +1,5 @@
 # ======================================== IMPORTS ========================================
-from ..._core import ctx, pm
+from ..._core import ctx, pm, get_folder, Path
 from typing import Iterable, Optional, Any
 
 from ._panels import ModifiersMenuView
@@ -15,7 +15,7 @@ class Modifiers(pm.states.State):
 
         # Paramètres de la partie
         self.params = {}
-        self.data_path = "modifiers.json"
+        self.data_path = str(Path(get_folder()) / "data/modifiers.json")
         ctx.engine.add_final(self.save)
 
         # Catégorie: Players
@@ -280,11 +280,17 @@ class Modifiers(pm.states.State):
     # ======================================== GESTION DE DONNEES ========================================
     def load(self):
         """Charge un ensemble de paramètres"""
-        data = pm.data.load(self.data_path)
-        for k, v in data.items():
-            self.params[k] = v
+        try:
+            data = pm.data.load(self.data_path)
+            for k, v in data.items():
+                self.params[k] = v
+        except (FileNotFoundError, RuntimeError):
+            print(f"[Data] Not file found at {self.data_path}")
     
     def save(self):
         """Sauvegarde un ensemble de paramètres"""
-        data = {k: v for (k, v) in self.params.items() if v.get("to_save", False)}
-        pm.data.save(data, self.data_path)
+        try:
+            data = {k: v for (k, v) in self.params.items() if v.get("to_save", False)}
+            pm.data.save(data, self.data_path)
+        except Exception as e:
+            print(f"[Data] Saving error : {e}")

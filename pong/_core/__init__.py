@@ -14,4 +14,5 @@ __all__ = [
     "Real",
 
     "get_path",
+    "get_folder",
 ]
