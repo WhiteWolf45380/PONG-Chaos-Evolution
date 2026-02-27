@@ -7,6 +7,7 @@ venv_build/Scripts/python.exe -m PyInstaller ^
 --collect-all pong ^
 --add-data "pong./_assets;pong/_assets" ^
 --add-data "pong./_languages;pong/_languages" ^
+--add-data "pong./_data;pong/_data" ^
 --icon "pong/_assets/icons/icon.ico" ^
 --name "PONG - Chaos Evolution" ^
 launcher.py
