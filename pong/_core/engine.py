@@ -89,13 +89,77 @@ class Engine:
         )
         self.background.visible = False
         
-        # Lancement d'une partie
+        # Chargement des sons et musics
+        self.load_sounds()
+        self.load_musics()
+        pm.audio.play_music("menus", loop=True, fade_ms=1500)
+        pm.inputs.add_listener(pm.inputs.MOUSELEFT, callback=lambda: pm.audio.play_sound("click"))
+        
+        # Démarrage dans le menu principal
         pm.states.activate("main_menu", transition=True, ease_out=False, duration=1.5)
 
     # ======================================== DEMARRAGE INITIAL ========================================
     def run(self):
         """Lance l'éxécution"""
         pm.run(self.update, final=self.final)
+
+    def load_sounds(self):
+        """Charge les sons"""
+        pm.audio.create_group(
+            "ui",
+            channels=3,
+            volume=1.0
+        )
+        
+        pm.audio.add_sound(
+            "click",
+            get_path("_assets/sounds/click.mp3"),
+            volume=0.2,
+            group="ui"
+        )
+
+        pm.audio.add_sound(
+            "select",
+            get_path("_assets/sounds/select.mp3"),
+            volume=0.5,
+            cooldown=0.5,
+            group="ui"
+        )
+
+        pm.audio.create_group(
+            "entities",
+            channels=5,
+            volume=1.0,
+        )
+
+        pm.audio.add_sound(
+            "bounce",
+            get_path("_assets/sounds/bounce.mp3"),
+            volume=0.55,
+            group="entities",
+        )
+        
+        pm.audio.add_sound(
+            "goal",
+            get_path("_assets/sounds/goal.mp3"),
+            volume=2.0,
+            cooldown=1.0,
+            group="entities"
+        )
+    
+    def load_musics(self):
+        """Charge les musiques"""
+        pm.audio.add_music(
+            "menus",
+            get_path("_assets/musics/menus.mp3"),
+            volume=0.4,
+        )
+
+        pm.audio.add_music(
+            "game",
+            get_path("_assets/musics/game.mp3"),
+            volume=0.25,
+        )
 
     # ======================================== ACTUALISATION FONDAMENTALE ========================================
     def update(self):

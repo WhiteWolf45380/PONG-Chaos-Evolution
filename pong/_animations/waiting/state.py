@@ -56,11 +56,13 @@ class Waiting(pm.states.State):
         if pm.network._connected:
             pm.network.disconnect()
         pm.states.activate("lobbies_menu", transition=True)
+        pm.audio.play_music("menus", loop=True, fade_ms=1500)
 
     # ======================================== HOOKS ========================================
     def on_enter(self):
         """Lancement de l'animation"""
         ctx.engine.background.visible = True
+        pm.audio.stop_music(fade_ms=1500)
         return super().on_enter()
 
     def on_exit(self):

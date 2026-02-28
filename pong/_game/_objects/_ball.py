@@ -192,6 +192,9 @@ class Ball(pm.entities.CircleEntity):
         abs_angle += random.uniform(0, self.bouncing_epsilon)
         self.angle = sign * abs_angle
 
+        # Son
+        pm.audio.play_sound("bounce")
+
     def collidepaddle(self, paddle: Paddle, p0: pm.types.PointObject, p1: pm.types.PointObject): 
         """
         Vérifie si déplacement de la balle rencontre une raquette
@@ -229,6 +232,12 @@ class Ball(pm.entities.CircleEntity):
         """Vérifie la collision avec les murs verticaux"""
         self.centerx = min(max(self.centerx, self.radius), self.view.width - self.radius)
         if self.left <= 0:
-            if not self.check_end(0): self.bounce(pm.geometry.Vector(1, 0))
+            if not self.check_end(0):
+                self.bounce(pm.geometry.Vector(1, 0))
+            else:
+                pm.audio.play_sound("goal")
         elif self.right >= self.view.width:
-            if not self.check_end(1): self.bounce(pm.geometry.Vector(-1, 0))
+            if not self.check_end(1):
+                self.bounce(pm.geometry.Vector(-1, 0))
+            else:
+                pm.audio.play_sound("goal")

@@ -60,23 +60,11 @@ class DQNNet(nn.Module):
 # ======================================== AGENT ========================================
 class Bot(nn.Module):
     """
-    Agent DQN — 3 actions avec pénalité d'oscillation.
-
-    Changements vs v2 :
-      • Retour à 3 actions (monter / rester / descendre).
-      • Pénalité d'oscillation : si le bot alterne montée/descente en rafale,
-        il est pénalisé à chaque inversion de direction.
-      • Bonus d'alignement : quand |delta_y| < PADDLE_H/4 et que le bot reste,
-        il reçoit un petit bonus pour apprendre que "rester quand c'est bon" est optimal.
-      • delta_y conservé dans l'état (acquis de v2).
+    Agent DQN — 3 actions avec pénalité d'oscillation
     """
-
     # [p2_y, ball_x, ball_y, ball_dx, ball_dy, delta_y]
     STATE_SCALE = np.array([1080.0, 1440.0, 1080.0, 1.0, 1.0, 1080.0], dtype=np.float32)
-
-    # Seuil en px en dessous duquel le bot est considéré "aligné"
-    ALIGNED_THRESHOLD = 30.0   # ~PADDLE_H / 4
-
+    ALIGNED_THRESHOLD = 30.0
     def __init__(
         self,
         lr: float               = 1e-3,
@@ -85,11 +73,11 @@ class Bot(nn.Module):
         epsilon_min: float      = 0.05,
         epsilon_decay: float    = 0.995,
         batch_size: int         = 64,
-        target_update_freq: int = 500,    # ← monté pour plus de stabilité
+        target_update_freq: int = 500,
         buffer_capacity: int    = 50_000,
         min_buffer_size: int    = 1_000,
-        oscillation_penalty: float = 0.02,  # pénalité par inversion de direction
-        alignment_bonus:     float = 0.01,  # bonus quand aligné + action neutre
+        oscillation_penalty: float = 0.02,
+        alignment_bonus:     float = 0.01,
     ):
         super().__init__()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -133,7 +121,7 @@ class Bot(nn.Module):
 
     def get_move(self, p2_y: Real, ball_x: Real, ball_y: Real,
                  ball_dx: Real, ball_dy: Real) -> int:
-        """Retourne -1 (monter), 0 (rester), +1 (descendre)."""
+        """Retourne -1 (monter), 0 (rester), +1 (descendre)"""
         state = self._build_state(p2_y, ball_x, ball_y, ball_dx, ball_dy)
         if self.is_training and random.random() < self.epsilon:
             action = random.randint(0, 2)
@@ -186,7 +174,7 @@ class Bot(nn.Module):
             done      = False
             total_reward  = 0.0
             ep_losses:    list[float] = []
-            prev_move     = 0   # action précédente pour détecter les oscillations
+            prev_move     = 0
 
             while not done:
                 p2_y, ball_x, ball_y, ball_dx, ball_dy = raw_state
@@ -198,12 +186,10 @@ class Bot(nn.Module):
                 _, _, ball_y_next, _, _ = raw_next
 
                 # --- Pénalité d'oscillation ---
-                # Inversion montée↔descente (ignore l'action neutre)
                 if prev_move != 0 and action_move != 0 and action_move != prev_move:
                     reward -= self.oscillation_penalty
 
                 # --- Bonus d'alignement ---
-                # Le bot est bien positionné ET choisit de ne pas bouger
                 delta_y = abs(ball_y - p2_y)
                 if action_move == 0 and delta_y < self.ALIGNED_THRESHOLD:
                     reward += self.alignment_bonus
@@ -287,7 +273,7 @@ class PongEnv:
     BALL_ANGLE_MAX        = 30
     BALL_BOUNCING_EPSILON = 5
 
-    MAX_FRAMES = 3000   # limite de durée par épisode (~50s @ 60fps)
+    MAX_FRAMES = 3000
 
     def __init__(self):
         self.reset()
@@ -374,7 +360,6 @@ class PongEnv:
             reward    = -1.0
         elif self.frame >= self.MAX_FRAMES:
             self.done = True
-            # Pas de pénalité en cas de timeout : le bot a tenu longtemps
 
         # Récompense de proximité + bonus rapprochement
         if not self.done:

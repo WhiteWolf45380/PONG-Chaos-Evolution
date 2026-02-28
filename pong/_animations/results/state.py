@@ -90,6 +90,7 @@ class Results(pm.states.State):
         self.phases["default"].visible = True
         self.phases["default"].set_alpha(0)
         pm.inputs.add_listener(pygame.K_SPACE, self.skip)
+        pm.audio.stop_music(fade_ms=1500)
         return super().on_enter()
 
     def on_exit(self):
@@ -97,6 +98,7 @@ class Results(pm.states.State):
         pm.inputs.remove_listener(pygame.K_SPACE, self.skip)
         for text in self.phases.values():
             text.visible = False
+        pm.audio.play_music("menus", loop=True, fade_ms=1500)
         return super().on_exit()
     
     # ======================================== METHODES DYNAMIQUES ========================================

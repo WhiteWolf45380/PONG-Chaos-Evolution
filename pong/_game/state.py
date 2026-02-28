@@ -58,9 +58,15 @@ class Game(pm.states.State):
         if self.current_mode is None: self.current_mode = self.modes["classic"]
         self.current_mode.activate()
 
+        # Lancement de la music
+        pm.audio.switch_music("game", loop=True, fade_ms=800)
+
     def on_exit(self):
+        # Désactivation des panels
+        super().on_exit()
+        
+        # Désactivation de l'arrière plan dynamique
         ctx.engine.background.visible = False
-        return super().on_exit()
 
     # ======================================== ACTUALISATION ========================================
     def update(self):

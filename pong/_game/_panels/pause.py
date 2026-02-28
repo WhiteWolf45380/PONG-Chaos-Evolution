@@ -105,3 +105,4 @@ class GamePause(pm.panels.Panel):
     def handle_leave(self):
         """Quitte la partie"""
         pm.states.activate("main_menu", transition=True)
+        pm.audio.switch_music("menus", loop=True, fade_ms=1500)

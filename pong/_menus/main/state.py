@@ -131,6 +131,8 @@ class Main(pm.states.State):
     
     def handle_quit(self):
         """Action du bouton Quitter"""
+        pm.audio.play_sound("select")
+        pm.audio.stop_music(fade_ms=1500)
         pm.states.deactivate_all(fade_out=True)
     
     def handle_pseudo(self, pseudo: str):
@@ -146,3 +148,4 @@ class Main(pm.states.State):
         ctx.modes.load(self.session_type)
         ctx.game.set_session(self.session_type)
         pm.states.activate(state, transition=True)
+        pm.audio.play_sound("select")
